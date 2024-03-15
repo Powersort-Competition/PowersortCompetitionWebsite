@@ -11,6 +11,7 @@ export default ({ mode }) => {
       "process.env": env,
     },
     plugins: [vue()],
+    base: "./",
     server: {
       host: true,
       port: 8080,
