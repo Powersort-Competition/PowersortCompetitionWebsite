@@ -4,6 +4,7 @@ use lazy_static::lazy_static;
 use dotenv::dotenv;
 use std::env;
 use diesel_migrations::embed_migrations;
+use r2d2::PooledConnection;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 lazy_static!
@@ -25,8 +26,8 @@ pub fn init()
     dotenv().ok();
 
     lazy_static::initialize(&POOL);
-    let conn = POOL.get();
-
+    
+    POOL.get().expect("Failed to load lazy static code for db!");
 }
 
 
