@@ -24,6 +24,14 @@ const routes = [
     {
       return import('../views/LogIn.vue')
     }
+  },
+  {
+    path: '/submission',
+    name: 'submission',
+    component:  function()
+    {
+      return import('../views/Submission.vue')
+    }
   }
 ]
 
