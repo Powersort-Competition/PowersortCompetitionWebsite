@@ -10,6 +10,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "pyodide": "^0.25.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue3-google-login": "^2.0.25"
