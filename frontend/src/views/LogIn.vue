@@ -1,7 +1,8 @@
 <template>
   <div class = "login">
-    Hello!
+    In order to upload a submission, you need to log in using a Google account.
 
+    <br><br>
     <GoogleLogin :callback="callback"/>
   </div>
 </template>
