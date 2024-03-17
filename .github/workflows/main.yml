@@ -36,11 +36,11 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install dependencies
-        working-directory: ./frontend
         run: npm ci
-      - name: Build
         working-directory: ./frontend
+      - name: Build
         run: npm run build
+        working-directory: ./frontend
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
