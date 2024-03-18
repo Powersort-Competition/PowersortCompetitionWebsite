@@ -1,11 +1,5 @@
-<script setup>
-
-</script>
-
 <template>
-  
+  <div class="useful">
+    Useful_stuff
+  </div>
 </template>
-
-<style scoped>
-
-</style>
