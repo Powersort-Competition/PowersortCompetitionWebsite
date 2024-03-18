@@ -32,6 +32,14 @@ const routes = [
     {
       return import('../views/Submission.vue')
     }
+  },
+  {
+    path: '/useful',
+    name: 'useful',
+    component: function()
+    {
+      return import('../views/Useful.vue')
+    }
   }
 ]
 
