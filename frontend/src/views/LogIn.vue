@@ -18,6 +18,6 @@ const callback = (response) => {
 
   console.log('Google login decoded response: ', decoded_res)
 
-  $cookies.set('pscomp_oauth', decoded_res)
+  $cookies.set('pscomp_oauth', JSON.stringify(decoded_res))
 }
 </script>
