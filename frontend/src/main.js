@@ -13,7 +13,7 @@ import router from './router'
 
 const app = createApp(App).use(router)
 
-app.use(VueCookies, { expires: '1d' })
+app.use(VueCookies, { expires: '1h' })
 app.use(vue3GoogleLogin,
     {
         clientId: '769935082895-a3dirndnnbcc6cdlig4at7650p73n3cl.apps.googleusercontent.com'

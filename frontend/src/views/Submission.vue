@@ -8,12 +8,12 @@
 import FileDropper from "@/components/FileDropper.vue";
 import router from '../router/index.js'
 
-/*// Check if oauth cookie is set. If not, redirect to login.
+// Check if oauth cookie is set. If not, redirect to login.
 if ($cookies.get('pscomp_oauth') == null)
 {
 	console.log("Not logged in... routing to login page");
 	router.push({ name: 'login' })
-}*/
+}
 
 import { asyncRun } from '../py_webworker.js'
 

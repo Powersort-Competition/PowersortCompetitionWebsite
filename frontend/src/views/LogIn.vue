@@ -8,14 +8,16 @@
 </template>
 
 <script setup>
-import { GoogleLogin } from "vue3-google-login";
-import { decodeCredential } from "vue3-google-login";
+import { GoogleLogin } from 'vue3-google-login';
+import { decodeCredential } from 'vue3-google-login';
 
 const callback = (response) => {
-  console.log("Google login raw response: ", response)
+  console.log('Google login raw response: ', response)
 
   const decoded_res = decodeCredential(response.credential)
 
-  console.log("Google login decoded response: ", decoded_res)
+  console.log('Google login decoded response: ', decoded_res)
+
+  $cookies.set('pscomp_oauth', decoded_res)
 }
 </script>
