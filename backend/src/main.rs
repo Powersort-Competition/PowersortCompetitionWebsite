@@ -12,6 +12,7 @@ mod api;
 async fn main() -> std::io::Result<()>
 {
     // Initialise the logger.
+    env::set_var("RUST_LOG", "actix_web = info");
     env_logger::init();
     // Initialise connection to the database.
     //database::init();
@@ -20,9 +21,9 @@ async fn main() -> std::io::Result<()>
 
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(move
-        || App::new().service(
-        api::usr_authenticated
-    ));
+        || App::new().service(api::ping)
+                     .service(api::get_user_comps));
+
     actix_server = match listenfd.take_tcp_listener(0)?
     {
         Some(listener) => actix_server.listen(listener)?,
