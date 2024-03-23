@@ -1,6 +1,6 @@
 <template>
   <div class = "submission">
-    <FileDropper />
+    <FileDropper @file-dropped="handleFileDrop" />
   </div>
 </template>
 
@@ -9,12 +9,26 @@ import FileDropper from "@/components/FileDropper.vue";
 import router from '../router/index.js'
 
 // Check if oauth cookie is set. If not, redirect to login.
-if ($cookies.get('pscomp_oauth') == null)
-{
-	console.log("Not logged in... routing to login page");
-	router.push({ name: 'login' })
-}
+// if ($cookies.get('pscomp_oauth') == null)
+// {
+// 	console.log("Not logged in... routing to login page");
+// 	router.push({ name: 'login' })
+// }
 
+const handleFileDrop = async (submission_content) => {
+  console.log("File dropped! Processing...");
+  console.log(submission_content);
+
+  // const file = files[0];
+  // const reader = new FileReader();
+  // reader.onload = (res) =>
+  // {
+  //   console.log("File read successfully!");
+  //   console.log(res.target.result);
+  // };
+  // reader.readAsText(file);
+}
+  // await runPyWebWorker();
 import { asyncRun } from '../py_webworker.js'
 
 const script = `
