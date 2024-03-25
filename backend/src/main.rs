@@ -5,8 +5,10 @@ use std::env;
 
 
 mod utils;
-mod database;
 mod api;
+mod schema;
+mod models;
+mod database;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>
@@ -14,15 +16,13 @@ async fn main() -> std::io::Result<()>
     // Initialise the logger.
     env::set_var("RUST_LOG", "actix_web = info");
     env_logger::init();
-    // Initialise connection to the database.
-    //database::init();
     // Get (static) variables from .env file.
     dotenv().ok();
 
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(move
         || App::new().service(api::ping)
-                     .service(api::get_user_comps));
+                     .service(api::login_probe));
 
     actix_server = match listenfd.take_tcp_listener(0)?
     {
