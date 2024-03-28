@@ -8,6 +8,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 import { GoogleLogin } from 'vue3-google-login';
 import { decodeCredential } from 'vue3-google-login';
 
@@ -17,6 +19,24 @@ const callback = (response) => {
   const decoded_res = decodeCredential(response.credential)
 
   console.log('Google login decoded response: ', decoded_res)
+
+  // Probe API and store data if new user.
+  const servResponse = ref(null);
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(
+        { id: 0,
+                first_name: decoded_res["given_name"],
+                last_name: decoded_res["family_name"],
+                email: decoded_res["email"] })
+  }
+
+  fetch('http://shayandoust.me:1123/logged_in', requestOptions)
+      .then(response => response.json())
+      .then(data => servResponse.status = data);
+
+  console.log("Server replied with: ", servResponse.status);
 
   $cookies.set('pscomp_oauth', JSON.stringify(decoded_res))
 }
