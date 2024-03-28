@@ -17,23 +17,17 @@ import router from '../router/index.js'
 
 const handleFileDrop = async (submission_content) => {
   console.log("File dropped! Processing...");
-  console.log(submission_content);
 
-  // const file = files[0];
-  // const reader = new FileReader();
-  // reader.onload = (res) =>
-  // {
-  //   console.log("File read successfully!");
-  //   console.log(res.target.result);
-  // };
-  // reader.readAsText(file);
+  //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
+  await runPyWebWorker(submission_content);
 }
-  // await runPyWebWorker();
+
 import { asyncRun } from '../py_webworker.js'
 
 const script = `
 from pyodide.ffi import to_js
 from pyodide.http import pyfetch
+
 response = await pyfetch("https://corsproxy.io/?https%3A%2F%2Fgithub.com%2Fshayandoust%2FPowersortCompetitionWebsite%2Fraw%2Fmain%2Ffrontend%2Fpy_assets%2Fpowersort_timsort.tar.gz") # .zip, .whl, ...
 await response.unpack_archive() # by default, unpacks to the current dir
 
@@ -57,15 +51,21 @@ def cost(lst, sorter):
 def compare_sorters(lst, sorters = [Powersort, Timsort]):
     sorters = sorted(sorters, key = lambda sorter: sorter.name())
 
-    return to_js([cost(lst, sorter) for sorter in sorters])
+    return [cost(lst, sorter) for sorter in sorters]
+
+with open("./submission.txt", "r") as fh:
+    data = fh.read()
+
+print(compare_sorters(data))
 `
 
-async function runPyWebWorker()
+async function runPyWebWorker(submission_content)
 {
   console.log("Pyodide web worker initialising.");
   try
   {
-    const { result, error } = await asyncRun(script, []);
+    const { result, error } = await asyncRun(script, [submission_content]);
+
     if (result)
     {
       console.log("Pyodide web worker returned: ", result);

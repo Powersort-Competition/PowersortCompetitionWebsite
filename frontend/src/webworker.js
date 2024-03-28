@@ -11,6 +11,11 @@ self.onmessage = async (event) => {
     await pyodideReadyPromise;
     // Don't bother yet with this line, suppose our API is built in such a way:
     const { id, python, ...context } = event.data;
+
+    // For the sake of the project, the first object within context is submission data.
+    const submission_content = context[0];
+    self.pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" })
+
     // The worker copies the context in its own "memory" (an object mapping name to values)
     for (const key of Object.keys(context)) {
         self[key] = context[key];
