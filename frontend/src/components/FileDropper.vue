@@ -14,7 +14,7 @@
 
       <label for="fileInput" class="file-label">
         <div v-if="isDragging">Release to drop submission file here!</div>
-        <div v-if="hasDropped">Processing...</div>
+        <div v-else-if="hasDropped">Processing...</div>
         <div v-else>Drop submission text (txt) file here!</div>
       </label>
       </div>
@@ -32,17 +32,11 @@ export default
     };
   },
   methods: {
-    onChange() {
+    async onChange() {
       this.file.push(...this.$refs.file.files);
 
-      const reader = new FileReader();
-      reader.onload = (res) =>
-      {
-        this.submission_content = res.target.result;
-      };
-      reader.readAsText(this.file[0]);
-
       this.hasDropped = true;
+      this.submission_content = await readFile(this.file[0]);
 
       this.$emit('file-dropped', this.submission_content);
     },
@@ -57,10 +51,25 @@ export default
       e.preventDefault();
       this.$refs.file.files = e.dataTransfer.files;
       this.onChange();
+
       this.isDragging = false;
       this.hasDropped = true;
     },
   },
 };
+function readFile(file){
+  return new Promise(async (resolve, reject) => {
+    var fileReader = new FileReader();
+
+    fileReader.onload = () => {
+      resolve(fileReader.result)
+    };
+
+    fileReader.onerror = reject;
+
+    await fileReader.readAsText(file);
+  });
+}
+
 </script>
 <style scoped src="../filedropper.css"></style>
