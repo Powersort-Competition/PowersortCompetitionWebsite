@@ -24,7 +24,8 @@ const callback = (response) => {
   const servResponse = ref(null);
   const requestOptions = {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json',
+               'Access-Control-Allow-Origin': '*'},
     body: JSON.stringify(
         { id: 0,
                 first_name: decoded_res["given_name"],
@@ -32,7 +33,7 @@ const callback = (response) => {
                 email: decoded_res["email"] })
   }
 
-  fetch('http://shayandoust.me:1123/logged_in', requestOptions)
+  fetch('http://psortcomp.shayandoust.me/logged_in', requestOptions)
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
