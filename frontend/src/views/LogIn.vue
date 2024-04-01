@@ -33,7 +33,7 @@ const callback = (response) => {
                 email: decoded_res["email"] })
   }
 
-  fetch('http://psortcomp.shayandoust.me/logged_in', requestOptions)
+  fetch('https://psortcomp.shayandoust.me/logged_in', requestOptions)
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
