@@ -25,7 +25,7 @@ const callback = (response) => {
   const requestOptions = {
     method: 'POST',
     headers: { 'content-type': 'application/json',
-               'Access-Control-Allow-Origin': '*'},
+               'Access-Control-Allow-Origin': 'psortcomp.shayandoust.me'},
     body: JSON.stringify(
         { id: 0,
                 first_name: decoded_res["given_name"],
