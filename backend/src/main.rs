@@ -1,4 +1,5 @@
-use actix_web::{HttpServer, App};
+use actix_web::{HttpServer, App, http};
+use actix_cors::Cors;
 use listenfd;
 use dotenv::dotenv;
 use std::env;
@@ -20,9 +21,22 @@ async fn main() -> std::io::Result<()>
     dotenv().ok();
 
     let mut listenfd = listenfd::ListenFd::from_env();
-    let mut actix_server = HttpServer::new(move
-        || App::new().service(api::ping)
-                     .service(api::login_probe));
+    let mut actix_server = HttpServer::new(|| {
+        // let cors = Cors::default()
+        //     .allowed_origin("https://shayandoust.github.io")
+        //     .allowed_methods(vec!["GET", "POST", "OPTIONS"])
+        //     .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+        //     .allowed_header(http::header::CONTENT_TYPE)
+        //     .max_age(3600);
+        let cors = Cors::permissive();
+
+        App::new()
+            .wrap(cors)
+            .service(api::ping)
+            .service(api::login_probe)
+            .service(api::my_user_id)
+            .service(api::new_submission)
+    });
 
     actix_server = match listenfd.take_tcp_listener(0)?
     {

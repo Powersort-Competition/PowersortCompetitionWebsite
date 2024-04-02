@@ -1,8 +1,18 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    users (id) {
-        id -> Int4,
+    submissions (submission_id) {
+        submission_id -> Int4,
+        user_id -> Int4,
+        powersort_comp -> Int4,
+        timsort_comp -> Int4,
+        ratio_comp -> Float8,
+    }
+}
+
+diesel::table! {
+    users (user_id) {
+        user_id -> Int4,
         #[max_length = 50]
         first_name -> Nullable<Varchar>,
         #[max_length = 50]
@@ -11,3 +21,10 @@ diesel::table! {
         email -> Nullable<Varchar>,
     }
 }
+
+diesel::joinable!(submissions -> users (user_id));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    submissions,
+    users,
+);
