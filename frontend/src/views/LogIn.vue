@@ -1,9 +1,14 @@
 <template>
   <div class = "login">
+    <p v-if="$cookies.get('pscomp_oauth') == null">
     In order to upload a submission, you need to log in using a Google account.
 
     <br><br>
     <GoogleLogin :callback="callback"/>
+    </p>
+    <p v-else>
+      You are already logged in as {{ this.email }}.
+    </p>
   </div>
 </template>
 
@@ -17,6 +22,7 @@ const callback = (response) => {
   console.log('Google login raw response: ', response)
 
   const decoded_res = decodeCredential(response.credential)
+  this.email = decoded_res["email"]
 
   console.log('Google login decoded response: ', decoded_res)
 
@@ -37,7 +43,7 @@ const callback = (response) => {
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
-  console.log("Server replied with: ", servResponse.status);
+  console.log("Server replied with: ", response);
 
   $cookies.set('pscomp_oauth', JSON.stringify(decoded_res))
 }
