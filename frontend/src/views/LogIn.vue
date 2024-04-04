@@ -7,7 +7,7 @@
     <GoogleLogin :callback="callback"/>
     </p>
     <p v-else>
-      You are already logged in as {{ this.email }}.
+      You are already logged in as TODO.
     </p>
   </div>
 </template>
@@ -22,7 +22,6 @@ const callback = (response) => {
   console.log('Google login raw response: ', response)
 
   const decoded_res = decodeCredential(response.credential)
-  this.email = decoded_res["email"]
 
   console.log('Google login decoded response: ', decoded_res)
 

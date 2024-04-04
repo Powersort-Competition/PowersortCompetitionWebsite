@@ -8,6 +8,8 @@
 import FileDropper from "@/components/FileDropper.vue";
 import router from '../router/index.js'
 
+import { ref } from 'vue';
+
 // Check if oauth cookie is set. If not, redirect to login.
 // if ($cookies.get('pscomp_oauth') == null)
 // {
@@ -19,7 +21,30 @@ const handleFileDrop = async (submission_content) => {
   console.log("File dropped! Processing...");
 
   //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
-  await runPyWebWorker(submission_content);
+  let comps = await runPyWebWorker(submission_content);
+  let psort_comps = comps.results[0].get("Comparisons");
+  let tsort_comps = comps.results[1].get("Comparisons");
+
+  // Now that we have the comparison counts, send to database.
+  const servResponse = ref(null);
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'content-type': 'application/json',
+      'Access-Control-Allow-Origin': '*'},
+    body: JSON.stringify(
+        { user_id: 1,
+                powersort_comp: psort_comps,
+                timsort_comp: tsort_comps,
+                ratio_comp: (tsort_comps / psort_comps) })
+  }
+
+  console.log(requestOptions);
+
+  fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
+      .then(response => response.json())
+      .then(data => servResponse.status = data);
+
+  console.log("Server replied with: ", servResponse);
 }
 
 import { asyncRun } from '../py_webworker.js'
@@ -56,7 +81,8 @@ def compare_sorters(lst, sorters = [Powersort, Timsort]):
 with open("./submission.txt", "r") as fh:
     data = fh.read()
 
-print(compare_sorters(data))
+comps = to_js(compare_sorters(data))
+comps
 `
 
 async function runPyWebWorker(submission_content)
@@ -64,16 +90,18 @@ async function runPyWebWorker(submission_content)
   console.log("Pyodide web worker initialising.");
   try
   {
-    const { result, error } = await asyncRun(script, [submission_content]);
+    let results = await asyncRun(script, [submission_content]);
 
-    if (result)
+    if (results)
     {
-      console.log("Pyodide web worker returned: ", result);
+      console.log("Pyodide web worker returned: ", results);
     }
-    else if (error)
+    else
     {
       console.log("Pyodide web worker failed and returned: ", error);
     }
+
+    return results
   }
   catch (e)
   {

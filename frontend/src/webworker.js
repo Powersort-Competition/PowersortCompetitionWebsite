@@ -24,6 +24,9 @@ self.onmessage = async (event) => {
     try {
         await self.pyodide.loadPackagesFromImports(python);
         let results = await self.pyodide.runPythonAsync(python);
+
+        console.log("Submission results are: ", results);
+
         self.postMessage({ results, id });
     } catch (error) {
         self.postMessage({ error: error.message, id });

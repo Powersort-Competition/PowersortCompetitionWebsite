@@ -14,7 +14,7 @@
 
       <label for="fileInput" class="file-label">
         <div v-if="isDragging">Release to drop submission file here!</div>
-        <div v-else-if="hasDropped">Processing...</div>
+        <div v-else-if="hasDropped">Processing. This might take a while...</div>
         <div v-else>Drop submission text (txt) file here!</div>
       </label>
       </div>
