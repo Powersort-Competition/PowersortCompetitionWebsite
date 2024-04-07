@@ -7,6 +7,9 @@ import vue from "@vitejs/plugin-vue";
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return defineConfig({
+    build: {
+      target: 'esnext'
+    },
     define: {
       "process.env": env,
     },
