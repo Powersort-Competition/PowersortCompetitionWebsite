@@ -1,6 +1,13 @@
 <template>
   <div class = "submission">
-    <FileDropper @file-dropped="handleFileDrop" />
+    <div v-if="fileDropComponent">
+      <div v-if="processed == false">
+        <FileDropper @file-dropped="handleFileDrop" />
+      </div>
+      <div v-else>
+        Your submission caused {{ psort_comps }} comparisons on Powersort and {{ tsort_comps }} comparisons on Timsort.
+      </div>
+    </div>
   </div>
 </template>
 
@@ -8,22 +15,34 @@
 import FileDropper from "@/components/FileDropper.vue";
 import router from '../router/index.js'
 
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
+
+let processed = false;
+let psort_comps, tsort_comps;
+const fileDropComponent = ref(true);
 
 // Check if oauth cookie is set. If not, redirect to login.
-// if ($cookies.get('pscomp_oauth') == null)
-// {
-// 	console.log("Not logged in... routing to login page");
-// 	router.push({ name: 'login' })
-// }
+if ($cookies.get('pscomp_oauth') == null)
+{
+	console.log("Not logged in... routing to login page");
+	router.push({ name: 'login' })
+}
+
+const forceRerender = async () => {
+  fileDropComponent.value = false;
+
+  await nextTick();
+
+  fileDropComponent.value = true;
+}
 
 const handleFileDrop = async (submission_content) => {
   console.log("File dropped! Processing...");
 
   //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
   let comps = await runPyWebWorker(submission_content);
-  let psort_comps = comps.results[0].get("Comparisons");
-  let tsort_comps = comps.results[1].get("Comparisons");
+  psort_comps = comps.results[0].get("Comparisons");
+  tsort_comps = comps.results[1].get("Comparisons");
 
   // Now that we have the comparison counts, send to database.
   const servResponse = ref(null);
@@ -44,10 +63,12 @@ const handleFileDrop = async (submission_content) => {
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
-  console.log("Server replied with: ", servResponse);
+  processed = true;
+  await forceRerender();
 }
 
 import { asyncRun } from '../py_webworker.js'
+import {FALSE} from "sass";
 
 const script = `
 from pyodide.ffi import to_js
