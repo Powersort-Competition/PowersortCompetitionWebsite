@@ -1,4 +1,4 @@
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js");
+importScripts("https://cdn.jsdelivr.net/gh/shayandoust/PowersortCompetitionWebsite/dist/pyodide.js");
 
 async function loadPyodideAndPackages() {
     self.pyodide = await loadPyodide();
