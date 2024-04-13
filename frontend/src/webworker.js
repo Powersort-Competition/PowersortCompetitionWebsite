@@ -2,7 +2,6 @@ importScripts("https://cdn.jsdelivr.net/gh/shayandoust/PowersortCompetitionWebsi
 
 async function loadPyodideAndPackages() {
     self.pyodide = await loadPyodide();
-    await self.pyodide.loadPackage(["pyodide.http"]);
 }
 let pyodideReadyPromise = loadPyodideAndPackages();
 
