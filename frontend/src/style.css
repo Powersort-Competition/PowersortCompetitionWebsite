@@ -61,6 +61,14 @@ body {
   left: 25%;
 }
 
+.useful
+{
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
