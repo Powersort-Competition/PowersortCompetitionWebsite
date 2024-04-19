@@ -89,3 +89,11 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
 
     HttpResponse::Ok().json("Success".to_string())
 }
+
+#[post("/serverside_calc")]
+pub async fn serverside_calc(input: Json<String>) -> HttpResponse
+{
+    println!("Performing server-side calculation.");
+
+    HttpResponse::Ok().json("Success".to_string())
+}

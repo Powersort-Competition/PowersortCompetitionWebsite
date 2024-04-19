@@ -10,6 +10,7 @@ mod api;
 mod schema;
 mod models;
 mod database;
+mod python_hook;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>
@@ -19,7 +20,7 @@ async fn main() -> std::io::Result<()>
     env_logger::init();
     // Get (static) variables from .env file.
     dotenv().ok();
-
+    python_hook::run_py_hook("[1, 2]".to_string()).await.expect("Error running Python hook!");
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(|| {
         // let cors = Cors::default()
