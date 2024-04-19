@@ -21,12 +21,12 @@ let processed = false;
 let psort_comps, tsort_comps;
 const fileDropComponent = ref(true);
 
-// Check if oauth cookie is set. If not, redirect to login.
-if ($cookies.get('pscomp_oauth') == null)
-{
-	console.log("Not logged in... routing to login page");
-	router.push({ name: 'login' })
-}
+// // Check if oauth cookie is set. If not, redirect to login.
+// if ($cookies.get('pscomp_oauth') == null)
+// {
+// 	console.log("Not logged in... routing to login page");
+// 	router.push({ name: 'login' })
+// }
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -37,12 +37,21 @@ const forceRerender = async () => {
 }
 
 const handleFileDrop = async (submission_content) => {
-  console.log("File dropped! Processing...");
+  console.log("File dropped! Processing with length: ", submission_content.length);
 
-  //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
-  let comps = await runPyWebWorker(submission_content);
-  psort_comps = comps.results[0].get("Comparisons");
-  tsort_comps = comps.results[1].get("Comparisons");
+  // If input file is too big for Pyodide, send to server for computation instead.
+  if (submission_content.length <= 21388890)
+  {
+    //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
+    let comps = await runPyWebWorker(submission_content);
+
+    psort_comps = comps.results[0].get("Comparisons");
+    tsort_comps = comps.results[1].get("Comparisons");
+  }
+  else
+  {
+    console.log("File too big for Pyodide, sending to server.");
+  }
 
   // Now that we have the comparison counts, send to database.
   const servResponse = ref(null);
