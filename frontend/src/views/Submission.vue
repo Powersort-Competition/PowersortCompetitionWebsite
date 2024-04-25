@@ -4,8 +4,12 @@
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop" />
       </div>
-      <div v-else>
-        Your submission caused {{ psort_comps }} comparisons on Powersort and {{ tsort_comps }} comparisons on Timsort.
+      <div v-else-if="needsServerComp == true">
+        Your submission is too large for in-browser computation, so it has been sent to the server for processing.
+        You will be notified by email the results.
+      </div>
+      <div v-else-if="processed == true">
+        Your submission caused {{ psortComps }} comparisons on Powersort and {{ tsortComps }} comparisons on Timsort.
       </div>
     </div>
   </div>
@@ -17,8 +21,9 @@ import router from '../router/index.js'
 
 import { ref, nextTick } from 'vue';
 
+let needsServerComp = false;
 let processed = false;
-let psort_comps, tsort_comps;
+let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
 const fileDropComponent = ref(true);
 
 // // Check if oauth cookie is set. If not, redirect to login.
@@ -45,12 +50,16 @@ const handleFileDrop = async (submission_content) => {
     //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
     let comps = await runPyWebWorker(submission_content);
 
-    psort_comps = comps.results[0].get("Comparisons");
-    tsort_comps = comps.results[1].get("Comparisons");
+    psortComps = comps.results[0].get("Comparisons");
+    tsortComps = comps.results[1].get("Comparisons");
+    psortMergeCost = comps.results[0].get("MergeCost");
+    tsortMergeCost = comps.results[1].get("MergeCost");
   }
   else
   {
     console.log("File too big for Pyodide, sending to server.");
+
+    needsServerComp = true;
   }
 
   // Now that we have the comparison counts, send to database.
@@ -61,12 +70,14 @@ const handleFileDrop = async (submission_content) => {
       'Access-Control-Allow-Origin': '*'},
     body: JSON.stringify(
         { user_id: 1,
-                powersort_comp: psort_comps,
-                timsort_comp: tsort_comps,
-                ratio_comp: (tsort_comps / psort_comps) })
+                powersort_comp: psortComps,
+                timsort_comp: tsortComps,
+                ratio_comp: (tsortComps / psortComps),
+                powersort_merge_cost: psortMergeCost,
+                timsort_merge_cost: tsortMergeCost })
   }
 
-  console.log(requestOptions);
+  console.log("Request body: ", requestOptions.body);
 
   fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
       .then(response => response.json())
@@ -100,7 +111,8 @@ def cost(lst, sorter):
 
     return {
         'Algorithm': sorter.name(),
-        'Comparisons': Counters.ComparisonCounter.COMPARISONS
+        'Comparisons': Counters.ComparisonCounter.COMPARISONS,
+        'MergeCost': Counters.MergeCosts.MERGECOST
     }
 
 def compare_sorters(lst, sorters = [Powersort, Timsort]):

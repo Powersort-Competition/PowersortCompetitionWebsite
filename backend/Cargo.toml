@@ -15,6 +15,7 @@ listenfd = "1.0.1"
 r2d2 = "0.8.10"
 lazy_static = "1.4.0"
 dotenv = "0.15.0"
+lettre = "0.11.6"
 
 [dependencies.pyo3]
 version = "0.21.1"

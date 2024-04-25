@@ -31,7 +31,9 @@ pub struct Submission
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub ratio_comp: f64
+    pub ratio_comp: f64,
+    pub powersort_merge_cost: i32,
+    pub timsort_merge_cost: i32
 }
 
 #[derive(Insertable, Serialize, Deserialize)]
@@ -41,5 +43,7 @@ pub struct NewSubmission
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub ratio_comp: f64
+    pub ratio_comp: f64,
+    pub powersort_merge_cost: i32,
+    pub timsort_merge_cost: i32
 }

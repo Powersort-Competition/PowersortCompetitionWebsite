@@ -11,6 +11,7 @@ mod schema;
 mod models;
 mod database;
 mod python_hook;
+mod mailer;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>
@@ -20,7 +21,10 @@ async fn main() -> std::io::Result<()>
     env_logger::init();
     // Get (static) variables from .env file.
     dotenv().ok();
-    python_hook::run_py_hook("[1, 2]".to_string()).await.expect("Error running Python hook!");
+    
+    //python_hook::run_py_hook("[1, 2]".to_string()).await.expect("Error running Python hook!");
+    //mailer::send_email("Hello, World!".to_string(), "hello@shayandoust.me".to_string());
+    
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(|| {
         // let cors = Cors::default()
@@ -37,6 +41,7 @@ async fn main() -> std::io::Result<()>
             .service(api::login_probe)
             .service(api::my_user_id)
             .service(api::new_submission)
+            .service(api::top_5_submissions)
     });
 
     actix_server = match listenfd.take_tcp_listener(0)?
