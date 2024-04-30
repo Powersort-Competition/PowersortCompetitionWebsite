@@ -79,7 +79,7 @@ const handleFileDrop = async (submission_content) => {
                  })
   }
 
-  fetch('http://127.0.0.1:1123/new_submission', requestOptions)
+  fetch('http://psortcomp.shayandoust.me/new_submission', requestOptions)
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
