@@ -74,12 +74,12 @@ const handleFileDrop = async (submission_content) => {
                 timsort_comp: tsortComps,
                 ratio_comp: (tsortComps / psortComps),
                 powersort_merge_cost: psortMergeCost,
-                timsort_merge_cost: tsortMergeCost })
+                timsort_merge_cost: tsortMergeCost,
+                submission_raw_data: submission_content
+                 })
   }
 
-  console.log("Request body: ", requestOptions.body);
-
-  fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
+  fetch('http://127.0.0.1:1123/new_submission', requestOptions)
       .then(response => response.json())
       .then(data => servResponse.status = data);
 
@@ -88,7 +88,6 @@ const handleFileDrop = async (submission_content) => {
 }
 
 import { asyncRun } from '../py_webworker.js'
-import {FALSE} from "sass";
 
 const script = `
 from pyodide.ffi import to_js
