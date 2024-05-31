@@ -17,8 +17,7 @@
 
 <script setup>
 import FileDropper from "@/components/FileDropper.vue";
-import router from '../router/index.js'
-
+import LZUTF8 from "lzutf8";
 import { ref, nextTick } from 'vue';
 
 let needsServerComp = false;
@@ -62,26 +61,40 @@ const handleFileDrop = async (submission_content) => {
     needsServerComp = true;
   }
 
-  // Now that we have the comparison counts, send to database.
+  // Now that we have the comparison counts, send to server.
   const servResponse = ref(null);
+  var submission_input_data = new FormData();
+
+  submission_input_data.append('file', submission_content);
+
   const requestOptions = {
     method: 'POST',
-    headers: { 'content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*'},
+    headers: {
+      'content-type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    },
     body: JSON.stringify(
-        { user_id: 1,
-                powersort_comp: psortComps,
-                timsort_comp: tsortComps,
-                ratio_comp: (tsortComps / psortComps),
-                powersort_merge_cost: psortMergeCost,
-                timsort_merge_cost: tsortMergeCost,
-                submission_raw_data: submission_content
-                 })
-  }
+          {
+            user_id: 1,
+            powersort_comp: psortComps,
+            timsort_comp: tsortComps,
+            ratio_comp: (tsortComps / psortComps),
+            powersort_merge_cost: psortMergeCost,
+            timsort_merge_cost: tsortMergeCost
+          })
+    }
+
+    //fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
 
   fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
       .then(response => response.json())
       .then(data => servResponse.status = data);
+
+  fetch('https://psortcomp.shayandoust.me/submission_input_save', {
+    method: 'POST',
+    body: submission_input_data,
+    file_name: "submission123"
+  });
 
   processed = true;
   await forceRerender();
