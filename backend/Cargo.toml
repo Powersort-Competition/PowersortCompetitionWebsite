@@ -8,6 +8,7 @@ env_logger = "0.11.2"
 actix-web = "4.5.1"
 actix-rt = "2.9.0"
 actix-cors = "0.7.0"
+actix-multipart = "0.6.1"
 diesel = { version = "2.1.4", features = ["postgres", "r2d2"] }
 diesel_migrations = "2.1.0"
 serde = "1.0.197"
@@ -16,9 +17,10 @@ r2d2 = "0.8.10"
 lazy_static = "1.4.0"
 dotenv = "0.15.0"
 lettre = "0.11.6"
+futures = "0.3.30"
 
 [dependencies.pyo3]
-version = "0.21.1"
+version = "0.21.2"
 features = ["auto-initialize"]
 
 [profile.release-lto]

@@ -1,16 +1,14 @@
-use actix_web::{web::{Data, Json},
-    post,
-    get,
-    HttpResponse,
-    Result};
-use diesel::connection::SimpleConnection;
+use std::env;
+use actix_multipart::form::MultipartForm;
+use actix_web::{web::Json, post, get, HttpResponse, put, web, Responder};
 use diesel::prelude::*;
-use diesel::row::NamedRow;
-use serde::Serialize;
+
+use dotenv::dotenv;
+use pyo3::ffi::wrapperbase;
 
 use crate::database::init_db;
 
-use crate::models::{ User, NewUser, Submission, NewSubmission };
+use crate::models::{User, NewUser, Submission, NewSubmission, FileDownload};
 use crate::schema::submissions::dsl::submissions;
 use crate::schema::submissions::ratio_comp;
 use crate::schema::users::dsl::*;
@@ -24,6 +22,7 @@ pub async fn ping() -> HttpResponse
 /*
 Internal function to check if user exists by probing database with email.
  */
+#[allow(unused_parens)]
 fn check_usr_exists(mut conn: PgConnection, email_addr: Option<String>) -> bool
 {
     //let res = users.select(User::as_select()).load(&mut conn);
@@ -57,6 +56,7 @@ pub async fn top_5_submissions() -> HttpResponse
     HttpResponse::Ok().json(top_5)
 }
 
+#[allow(unused_parens)]
 #[post("/logged_in")]
 pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse
 {
@@ -98,12 +98,23 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         timsort_comp: submission.timsort_comp.clone(),
         ratio_comp: submission.ratio_comp.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
-        timsort_merge_cost: submission.timsort_merge_cost.clone()
+        timsort_merge_cost: submission.timsort_merge_cost.clone(),
     };
-
-    println!("{:?}", _new_submission.ratio_comp);
-
     let _ = diesel::insert_into(submissions).values(&_new_submission).execute(&mut init_db());
+
+    HttpResponse::Ok().json("Success".to_string())
+}
+
+#[post("/submission_input_save")]
+pub async fn submission_input_save(MultipartForm(form): MultipartForm<FileDownload>,
+                                   file_name: String) -> HttpResponse
+{
+    println!("Saving user submission input.");
+    
+    let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
+                                                                 file_name);
+
+    println!("{:?} {:?}", form, file_path);
 
     HttpResponse::Ok().json("Success".to_string())
 }

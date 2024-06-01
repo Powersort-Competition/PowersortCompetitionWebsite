@@ -1,6 +1,15 @@
+use actix_multipart::form::MultipartForm;
+use actix_multipart::form::tempfile::TempFile;
 use diesel::prelude::*;
 use diesel::sql_types::Integer;
 use serde::{ Serialize, Deserialize };
+
+#[derive(Debug, MultipartForm)]
+pub struct FileDownload
+{
+    #[multipart(rename = "file")]
+    pub(crate) file: Vec<TempFile>
+}
 
 #[derive(Queryable, Selectable, Serialize, Deserialize)]
 #[diesel(table_name = crate::schema::users)]
@@ -46,4 +55,11 @@ pub struct NewSubmission
     pub ratio_comp: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32
+}
+
+#[derive(Debug, MultipartForm)]
+struct UploadForm
+{
+    #[multipart(rename = "file")]
+    file: Vec<TempFile>,
 }

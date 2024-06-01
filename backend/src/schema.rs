@@ -8,7 +8,7 @@ diesel::table! {
         timsort_comp -> Int4,
         ratio_comp -> Float8,
         powersort_merge_cost -> Int4,
-        timsort_merge_cost -> Int4,
+        timsort_merge_cost -> Int4
     }
 }
 

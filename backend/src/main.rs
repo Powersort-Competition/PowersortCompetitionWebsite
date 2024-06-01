@@ -1,4 +1,4 @@
-use actix_web::{HttpServer, App, http};
+use actix_web::{HttpServer, App, web};
 use actix_cors::Cors;
 use listenfd;
 use dotenv::dotenv;
@@ -21,8 +21,10 @@ async fn main() -> std::io::Result<()>
     env_logger::init();
     // Get (static) variables from .env file.
     dotenv().ok();
+
+    create_submission_data_dir();
     
-    //python_hook::run_py_hook("[1, 2]".to_string()).await.expect("Error running Python hook!");
+    python_hook::run_py_hook("2,-1".to_string()).await.expect("Error running Python hook!");
     //mailer::send_email("Hello, World!".to_string(), "hello@shayandoust.me".to_string());
     
     let mut listenfd = listenfd::ListenFd::from_env();
@@ -42,6 +44,8 @@ async fn main() -> std::io::Result<()>
             .service(api::my_user_id)
             .service(api::new_submission)
             .service(api::top_5_submissions)
+            .service(api::submission_input_save)
+            .app_data(web::PayloadConfig::default().limit(10000000))
     });
 
     actix_server = match listenfd.take_tcp_listener(0)?
@@ -56,4 +60,12 @@ async fn main() -> std::io::Result<()>
     };
 
     actix_server.run().await
+}
+
+fn create_submission_data_dir()
+{
+    let data_dir = env::var("EGRESS_DIR").expect("EGRESS_DIR must be set!");
+    let submission_dir = format!("{}/submissions", data_dir);
+
+    std::fs::create_dir_all(submission_dir).expect("Could not create submissions directory!");
 }
