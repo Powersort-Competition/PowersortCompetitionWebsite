@@ -21,7 +21,7 @@ import { decodeCredential } from 'vue3-google-login';
 let email;
 if ($cookies.get('pscomp_oauth') != null)
 {
- email = cookies.get('pscomp_oauth').email;
+ email = $cookies.get('pscomp_oauth').email;
 }
 
 const callback = (response) => {
