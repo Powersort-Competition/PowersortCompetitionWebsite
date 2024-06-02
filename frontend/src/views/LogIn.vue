@@ -51,6 +51,9 @@ const callback = (response) => {
   console.log("Server replied with: ", response);
 
   $cookies.set('pscomp_oauth', JSON.stringify(decoded_res))
+
+  // Once logged in, route to home page.
+  router.push({ name: 'home' });
 }
 
 </script>
