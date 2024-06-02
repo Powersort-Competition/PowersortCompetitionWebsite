@@ -21,6 +21,7 @@
 import FileDropper from "@/components/FileDropper.vue";
 import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
+import {getInputSize} from "@/misc.js";
 
 let needsServerComp = false;
 let processed = false;
@@ -83,6 +84,7 @@ const handleFileDrop = async (submission_content) => {
       ratio_comp: tsortComps / psortComps,
       powersort_merge_cost: psortMergeCost,
       timsort_merge_cost: tsortMergeCost,
+      submission_size: getInputSize(submission_content)
     }),
   };
 
