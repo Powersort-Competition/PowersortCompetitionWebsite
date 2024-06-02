@@ -40,6 +40,14 @@ const routes = [
     {
       return import('../views/Useful.vue')
     }
+  },
+  {
+    path: '/stats',
+    name: 'stats',
+    component: function()
+    {
+      return import('../views/Stats.vue')
+    }
   }
 ]
 
