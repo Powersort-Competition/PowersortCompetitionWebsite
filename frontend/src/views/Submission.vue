@@ -1,15 +1,17 @@
 <template>
-  <div class = "submission">
+  <div class="submission">
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop" />
       </div>
       <div v-else-if="needsServerComp == true">
-        Your submission is too large for in-browser computation, so it has been sent to the server for processing.
-        You will be notified by email the results.
+        Your submission is too large for in-browser computation, so it has been
+        sent to the server for processing. You will be notified by email the
+        results.
       </div>
       <div v-else-if="processed == true">
-        Your submission caused {{ psortComps }} comparisons on Powersort and {{ tsortComps }} comparisons on Timsort.
+        Your submission caused {{ psortComps }} comparisons on Powersort and
+        {{ tsortComps }} comparisons on Timsort.
       </div>
     </div>
   </div>
@@ -17,8 +19,8 @@
 
 <script setup>
 import FileDropper from "@/components/FileDropper.vue";
-import LZUTF8 from "lzutf8";
-import { ref, nextTick } from 'vue';
+import { nextTick, ref } from "vue";
+import { asyncRun } from "../py_webworker.js";
 
 let needsServerComp = false;
 let processed = false;
@@ -38,14 +40,16 @@ const forceRerender = async () => {
   await nextTick();
 
   fileDropComponent.value = true;
-}
+};
 
 const handleFileDrop = async (submission_content) => {
-  console.log("File dropped! Processing with length: ", submission_content.length);
+  console.log(
+    "File dropped! Processing with length: ",
+    submission_content.length,
+  );
 
   // If input file is too big for Pyodide, send to server for computation instead.
-  if (submission_content.length <= 21388890)
-  {
+  if (submission_content.length <= 21388890) {
     //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
     let comps = await runPyWebWorker(submission_content);
 
@@ -53,9 +57,7 @@ const handleFileDrop = async (submission_content) => {
     tsortComps = comps.results[1].get("Comparisons");
     psortMergeCost = comps.results[0].get("MergeCost");
     tsortMergeCost = comps.results[1].get("MergeCost");
-  }
-  else
-  {
+  } else {
     console.log("File too big for Pyodide, sending to server.");
 
     needsServerComp = true;
@@ -65,42 +67,40 @@ const handleFileDrop = async (submission_content) => {
   const servResponse = ref(null);
   var submission_input_data = new FormData();
 
-  submission_input_data.append('file', submission_content);
+  submission_input_data.append("file", submission_content);
+  submission_input_data.append("submissionId", 1);
 
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
+      "content-type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify(
-          {
-            user_id: 1,
-            powersort_comp: psortComps,
-            timsort_comp: tsortComps,
-            ratio_comp: (tsortComps / psortComps),
-            powersort_merge_cost: psortMergeCost,
-            timsort_merge_cost: tsortMergeCost
-          })
-    }
+    body: JSON.stringify({
+      user_id: 1,
+      powersort_comp: psortComps,
+      timsort_comp: tsortComps,
+      ratio_comp: tsortComps / psortComps,
+      powersort_merge_cost: psortMergeCost,
+      timsort_merge_cost: tsortMergeCost,
+    }),
+  };
 
-    //fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
+  //fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
 
-  fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
-      .then(response => response.json())
-      .then(data => servResponse.status = data);
+  fetch("https://psortcomp.shayandoust.me/new_submission", requestOptions)
+    .then((response) => response.json())
+    .then((data) => (servResponse.status = data));
 
-  fetch('https://psortcomp.shayandoust.me/submission_input_save', {
-    method: 'POST',
+  fetch("http://127.0.0.1:1123/submission_input_save", {
+    method: "POST",
+    headers: { file_name: 1 },
     body: submission_input_data,
-    file_name: "submission123"
   });
 
   processed = true;
   await forceRerender();
-}
-
-import { asyncRun } from '../py_webworker.js'
+};
 
 const script = `
 from pyodide.ffi import to_js
@@ -137,29 +137,24 @@ with open("./submission.txt", "r") as fh:
 
 comps = to_js(compare_sorters(data))
 comps
-`
+`;
 
-async function runPyWebWorker(submission_content)
-{
+async function runPyWebWorker(submission_content) {
   console.log("Pyodide web worker initialising.");
-  try
-  {
+  try {
     let results = await asyncRun(script, [submission_content]);
 
-    if (results)
-    {
+    if (results) {
       console.log("Pyodide web worker returned: ", results);
-    }
-    else
-    {
+    } else {
       console.log("Pyodide web worker failed and returned: ", error);
     }
 
-    return results
-  }
-  catch (e)
-  {
-    console.log(`Error with Pyodide web worker at ${e.filename}, ${e.lineno}, ${e.message}`);
+    return results;
+  } catch (e) {
+    console.log(
+      `Error with Pyodide web worker at ${e.filename}, ${e.lineno}, ${e.message}`,
+    );
   }
 }
 </script>
