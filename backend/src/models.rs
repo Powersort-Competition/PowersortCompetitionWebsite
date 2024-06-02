@@ -61,5 +61,5 @@ pub struct NewSubmission
 struct UploadForm
 {
     #[multipart(rename = "file")]
-    file: Vec<TempFile>,
+    file: Vec<TempFile>
 }

@@ -1,7 +1,10 @@
 use std::env;
 use actix_multipart::form::MultipartForm;
-use actix_web::{web::Json, post, get, HttpResponse, put, web, Responder};
+use actix_web::{web::Json, post, get, HttpResponse, put, web, Responder, HttpRequest};
 use diesel::prelude::*;
+
+use std::io::Read;
+use std::fs;
 
 use dotenv::dotenv;
 use pyo3::ffi::wrapperbase;
@@ -106,15 +109,22 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
 }
 
 #[post("/submission_input_save")]
-pub async fn submission_input_save(MultipartForm(form): MultipartForm<FileDownload>,
-                                   file_name: String) -> HttpResponse
+pub async fn submission_input_save(req: HttpRequest,
+                                   MultipartForm(mut form): MultipartForm<FileDownload>) -> HttpResponse
 {
     println!("Saving user submission input.");
-    
+
+    let headers = req.headers();
+    let mut contents = String::new();
+
+    let file_name = headers.get("file_name").unwrap().to_str().unwrap();
     let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
                                                                  file_name);
 
-    println!("{:?} {:?}", form, file_path);
+    form.file[0].file.read_to_string(&mut contents).expect("Error reading file contents!");
+
+    // Save the file contents to the file system.
+    fs::write(&file_path, &contents).expect("Unable to write file to disk!");
 
     HttpResponse::Ok().json("Success".to_string())
 }
