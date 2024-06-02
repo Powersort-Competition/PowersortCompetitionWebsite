@@ -7,7 +7,7 @@
     <GoogleLogin :callback="callback"/>
     </p>
     <p v-else>
-      You are already logged in as TODO.
+      You are already logged in as {{ email }}.
     </p>
   </div>
 </template>
@@ -17,6 +17,12 @@ import { ref } from 'vue';
 
 import { GoogleLogin } from 'vue3-google-login';
 import { decodeCredential } from 'vue3-google-login';
+
+let email;
+if ($cookies.get('pscomp_oauth') != null)
+{
+ email = cookies.get('pscomp_oauth').email;
+}
 
 const callback = (response) => {
   console.log('Google login raw response: ', response)
@@ -46,4 +52,5 @@ const callback = (response) => {
 
   $cookies.set('pscomp_oauth', JSON.stringify(decoded_res))
 }
+
 </script>
