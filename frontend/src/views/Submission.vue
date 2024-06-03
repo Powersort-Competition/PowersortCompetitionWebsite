@@ -93,7 +93,7 @@ const handleFileDrop = async (submission_content) => {
     .then((response) => response.json())
     .then((data) => (servResponse.status = data));
 
-  fetch("http://127.0.0.1:1123/submission_input_save", {
+  fetch("https://psortcomp.shayandoust.me/submission_input_save", {
     method: "POST",
     headers: { file_name: 1 },
     body: submission_input_data,
