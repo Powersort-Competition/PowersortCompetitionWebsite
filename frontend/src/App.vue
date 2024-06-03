@@ -1,13 +1,18 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/useful">Supplementary Information</router-link> |
-    <router-link to="/stats">Statistics</router-link> |
-    <router-link to="/submission">Submit</router-link> |
+    <router-link to="/">Home</router-link>
+    |
+    <router-link to="/about">About</router-link>
+    |
+    <router-link to="/useful">Supplementary Information</router-link>
+    |
+    <router-link to="/stats">Statistics</router-link>
+    |
+    <router-link to="/submission">Submit</router-link>
+    |
     <router-link to="/login">Log In</router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>

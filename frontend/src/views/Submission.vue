@@ -21,19 +21,18 @@
 import FileDropper from "@/components/FileDropper.vue";
 import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
-import {getInputSize} from "@/misc.js";
+import { getInputSize } from "@/misc.js";
 
 let needsServerComp = false;
 let processed = false;
 let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
 const fileDropComponent = ref(true);
 
-// // Check if oauth cookie is set. If not, redirect to login.
-// if ($cookies.get('pscomp_oauth') == null)
-// {
-// 	console.log("Not logged in... routing to login page");
-// 	router.push({ name: 'login' })
-// }
+// Check if oauth cookie is set. If not, redirect to login.
+if ($cookies.get("pscomp_oauth") == null) {
+  console.log("Not logged in... routing to login page");
+  router.push({ name: "login" });
+}
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -84,7 +83,7 @@ const handleFileDrop = async (submission_content) => {
       ratio_comp: tsortComps / psortComps,
       powersort_merge_cost: psortMergeCost,
       timsort_merge_cost: tsortMergeCost,
-      submission_size: getInputSize(submission_content)
+      submission_size: getInputSize(submission_content),
     }),
   };
 

@@ -29,6 +29,7 @@ body {
   padding: 2rem;
   text-align: center;
 }
+
 #top_nav {
   position: fixed;
   top: 0;
@@ -38,31 +39,32 @@ body {
   height: 23px;
 }
 
-.login
-{
+.login {
   position: absolute;
   top: 400px;
   left: 700px;
   text-align: center;
 }
 
-.home
-{
+.home {
   position: fixed;
   width: 95%;
   top: 100px;
 }
 
-.leaderboard-table
-{
-  position: fixed;
-  width: 50%;
-  top: 60%;
-  left: 25%;
+.leaderboard-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 900px;
 }
 
-.useful
-{
+.stats {
+  display: flex;
+  top: 50%;
+}
+
+.useful {
   position: absolute;
   top: 25%;
   left: 25%;
