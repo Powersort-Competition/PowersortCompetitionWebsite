@@ -29,10 +29,10 @@ let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
 const fileDropComponent = ref(true);
 
 // Check if oauth cookie is set. If not, redirect to login.
-if ($cookies.get("pscomp_oauth") == null) {
-  console.log("Not logged in... routing to login page");
-  router.push({ name: "login" });
-}
+// if ($cookies.get("pscomp_oauth") == null) {
+//   console.log("Not logged in... routing to login page");
+//   router.push({ name: "login" });
+// }
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -87,13 +87,11 @@ const handleFileDrop = async (submission_content) => {
     }),
   };
 
-  //fetch('https://psortcomp.shayandoust.me/new_submission', requestOptions)
-
-  fetch("https://psortcomp.shayandoust.me/new_submission", requestOptions)
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/new_submission`, requestOptions)
     .then((response) => response.json())
     .then((data) => (servResponse.status = data));
 
-  fetch("https://psortcomp.shayandoust.me/submission_input_save", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/submission_input_save`, {
     method: "POST",
     headers: { file_name: 1 },
     body: submission_input_data,

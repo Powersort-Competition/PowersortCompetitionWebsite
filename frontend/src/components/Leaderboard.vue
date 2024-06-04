@@ -20,9 +20,9 @@
             <td>{{ submission.submission_id }}</td>
             <td>{{ submission.powersort_comp }}</td>
             <td>{{ submission.timsort_comp }}</td>
-            <td>{{ submission.ratio_comp }}</td>
             <td>{{ submission.powersort_merge_cost }}</td>
             <td>{{ submission.timsort_merge_cost }}</td>
+            <td>{{ submission.ratio_comp }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,7 +34,7 @@
 import axios from "axios";
 
 let { data } = await axios.get(
-  "https://psortcomp.shayandoust.me/top_5_submissions",
+  `${import.meta.env.VITE_BACKEND_URL}/top_5_submissions`,
 );
 const leaderboardJson = data;
 

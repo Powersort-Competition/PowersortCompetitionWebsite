@@ -18,14 +18,16 @@
       <FlyweightLeaderboard />
     </suspense>
   </div>
+
+  <ScatterGraph />
 </template>
 
 <script setup>
-// import Chart from 'chart.js';
-
 import HeavyweightLeaderboard from "@/components/HeavyweightLeaderboard.vue";
 import MediumweightLeaderboard from "@/components/MediumweightLeaderboard.vue";
 import FlyweightLeaderboard from "@/components/FlyweightLeaderboard.vue";
+
+import ScatterGraph from "@/components/ScatterGraph.vue";
 </script>
 
 <style scoped></style>
