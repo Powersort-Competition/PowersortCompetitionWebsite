@@ -18,6 +18,8 @@
 </template>
 
 <script setup>
+import axios from "axios";
+
 import FileDropper from "@/components/FileDropper.vue";
 import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
@@ -70,32 +72,51 @@ const handleFileDrop = async (submission_content) => {
   submission_input_data.append("file", submission_content);
   submission_input_data.append("submissionId", 1);
 
-  const requestOptions = {
-    method: "POST",
+  // const requestOptions = {
+  //   method: "POST",
+  //   headers: {
+  //     "content-type": "application/json",
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  //   body: JSON.stringify({
+  //     user_id: 1,
+  //     powersort_comp: psortComps,
+  //     timsort_comp: tsortComps,
+  //     ratio_comp: tsortComps / psortComps,
+  //     powersort_merge_cost: psortMergeCost,
+  //     timsort_merge_cost: tsortMergeCost,
+  //     submission_size: getInputSize(submission_content),
+  //   }),
+  // };
+
+  let requestData = {
+    user_id: 1,
+    powersort_comp: psortComps,
+    timsort_comp: tsortComps,
+    ratio_comp: tsortComps / psortComps,
+    powersort_merge_cost: psortMergeCost,
+    timsort_merge_cost: tsortMergeCost,
+    submission_size: getInputSize(submission_content),
+  };
+  axios.post("/new_submission", requestData, {
     headers: {
       "content-type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify({
-      user_id: 1,
-      powersort_comp: psortComps,
-      timsort_comp: tsortComps,
-      ratio_comp: tsortComps / psortComps,
-      powersort_merge_cost: psortMergeCost,
-      timsort_merge_cost: tsortMergeCost,
-      submission_size: getInputSize(submission_content),
-    }),
-  };
+    }
+  })
 
-  fetch(`${import.meta.env.VITE_BACKEND_URL}/new_submission`, requestOptions)
-    .then((response) => response.json())
-    .then((data) => (servResponse.status = data));
 
-  fetch(`${import.meta.env.VITE_BACKEND_URL}/submission_input_save`, {
-    method: "POST",
-    headers: { "file_name": 1 },
-    body: submission_input_data,
-  });
+  // fetch(`${import.meta.env.VITE_BACKEND_URL}/submission_input_save`, {
+  //   method: "POST",
+  //   headers: { "file_name": 1 },
+  //   body: submission_input_data,
+  // });
+  axios.post("/submission_input_save", submission_input_data, {
+    headers: {
+      "file-name": 1,
+      "Access-Control-Allow-Origin": "*",
+    }
+  })
 
   processed = true;
   await forceRerender();
