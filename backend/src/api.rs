@@ -5,6 +5,8 @@ use diesel::prelude::*;
 
 use std::io::Read;
 use std::fs;
+use std::ptr::null;
+use actix_web::web::Path;
 
 use dotenv::dotenv;
 use pyo3::ffi::wrapperbase;
@@ -13,7 +15,7 @@ use crate::database::init_db;
 
 use crate::models::{User, NewUser, Submission, NewSubmission, FileDownload};
 use crate::schema::submissions::dsl::submissions;
-use crate::schema::submissions::ratio_comp;
+use crate::schema::submissions::{ratio_comp, submission_size};
 use crate::schema::users::dsl::*;
 
 #[get("/ping")]
@@ -26,7 +28,7 @@ pub async fn ping() -> HttpResponse
 Internal function to check if user exists by probing database with email.
  */
 #[allow(unused_parens)]
-fn check_usr_exists(mut conn: PgConnection, email_addr: Option<String>) -> bool
+fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
 {
     //let res = users.select(User::as_select()).load(&mut conn);
     //println!("{:?}", res.unwrap().get(1).unwrap().email);
@@ -37,13 +39,14 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: Option<String>) -> bool
     else { return false }
 }
 
-fn get_user_id(mut conn: PgConnection, email_addr: Option<String>) -> i32
+fn get_user_id(mut conn: PgConnection, email_addr: String) -> i32
 {
     let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
 
     return res.expect("Cannot find user id! This should not happen!").get(0).unwrap().user_id
 }
 
+// Top 5 GLOBAL submissions irrespective of upload size.
 #[get("/top_5_submissions")]
 pub async fn top_5_submissions() -> HttpResponse
 {
@@ -56,6 +59,50 @@ pub async fn top_5_submissions() -> HttpResponse
         top_5.push(submission);
     }
 
+    HttpResponse::Ok().json(top_5)
+}
+
+// class = flyweight OR mediumweight OR heavyweight.
+#[get("/weightclass_leading_submissions/{class}")]
+pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpResponse
+{
+    let _class = class.into_inner();
+    println!("Getting top 5 submissions for weight class: {}", _class);
+
+    let res;
+    
+    if (_class == "flyweight")
+    {
+        res = submissions
+            .filter(submission_size.lt(i32::pow(10, 4)))
+            .order(ratio_comp.desc())
+            .limit(5)
+            .load::<Submission>(&mut init_db());
+    }
+    else if (_class == "mediumweight")
+    {
+        res = submissions
+            .filter(submission_size.ge(i32::pow(10, 4)).and(submission_size.lt(i32::pow(10, 6))))
+            .order(ratio_comp.desc())
+            .limit(5)
+            .load::<Submission>(&mut init_db());
+    }
+    else // heavyweight
+    {
+        res = submissions
+            .filter(submission_size.ge(i32::pow(10, 6)))
+            .order(ratio_comp.desc())
+            .limit(5)
+            .load::<Submission>(&mut init_db());
+    }
+    
+    let mut top_5 = Vec::new();
+    
+    for submission in res.expect("Error loading top 5 flyweight submissions!")
+    {
+        top_5.push(submission);
+    }
+    
     HttpResponse::Ok().json(top_5)
 }
 
@@ -102,6 +149,7 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         ratio_comp: submission.ratio_comp.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
+        submission_size: submission.submission_size.clone()
     };
     let _ = diesel::insert_into(submissions).values(&_new_submission).execute(&mut init_db());
 
@@ -117,7 +165,9 @@ pub async fn submission_input_save(req: HttpRequest,
     let headers = req.headers();
     let mut contents = String::new();
 
-    let file_name = headers.get("file_name").unwrap().to_str().unwrap();
+    println!("{:#?}", headers);
+
+    let file_name = headers.get("file-name").unwrap().to_str().unwrap();
     let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
                                                                  file_name);
 

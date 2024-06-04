@@ -8,7 +8,8 @@ diesel::table! {
         timsort_comp -> Int4,
         ratio_comp -> Float8,
         powersort_merge_cost -> Int4,
-        timsort_merge_cost -> Int4
+        timsort_merge_cost -> Int4,
+        submission_size -> Int4,
     }
 }
 
@@ -16,11 +17,11 @@ diesel::table! {
     users (user_id) {
         user_id -> Int4,
         #[max_length = 50]
-        first_name -> Nullable<Varchar>,
+        first_name -> Varchar,
         #[max_length = 50]
-        last_name -> Nullable<Varchar>,
+        last_name -> Varchar,
         #[max_length = 50]
-        email -> Nullable<Varchar>,
+        email -> Varchar,
     }
 }
 

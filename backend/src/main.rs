@@ -44,8 +44,8 @@ async fn main() -> std::io::Result<()>
             .service(api::my_user_id)
             .service(api::new_submission)
             .service(api::top_5_submissions)
+            .service(api::weightclass_leading_submissions)
             .service(api::submission_input_save)
-            .app_data(web::PayloadConfig::default().limit(10000000))
     });
 
     actix_server = match listenfd.take_tcp_listener(0)?
