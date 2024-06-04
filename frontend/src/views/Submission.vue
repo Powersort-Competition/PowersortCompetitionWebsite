@@ -93,7 +93,7 @@ const handleFileDrop = async (submission_content) => {
 
   fetch(`${import.meta.env.VITE_BACKEND_URL}/submission_input_save`, {
     method: "POST",
-    headers: { file_name: 1 },
+    headers: { "file_name": 1 },
     body: submission_input_data,
   });
 
