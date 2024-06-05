@@ -20,11 +20,17 @@
 <script setup>
 import axios from "axios";
 
+import router from "@/router/index.js";
 import FileDropper from "@/components/FileDropper.vue";
 import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
 import { getInputSize, getUserID, getEmailFromCookie } from "@/misc.js";
-import router from "@/router/index.js";
+
+// Check if oauth cookie is set. If not, redirect to login.
+if ($cookies.get("pscomp_oauth") == null) {
+  console.log("Not logged in... routing to login page");
+  router.push({ name: "login" });
+}
 
 let needsServerComp = false;
 let processed = false;
@@ -32,12 +38,6 @@ let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
 
 const fileDropComponent = ref(true);
 const email = getEmailFromCookie();
-
-// Check if oauth cookie is set. If not, redirect to login.
-if ($cookies.get("pscomp_oauth") == null) {
-  console.log("Not logged in... routing to login page");
-  router.push({ name: "login" });
-}
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
