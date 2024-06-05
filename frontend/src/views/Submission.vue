@@ -23,18 +23,21 @@ import axios from "axios";
 import FileDropper from "@/components/FileDropper.vue";
 import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
-import { getInputSize } from "@/misc.js";
+import { getInputSize, getUserID, getEmailFromCookie } from "@/misc.js";
+import router from "@/router/index.js";
 
 let needsServerComp = false;
 let processed = false;
 let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
+
 const fileDropComponent = ref(true);
+const email = getEmailFromCookie();
 
 // Check if oauth cookie is set. If not, redirect to login.
-// if ($cookies.get("pscomp_oauth") == null) {
-//   console.log("Not logged in... routing to login page");
-//   router.push({ name: "login" });
-// }
+if ($cookies.get("pscomp_oauth") == null) {
+  console.log("Not logged in... routing to login page");
+  router.push({ name: "login" });
+}
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -70,27 +73,10 @@ const handleFileDrop = async (submission_content) => {
   var submission_input_data = new FormData();
 
   submission_input_data.append("file", submission_content);
-  submission_input_data.append("submissionId", 1);
-
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: {
-  //     "content-type": "application/json",
-  //     "Access-Control-Allow-Origin": "*",
-  //   },
-  //   body: JSON.stringify({
-  //     user_id: 1,
-  //     powersort_comp: psortComps,
-  //     timsort_comp: tsortComps,
-  //     ratio_comp: tsortComps / psortComps,
-  //     powersort_merge_cost: psortMergeCost,
-  //     timsort_merge_cost: tsortMergeCost,
-  //     submission_size: getInputSize(submission_content),
-  //   }),
-  // };
+  submission_input_data.append("submissionId", 1); // Might be able to remove this now?
 
   let requestData = {
-    user_id: 1,
+    user_id: getUserID(email),
     powersort_comp: psortComps,
     timsort_comp: tsortComps,
     ratio_comp: tsortComps / psortComps,
@@ -105,12 +91,6 @@ const handleFileDrop = async (submission_content) => {
     }
   })
 
-
-  // fetch(`${import.meta.env.VITE_BACKEND_URL}/submission_input_save`, {
-  //   method: "POST",
-  //   headers: { "file_name": 1 },
-  //   body: submission_input_data,
-  // });
   axios.post("/submission_input_save", submission_input_data, {
     headers: {
       "file-name": 1,
