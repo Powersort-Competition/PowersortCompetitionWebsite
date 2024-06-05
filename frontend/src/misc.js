@@ -29,5 +29,5 @@ export function getUserID(email)
         email: email,
     }
 
-    return axios.post("/get_user_id", userRequest)
+    return axios.post("/my_user_id", userRequest)
 }
