@@ -14,7 +14,7 @@ export default ({ mode }) => {
       "process.env": env,
     },
     plugins: [vue()],
-    base: "https://shayandoust.github.io/PowersortCompetitionWebsite/",
+    base: "https://powersort-competition.github.io/PowersortCompetitionWebsite/",
     server: {
       host: true,
       port: 8080,
