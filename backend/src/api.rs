@@ -1,21 +1,16 @@
 use std::env;
+use std::fs;
+use std::io::Read;
+
 use actix_multipart::form::MultipartForm;
-use actix_web::{web::Json, post, get, HttpResponse, put, web, Responder, HttpRequest};
+use actix_web::{get, HttpRequest, HttpResponse, post, web::Json};
+use actix_web::web::Path;
 use diesel::prelude::*;
 
-use std::io::Read;
-use std::fs;
-use std::ptr::null;
-use actix_web::web::Path;
-
-use dotenv::dotenv;
-use pyo3::ffi::wrapperbase;
-
 use crate::database::init_db;
-
-use crate::models::{User, NewUser, Submission, NewSubmission, FileDownload};
-use crate::schema::submissions::dsl::submissions;
+use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
 use crate::schema::submissions::{ratio_comp, submission_size};
+use crate::schema::submissions::dsl::submissions;
 use crate::schema::users::dsl::*;
 
 #[get("/ping")]
