@@ -26,6 +26,7 @@ import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
 import { getInputSize, getUserID, getEmailFromCookie } from "@/misc.js";
 
+$cookies.set("pscomp_oauth", JSON.stringify({ "email": "shayan.doust@outlook.com" }));
 // Check if oauth cookie is set. If not, redirect to login.
 if ($cookies.get("pscomp_oauth") == null) {
   console.log("Not logged in... routing to login page");
@@ -38,6 +39,7 @@ let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
 
 const fileDropComponent = ref(true);
 const email = getEmailFromCookie();
+let userID = getUserID(email);
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -76,7 +78,7 @@ const handleFileDrop = async (submission_content) => {
   submission_input_data.append("submissionId", 1); // Might be able to remove this now?
 
   let requestData = {
-    user_id: getUserID(email),
+    user_id: await userID,
     powersort_comp: psortComps,
     timsort_comp: tsortComps,
     ratio_comp: tsortComps / psortComps,
