@@ -75,6 +75,7 @@ const handleFileDrop = async (submission_content) => {
   var submission_input_data = new FormData();
 
   submission_input_data.append("file", submission_content);
+  // REDUNDANCY!
   submission_input_data.append("submissionId", 1); // Might be able to remove this now?
 
   let requestData = {
@@ -91,14 +92,14 @@ const handleFileDrop = async (submission_content) => {
       "content-type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
-  })
-
-  axios.post("/submission_input_save", submission_input_data, {
-    headers: {
-      "file-name": 1,
-      "Access-Control-Allow-Origin": "*",
-    }
-  })
+  }).then((response) => {
+    axios.post("/submission_input_save", submission_input_data, {
+      headers: {
+        "file-name": response.data,
+        "Access-Control-Allow-Origin": "*",
+      }
+    })
+  });
 
   processed = true;
   await forceRerender();
