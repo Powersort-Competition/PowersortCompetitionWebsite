@@ -26,7 +26,7 @@ import { nextTick, ref } from "vue";
 import { asyncRun } from "../py_webworker.js";
 import { getInputSize, getUserID, getEmailFromCookie } from "@/misc.js";
 
-$cookies.set("pscomp_oauth", JSON.stringify({ "email": "shayan.doust@outlook.com" }));
+// $cookies.set("pscomp_oauth", JSON.stringify({ "email": "shayan.doust@outlook.com" }));
 // Check if oauth cookie is set. If not, redirect to login.
 if ($cookies.get("pscomp_oauth") == null) {
   console.log("Not logged in... routing to login page");

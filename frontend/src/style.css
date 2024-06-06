@@ -59,11 +59,6 @@ body {
   height: 900px;
 }
 
-.stats {
-  display: flex;
-  top: 50%;
-}
-
 .useful {
   position: absolute;
   top: 25%;

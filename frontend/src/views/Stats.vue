@@ -19,7 +19,7 @@
     </suspense>
   </div>
 
-  <ScatterGraph />
+<!--  <ScatterGraph />-->
 </template>
 
 <script setup>
