@@ -1,22 +1,21 @@
 import axios from "axios";
 
 export function getInputSize(inputArr) {
-  inputArr = inputArr.split(",");
+    inputArr = inputArr.split(",");
 
-  return inputArr.length;
+    return inputArr.length;
 }
 
 // TODO: Replace this function with axios.
 export function backendHealthCheck() {
-  return fetch("https://psortcomp.shayandoust.me/ping")
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    });
+    return fetch("https://psortcomp.shayandoust.me/ping")
+        .then((response) => response.json())
+        .then((data) => {
+            return data;
+        });
 }
 
-export function getEmailFromCookie()
-{
+export function getEmailFromCookie() {
     return $cookies.get("pscomp_oauth").email;
 }
 

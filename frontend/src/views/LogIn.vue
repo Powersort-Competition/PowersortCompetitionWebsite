@@ -4,17 +4,17 @@
       In order to upload a submission, you need to log in using a Google
       account.
 
-      <br /><br />
-      <GoogleLogin :callback="callback" />
+      <br/><br/>
+      <GoogleLogin :callback="callback"/>
     </p>
     <p v-else>You are already logged in as {{ email }}.</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {ref} from "vue";
 
-import { decodeCredential, GoogleLogin } from "vue3-google-login";
+import {decodeCredential, GoogleLogin} from "vue3-google-login";
 import router from "@/router/index.js";
 
 let email;
@@ -46,14 +46,14 @@ const callback = (response) => {
   };
 
   fetch("https://psortcomp.shayandoust.me/logged_in", requestOptions)
-    .then((response) => response.json())
-    .then((data) => (servResponse.status = data));
+      .then((response) => response.json())
+      .then((data) => (servResponse.status = data));
 
   console.log("Server replied with: ", response);
 
   $cookies.set("pscomp_oauth", JSON.stringify(decoded_res));
 
   // Once logged in, route to home page.
-  router.push({ name: "home" });
+  router.push({name: "home"});
 };
 </script>

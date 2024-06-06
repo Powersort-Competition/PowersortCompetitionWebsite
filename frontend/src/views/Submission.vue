@@ -2,7 +2,7 @@
   <div class="submission">
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
-        <FileDropper @file-dropped="handleFileDrop" />
+        <FileDropper @file-dropped="handleFileDrop"/>
       </div>
       <div v-else-if="needsServerComp == true">
         Your submission is too large for in-browser computation, so it has been
@@ -22,15 +22,15 @@ import axios from "axios";
 
 import router from "@/router/index.js";
 import FileDropper from "@/components/FileDropper.vue";
-import { nextTick, ref } from "vue";
-import { asyncRun } from "../py_webworker.js";
-import { getInputSize, getUserID, getEmailFromCookie } from "@/misc.js";
+import {nextTick, ref} from "vue";
+import {asyncRun} from "../py_webworker.js";
+import {getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
 
 // $cookies.set("pscomp_oauth", JSON.stringify({ "email": "shayan.doust@outlook.com" }));
 // Check if oauth cookie is set. If not, redirect to login.
 if ($cookies.get("pscomp_oauth") == null) {
   console.log("Not logged in... routing to login page");
-  router.push({ name: "login" });
+  router.push({name: "login"});
 }
 
 let needsServerComp = false;
@@ -51,8 +51,8 @@ const forceRerender = async () => {
 
 const handleFileDrop = async (submission_content) => {
   console.log(
-    "File dropped! Processing with length: ",
-    submission_content.length,
+      "File dropped! Processing with length: ",
+      submission_content.length,
   );
 
   // If input file is too big for Pyodide, send to server for computation instead.
@@ -156,7 +156,7 @@ async function runPyWebWorker(submission_content) {
     return results;
   } catch (e) {
     console.log(
-      `Error with Pyodide web worker at ${e.filename}, ${e.lineno}, ${e.message}`,
+        `Error with Pyodide web worker at ${e.filename}, ${e.lineno}, ${e.message}`,
     );
   }
 }

@@ -5,24 +5,24 @@
         Top 5 heavyweight submissions
       </caption>
       <thead>
-        <tr>
-          <th scope="col">Submission ID</th>
-          <th scope="col">Powersort Comparisons</th>
-          <th scope="col">Timsort Comparisons</th>
-          <th scope="col">Powersort Merge Cost</th>
-          <th scope="col">Timsort Merge Cost</th>
-          <th scope="col">Comparison ratio</th>
-        </tr>
+      <tr>
+        <th scope="col">Submission ID</th>
+        <th scope="col">Powersort Comparisons</th>
+        <th scope="col">Timsort Comparisons</th>
+        <th scope="col">Powersort Merge Cost</th>
+        <th scope="col">Timsort Merge Cost</th>
+        <th scope="col">Comparison ratio</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="submission in leaderboardJson">
-          <td>{{ submission.submission_id }}</td>
-          <td>{{ submission.powersort_comp }}</td>
-          <td>{{ submission.timsort_comp }}</td>
-          <td>{{ submission.powersort_merge_cost }}</td>
-          <td>{{ submission.timsort_merge_cost }}</td>
-          <td>{{ submission.ratio_comp }}</td>
-        </tr>
+      <tr v-for="submission in leaderboardJson">
+        <td>{{ submission.submission_id }}</td>
+        <td>{{ submission.powersort_comp }}</td>
+        <td>{{ submission.timsort_comp }}</td>
+        <td>{{ submission.powersort_merge_cost }}</td>
+        <td>{{ submission.timsort_merge_cost }}</td>
+        <td>{{ submission.ratio_comp }}</td>
+      </tr>
       </tbody>
     </table>
   </Suspense>
@@ -31,14 +31,14 @@
 <script>
 import axios from "axios";
 
-let { data } = await axios.get(
-  `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/heavyweight`,
+let {data} = await axios.get(
+    `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/heavyweight`,
 );
 const leaderboardJson = data;
 
 export default {
   async setup() {
-    return { leaderboardJson };
+    return {leaderboardJson};
   },
 };
 </script>

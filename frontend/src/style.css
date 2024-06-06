@@ -1,74 +1,74 @@
 @import "bootstrap/scss/bootstrap.scss";
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 10px;
-  padding: 2rem;
-  text-align: center;
+    max-width: 1280px;
+    margin: 10px;
+    padding: 2rem;
+    text-align: center;
 }
 
 #top_nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  height: 23px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 23px;
 }
 
 .login {
-  position: absolute;
-  top: 400px;
-  left: 700px;
-  text-align: center;
+    position: absolute;
+    top: 400px;
+    left: 700px;
+    text-align: center;
 }
 
 .home {
-  position: fixed;
-  width: 95%;
-  top: 100px;
+    position: fixed;
+    width: 95%;
+    top: 100px;
 }
 
 .leaderboard-table {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 900px;
 }
 
 .useful {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
 }

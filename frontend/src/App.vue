@@ -12,7 +12,7 @@
     |
     <router-link to="/login">Log In</router-link>
   </nav>
-  <router-view />
+  <router-view/>
 </template>
 
 <style>

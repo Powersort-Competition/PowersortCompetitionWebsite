@@ -2,9 +2,9 @@
   <div class="home">
     <h1>Powersort Competition</h1>
 
-    <br />
+    <br/>
     <Suspense>
-      <Leaderboard />
+      <Leaderboard/>
     </Suspense>
   </div>
 </template>

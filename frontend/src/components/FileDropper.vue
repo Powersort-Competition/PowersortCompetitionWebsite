@@ -1,20 +1,20 @@
 <template>
   <div class="main">
     <div
-      class="dropzone-container"
-      @dragover="dragover"
-      @dragleave="dragleave"
-      @drop="drop"
+        class="dropzone-container"
+        @dragover="dragover"
+        @dragleave="dragleave"
+        @drop="drop"
     >
       <input
-        type="file"
-        multiple
-        name="file"
-        id="fileInput"
-        class="hidden-input"
-        @change="onChange"
-        ref="file"
-        accept=".txt"
+          type="file"
+          multiple
+          name="file"
+          id="fileInput"
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          accept=".txt"
       />
 
       <label for="fileInput" class="file-label">
