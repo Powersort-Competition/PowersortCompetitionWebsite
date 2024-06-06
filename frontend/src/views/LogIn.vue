@@ -15,6 +15,7 @@
 import { ref } from "vue";
 
 import { decodeCredential, GoogleLogin } from "vue3-google-login";
+import router from "@/router/index.js";
 
 let email;
 if ($cookies.get("pscomp_oauth") != null) {
