@@ -39,12 +39,12 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
     else { return false }
 }
 
-fn get_user_id(mut conn: PgConnection, email_addr: String) -> i32
-{
-    let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
-
-    return res.expect("Cannot find user id! This should not happen!").get(0).unwrap().user_id
-}
+// fn get_user_id(mut conn: PgConnection, email_addr: String) -> i32
+// {
+//     let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
+// 
+//     return res.expect("Cannot find user id! This should not happen!").get(0).unwrap().user_id
+// }
 
 // Top 5 GLOBAL submissions irrespective of upload size.
 #[get("/top_5_submissions")]
@@ -133,7 +133,10 @@ pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse
 #[post("/my_user_id")]
 pub async fn my_user_id(usr_details: Json<User>) -> HttpResponse
 {
-    HttpResponse::Ok().json(get_user_id(init_db(), usr_details.email.clone()))
+    // We are only concerned with user email, as that is unique.
+    let res = users.filter(email.eq(usr_details.email.clone())).load::<User>(&mut init_db());
+    
+    HttpResponse::Ok().json(res.expect("Error loading user ID!").get(0).unwrap().user_id)
 }
 
 #[post("/new_submission")]
@@ -164,8 +167,6 @@ pub async fn submission_input_save(req: HttpRequest,
 
     let headers = req.headers();
     let mut contents = String::new();
-
-    println!("{:#?}", headers);
 
     let file_name = headers.get("file-name").unwrap().to_str().unwrap();
     let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
