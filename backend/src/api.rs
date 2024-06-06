@@ -9,7 +9,7 @@ use diesel::prelude::*;
 
 use crate::database::init_db;
 use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
-use crate::schema::submissions::{ratio_comp, submission_size};
+use crate::schema::submissions::{ratio_comp, submission_id, submission_size};
 use crate::schema::submissions::dsl::submissions;
 use crate::schema::users::dsl::*;
 
@@ -149,9 +149,11 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
         submission_size: submission.submission_size.clone()
     };
-    let _ = diesel::insert_into(submissions).values(&_new_submission).execute(&mut init_db());
+    let s_id = diesel::insert_into(submissions).values(&_new_submission)
+        .returning(submission_id)
+        .get_result::<i32>(&mut init_db());
 
-    HttpResponse::Ok().json("Success".to_string())
+    HttpResponse::Ok().json(s_id.unwrap())
 }
 
 #[post("/submission_input_save")]
