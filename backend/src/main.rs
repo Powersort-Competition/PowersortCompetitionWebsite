@@ -25,7 +25,6 @@ async fn main() -> std::io::Result<()>
     create_submission_data_dir();
     
     python_hook::run_py_hook("2,-1".to_string()).await.expect("Error running Python hook!");
-    //mailer::send_email("Hello, World!".to_string(), "hello@shayandoust.me".to_string());
     
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(|| {

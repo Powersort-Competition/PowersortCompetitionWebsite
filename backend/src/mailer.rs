@@ -31,7 +31,7 @@ pub fn send_email(body: String, email: String)
 fn body_constructor(body: String, email: String) -> Message
 {
     let mail = Message::builder()
-        .from("no-reply@powersortcomp".parse().unwrap())
+        .from(env::var("MAIL_FROM").unwrap().parse().unwrap())
         .to(email.parse().unwrap())
         .subject("Powersort Competition Receipt")
         .header(ContentType::TEXT_HTML)

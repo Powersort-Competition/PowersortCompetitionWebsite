@@ -8,6 +8,7 @@ use actix_web::web::Path;
 use diesel::prelude::*;
 
 use crate::database::init_db;
+use crate::mailer;
 use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
 use crate::schema::submissions::{ratio_comp, submission_id, submission_size};
 use crate::schema::submissions::dsl::submissions;
@@ -34,12 +35,31 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
     else { return false }
 }
 
-// fn get_user_id(mut conn: PgConnection, email_addr: String) -> i32
-// {
-//     let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
-// 
-//     return res.expect("Cannot find user id! This should not happen!").get(0).unwrap().user_id
-// }
+fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
+{
+    let body = format!("Hello! Your submission has been recorded successfully. \
+                        \n\n<br> <br> Powersort Comparison: {} \
+                        \n<br> Timsort Comparison: {} \
+                        \n<br> Ratio Comparison: {} \
+                        \n<br> Powersort Merge Cost: {} \
+                        \n<br> Timsort Merge Cost: {} \
+                        \n<br> Submission Size: {}",
+                        submission.powersort_comp,
+                        submission.timsort_comp,
+                        submission.ratio_comp,
+                        submission.powersort_merge_cost,
+                        submission.timsort_merge_cost,
+                        submission.submission_size);
+
+    mailer::send_email(body, usr_details.email.clone());
+}
+
+fn get_email_from_user_id(usr_id: i32) -> String
+{
+    let res = users.filter(user_id.eq(usr_id)).load::<User>(&mut init_db());
+    
+    return res.expect("Error loading user email!").get(0).unwrap().email.clone();
+}
 
 // Top 5 GLOBAL submissions irrespective of upload size.
 #[get("/top_5_submissions")]
@@ -153,6 +173,12 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         .returning(submission_id)
         .get_result::<i32>(&mut init_db());
 
+    // Send email receipt to user.
+    let email_addr = get_email_from_user_id(_new_submission.user_id);
+    dispatch_mail_receipt(Json(User { 
+        user_id: 0, first_name: "".to_string(), last_name: "".to_string(), email: email_addr 
+    }), _new_submission);
+    
     HttpResponse::Ok().json(s_id.unwrap())
 }
 
