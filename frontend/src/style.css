@@ -66,6 +66,13 @@ body {
     width: 50%;
 }
 
+/*.submission {*/
+/*    display: flex;*/
+/*    top: 100px;*/
+/*    width: 90%;*/
+/*    height: 200px;*/
+/*}*/
+
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;

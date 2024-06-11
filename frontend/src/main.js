@@ -4,13 +4,14 @@ import "./style.css";
 import App from "./App.vue";
 import {backendHealthCheck} from "@/misc.js";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
-
 import axios from "axios";
 import vue3GoogleLogin from "vue3-google-login";
 import VueCookies from "vue-cookies";
 import router from "./router";
+
+import {createBootstrap} from 'bootstrap-vue-next'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 const app = createApp(App).use(router);
 
@@ -18,6 +19,7 @@ const app = createApp(App).use(router);
 if ((await backendHealthCheck()) == "pong") {
     axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
+    app.use(createBootstrap());
     app.use(VueCookies, {expires: "6h"});
     app.use(vue3GoogleLogin, {
         clientId:

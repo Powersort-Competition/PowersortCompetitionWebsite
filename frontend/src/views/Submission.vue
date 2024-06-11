@@ -1,5 +1,5 @@
 <template>
-  <div class="submission">
+  <div class="home">
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop"/>
@@ -10,8 +10,31 @@
         results.
       </div>
       <div v-else-if="processed == true">
-        Your submission caused {{ psortComps }} comparisons on Powersort and
-        {{ tsortComps }} comparisons on Timsort.
+        <BAlert :model-value="true" variant="success">
+          <h4 class="alert-heading">Success!</h4>
+
+          <p>
+            Your submission has been computed and recorded successfully! You should momentarily
+            receive an email receipt outlining computation details for your convenience.
+
+            <br>
+            It is now safe to close this page.
+          </p>
+
+          <hr>
+
+          <p class="mb-0">
+            <b>Number of Powersort Comparisons</b>: <code>{{ psortComps }}</code>
+            <br>
+            <b>Number of Timsort Comparisons</b>: <code>{{ tsortComps }}</code>
+            <br>
+            <b>Powersort MergeCost</b>: <code>{{ psortMergeCost }}</code>
+            <br>
+            <b>Timsort MergeCost</b>: <code>{{ tsortMergeCost }}</code>
+          </p>
+        </BAlert>
+        <!--        Your submission caused {{ psortComps }} comparisons on Powersort and-->
+        <!--        {{ tsortComps }} comparisons on Timsort.-->
       </div>
     </div>
   </div>
@@ -19,19 +42,19 @@
 
 <script setup>
 import axios from "axios";
-
-import router from "@/router/index.js";
 import FileDropper from "@/components/FileDropper.vue";
 import {nextTick, ref} from "vue";
 import {asyncRun} from "../py_webworker.js";
 import {getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
 
-// $cookies.set("pscomp_oauth", JSON.stringify({ "email": "shayan.doust@outlook.com" }));
+import {BAlert} from "bootstrap-vue-next";
+
+$cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
 // Check if oauth cookie is set. If not, redirect to login.
-if ($cookies.get("pscomp_oauth") == null) {
-  console.log("Not logged in... routing to login page");
-  router.push({name: "login"});
-}
+// if ($cookies.get("pscomp_oauth") == null) {
+//   console.log("Not logged in... routing to login page");
+//   router.push({name: "login"});
+// }
 
 let needsServerComp = false;
 let processed = false;
