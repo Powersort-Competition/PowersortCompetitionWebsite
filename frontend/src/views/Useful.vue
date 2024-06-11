@@ -2,49 +2,40 @@
   <div class="useful">
     <h2>"What file formats can I use for the submission?"</h2>
     <p>
-      Currently, the only accepted file format is a plain text file with the
-      extension ".txt". The contents of the files should be a list of comma
-      separated elements, with the list enclosed in square brackets. For
-      example, the following are valid contents of a file:
+      Currently, the only accepted file format is a plain text file.
+      The contents of the files should be a list of comma separated elements,
+      with the list enclosed in square brackets. For example, the following
+      are valid contents of a file:
 
       <br/>
       <br/>
-      <code> [1, 2, 3, 4, 5] </code>
+      <code> [1, 'b', -1025, 3, 'a', 5] </code>
     </p>
+
+    Notice that valid elements are those that have intrinsic lexicographic ordering.
 
     <br/>
     <br/>
     <h2>"What is the maximum file size allowed?"</h2>
-    <p>todo</p>
-
-    <br/><br/>
-    <h2>"I need some inspiration for an input..."</h2>
     <p>
-      Whilst you can generate an input of random permutations and hope it
-      performs worse on Powersort than Timsort, one can be more strategic in
-      their approach. For instance, one can pick permutations from some
-      probabilistic distribution that can be hard for Powersort, whilst another
-      way could be using real-world data such as
-      <a
-          class="btn btn-outline-success btn-sm"
-          href="https://github.com/mxw/grmr/blob/master/src/finaltests/bible.txt"
-          role="button"
-      >
-        The Bible </a
-      >.
+      There is no upper limit on the file size. However, as of right now, the number
+      of elements should not exceed <code>TODO</code> elements, due to limitations
+      of in-browser resource allocation towards computing the costs of Timsort and
+      Powersort.
 
       <br/>
       <br/>
-      Regardless, some examples exist in the
-      <a
-          class="btn btn-outline-success btn-sm"
-          href="https://github.com/shayandoust/PowersortCompetitionExamples"
-          role="button"
-      >
-        Powersort Competition Examples
-      </a>
-      repository.
+      This will, however, change in the upcoming days, with an upper limit of <code>15^6</code>
+      elements being feasible.
     </p>
+
+    <br/>
+    <br/>
+    <h2>"How can I start? I need some inspiration!"</h2>
+    <p>
+
+    </p>
+
   </div>
 </template>
 <script setup lang="ts"></script>
