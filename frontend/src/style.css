@@ -61,9 +61,10 @@ body {
 
 .useful {
     position: absolute;
-    top: 25%;
+    top: 15%;
     left: 25%;
     width: 50%;
+    height: 900px;
 }
 
 /*.submission {*/
