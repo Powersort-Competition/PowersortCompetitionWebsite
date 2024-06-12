@@ -11,7 +11,7 @@
       </div>
       <div v-else-if="processed == true">
         <BAlert :model-value="true" variant="success">
-          <h4 class="alert-heading">Success!</h4>
+          <h4 class="alert-heading"><IMdiCheck /> Success!</h4>
 
           <p>
             Your submission has been computed and recorded successfully! You should momentarily
@@ -33,8 +33,6 @@
             <b>Timsort MergeCost</b>: <code>{{ tsortMergeCost }}</code>
           </p>
         </BAlert>
-        <!--        Your submission caused {{ psortComps }} comparisons on Powersort and-->
-        <!--        {{ tsortComps }} comparisons on Timsort.-->
       </div>
     </div>
   </div>
