@@ -6,7 +6,7 @@ diesel::table! {
         user_id -> Int4,
         powersort_comp -> Int4,
         timsort_comp -> Int4,
-        ratio_comp -> Float8,
+        perc_diff -> Float8,
         powersort_merge_cost -> Int4,
         timsort_merge_cost -> Int4,
         submission_size -> Int4,

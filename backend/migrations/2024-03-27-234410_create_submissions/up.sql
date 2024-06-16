@@ -3,7 +3,7 @@ CREATE TABLE submissions (
     user_id INT NOT NULL,
     powersort_comp integer NOT NULL,
     timsort_comp integer NOT NULL,
-    ratio_comp float NOT NULL,
+    perc_diff float NOT NULL,
     powersort_merge_cost integer NOT NULL,
     timsort_merge_cost integer NOT NULL,
     submission_size integer NOT NULL,

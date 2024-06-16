@@ -10,7 +10,7 @@ use diesel::prelude::*;
 use crate::database::init_db;
 use crate::mailer;
 use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
-use crate::schema::submissions::{ratio_comp, submission_id, submission_size};
+use crate::schema::submissions::{perc_diff, submission_id, submission_size};
 use crate::schema::submissions::dsl::submissions;
 use crate::schema::users::dsl::*;
 
@@ -40,13 +40,13 @@ fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
     let body = format!("Hello! Your submission has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
                         \n<br> Timsort Comparison: {} \
-                        \n<br> Ratio Comparison: {} \
+                        \n<br> Difference in merge costs: {} \
                         \n<br> Powersort Merge Cost: {} \
                         \n<br> Timsort Merge Cost: {} \
                         \n<br> Submission Size: {}",
                         submission.powersort_comp,
                         submission.timsort_comp,
-                        submission.ratio_comp,
+                        submission.perc_diff,
                         submission.powersort_merge_cost,
                         submission.timsort_merge_cost,
                         submission.submission_size);
@@ -65,7 +65,7 @@ fn get_email_from_user_id(usr_id: i32) -> String
 #[get("/top_5_submissions")]
 pub async fn top_5_submissions() -> HttpResponse
 {
-    let res = submissions.order(ratio_comp.desc()).limit(5).load::<Submission>(&mut init_db());
+    let res = submissions.order(perc_diff.desc()).limit(5).load::<Submission>(&mut init_db());
 
     let mut top_5 = Vec::new();
 
@@ -90,7 +90,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     {
         res = submissions
             .filter(submission_size.lt(i32::pow(10, 4)))
-            .order(ratio_comp.desc())
+            .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     }
@@ -98,7 +98,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     {
         res = submissions
             .filter(submission_size.ge(i32::pow(10, 4)).and(submission_size.lt(i32::pow(10, 6))))
-            .order(ratio_comp.desc())
+            .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     }
@@ -106,7 +106,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     {
         res = submissions
             .filter(submission_size.ge(i32::pow(10, 6)))
-            .order(ratio_comp.desc())
+            .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     }
@@ -164,7 +164,7 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         user_id: submission.user_id,
         powersort_comp: submission.powersort_comp.clone(),
         timsort_comp: submission.timsort_comp.clone(),
-        ratio_comp: submission.ratio_comp.clone(),
+        perc_diff: submission.perc_diff.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
         submission_size: submission.submission_size.clone()

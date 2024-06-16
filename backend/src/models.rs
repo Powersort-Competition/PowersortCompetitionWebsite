@@ -39,7 +39,7 @@ pub struct Submission
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub ratio_comp: f64,
+    pub perc_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32
@@ -52,7 +52,7 @@ pub struct NewSubmission
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub ratio_comp: f64,
+    pub perc_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32
