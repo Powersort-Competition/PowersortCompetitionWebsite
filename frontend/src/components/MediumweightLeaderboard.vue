@@ -11,7 +11,7 @@
         <th scope="col">Timsort Comparisons</th>
         <th scope="col">Powersort Merge Cost</th>
         <th scope="col">Timsort Merge Cost</th>
-        <th scope="col">Comparison ratio</th>
+        <th scope="col">Merge Cost Difference (%)</th>
       </tr>
       </thead>
       <tbody>
@@ -21,7 +21,7 @@
         <td>{{ submission.timsort_comp }}</td>
         <td>{{ submission.powersort_merge_cost }}</td>
         <td>{{ submission.timsort_merge_cost }}</td>
-        <td>{{ submission.ratio_comp }}</td>
+        <td>{{ submission.perc_diff }}</td>
       </tr>
       </tbody>
     </table>

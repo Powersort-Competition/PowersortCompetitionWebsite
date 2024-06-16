@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+<!--    <suspense>-->
+<!--      <div v-if = "backendOnline !== true">-->
+<!--        <BackendOfflineAlert />-->
+<!--      </div>-->
+<!--    </suspense>-->
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop"/>
@@ -41,22 +46,26 @@
 <script setup>
 import axios from "axios";
 import FileDropper from "@/components/FileDropper.vue";
+import BackendOfflineAlert from "@/components/BackendOfflineAlert.vue";
 import {nextTick, ref} from "vue";
 import {asyncRun} from "../py_webworker.js";
-import {getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
+import {backendHealthCheck, percDifference, getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
 
 import {BAlert} from "bootstrap-vue-next";
 
-$cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
+// $cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
 // Check if oauth cookie is set. If not, redirect to login.
-// if ($cookies.get("pscomp_oauth") == null) {
-//   console.log("Not logged in... routing to login page");
-//   router.push({name: "login"});
-// }
+if ($cookies.get("pscomp_oauth") == null) {
+  console.log("Not logged in... routing to login page");
+  router.push({name: "login"});
+}
 
+let backendOnline = false;
 let needsServerComp = false;
 let processed = false;
 let psortComps, tsortComps, psortMergeCost, tsortMergeCost;
+
+// if (await backendHealthCheck() === "pong") { backendOnline = true; } else { backendOnline = false; }
 
 const fileDropComponent = ref(true);
 const email = getEmailFromCookie();
@@ -103,7 +112,7 @@ const handleFileDrop = async (submission_content) => {
     user_id: await userID,
     powersort_comp: psortComps,
     timsort_comp: tsortComps,
-    ratio_comp: tsortComps / psortComps,
+    perc_diff: percDifference(tsortMergeCost, psortMergeCost),
     powersort_merge_cost: psortMergeCost,
     timsort_merge_cost: tsortMergeCost,
     submission_size: getInputSize(submission_content),
