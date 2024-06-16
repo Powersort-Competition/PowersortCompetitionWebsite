@@ -6,6 +6,7 @@ use actix_multipart::form::MultipartForm;
 use actix_web::{get, HttpRequest, HttpResponse, post, web::Json};
 use actix_web::web::Path;
 use diesel::prelude::*;
+use futures::executor::block_on;
 
 use crate::crypto::hash_submission;
 use crate::database::init_db;
@@ -35,8 +36,11 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
     if (res_size == 1) { return true; } else { return false; }
 }
 
-fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
+fn dispatch_mail_receipt(email_addr: String, s_id: i32, submission: NewSubmission)
 {
+    let hash_submission_str = block_on(hash_submission(s_id));
+    
+    println!("Hash submission string: {}", hash_submission_str);
     let body = format!("Hello! Your submission has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
                         \n<br> Timsort Comparison: {} \
@@ -44,16 +48,16 @@ fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
                         \n<br> Powersort Merge Cost: {} \
                         \n<br> Timsort Merge Cost: {} \
                         \n<br> Submission Size: {} \
-                         \n\n<br> <br> {} ",
+                         \n\n<br> <br> <br> <br> <br> {} ",
                        submission.powersort_comp,
                        submission.timsort_comp,
                        submission.perc_diff,
                        submission.powersort_merge_cost,
                        submission.timsort_merge_cost,
                        submission.submission_size,
-                       hash_submission(submission));
+                       hash_submission_str);
 
-    mailer::send_email(body, usr_details.email.clone());
+    mailer::send_email(body, email_addr);
 }
 
 fn get_email_from_user_id(usr_id: i32) -> String
@@ -171,18 +175,14 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
     };
     let s_id = diesel::insert_into(submissions).values(&_new_submission)
         .returning(submission_id)
-        .get_result::<i32>(&mut init_db());
+        .get_result::<i32>(&mut init_db())
+        .unwrap();
 
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(Json(User {
-        user_id: 0,
-        first_name: "".to_string(),
-        last_name: "".to_string(),
-        email: email_addr,
-    }), _new_submission);
+    dispatch_mail_receipt(email_addr, s_id, _new_submission);
 
-    HttpResponse::Ok().json(s_id.unwrap())
+    HttpResponse::Ok().json(s_id)
 }
 
 #[post("/submission_input_save")]
