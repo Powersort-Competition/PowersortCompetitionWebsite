@@ -19,6 +19,7 @@ dotenv = "0.15.0"
 lettre = "0.11.6"
 futures = "0.3.30"
 chrono = "0.4.38"
+argon2 = "0.5.3"
 
 [dependencies.pyo3]
 version = "0.21.2"

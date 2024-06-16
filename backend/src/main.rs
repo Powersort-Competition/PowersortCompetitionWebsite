@@ -3,6 +3,7 @@ use actix_cors::Cors;
 use listenfd;
 use dotenv::dotenv;
 use std::env;
+use crate::crypto::hash_submission;
 
 
 mod utils;
@@ -12,6 +13,7 @@ mod models;
 mod database;
 mod python_hook;
 mod mailer;
+mod crypto;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>
