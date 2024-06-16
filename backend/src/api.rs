@@ -7,6 +7,7 @@ use actix_web::{get, HttpRequest, HttpResponse, post, web::Json};
 use actix_web::web::Path;
 use diesel::prelude::*;
 
+use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::mailer;
 use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
@@ -31,8 +32,7 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
     let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
     let res_size = res.expect("Error checking if user exists in database!").len();
 
-    if (res_size == 1) { return true }
-    else { return false }
+    if (res_size == 1) { return true; } else { return false; }
 }
 
 fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
@@ -43,13 +43,15 @@ fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
                         \n<br> Difference in merge costs: {} \
                         \n<br> Powersort Merge Cost: {} \
                         \n<br> Timsort Merge Cost: {} \
-                        \n<br> Submission Size: {}",
-                        submission.powersort_comp,
-                        submission.timsort_comp,
-                        submission.perc_diff,
-                        submission.powersort_merge_cost,
-                        submission.timsort_merge_cost,
-                        submission.submission_size);
+                        \n<br> Submission Size: {} \
+                         \n\n<br> <br> {} ",
+                       submission.powersort_comp,
+                       submission.timsort_comp,
+                       submission.perc_diff,
+                       submission.powersort_merge_cost,
+                       submission.timsort_merge_cost,
+                       submission.submission_size,
+                       hash_submission(submission));
 
     mailer::send_email(body, usr_details.email.clone());
 }
@@ -57,7 +59,7 @@ fn dispatch_mail_receipt(usr_details: Json<User>, submission: NewSubmission)
 fn get_email_from_user_id(usr_id: i32) -> String
 {
     let res = users.filter(user_id.eq(usr_id)).load::<User>(&mut init_db());
-    
+
     return res.expect("Error loading user email!").get(0).unwrap().email.clone();
 }
 
@@ -85,7 +87,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     println!("Getting top 5 submissions for weight class: {}", _class);
 
     let res;
-    
+
     if (_class == "flyweight")
     {
         res = submissions
@@ -93,16 +95,14 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
             .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
-    }
-    else if (_class == "mediumweight")
+    } else if (_class == "mediumweight")
     {
         res = submissions
             .filter(submission_size.ge(i32::pow(10, 4)).and(submission_size.lt(i32::pow(10, 6))))
             .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
-    }
-    else // heavyweight
+    } else // heavyweight
     {
         res = submissions
             .filter(submission_size.ge(i32::pow(10, 6)))
@@ -110,14 +110,14 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
             .limit(5)
             .load::<Submission>(&mut init_db());
     }
-    
+
     let mut top_5 = Vec::new();
-    
+
     for submission in res.expect("Error loading top 5 flyweight submissions!")
     {
         top_5.push(submission);
     }
-    
+
     HttpResponse::Ok().json(top_5)
 }
 
@@ -127,7 +127,7 @@ pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse
 {
     // Check if user already exists in the database via their email address.
     let usr_exists = check_usr_exists(init_db(), usr_details.email.clone());
-    
+
     if (!usr_exists)
     {
         println!("Creating new user in database.");
@@ -136,7 +136,7 @@ pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse
         {
             first_name: usr_details.first_name.clone(),
             last_name: usr_details.last_name.clone(),
-            email: usr_details.email.clone()
+            email: usr_details.email.clone(),
         };
 
         let _ = diesel::insert_into(users).values(&_new_usr).execute(&mut init_db());
@@ -150,7 +150,7 @@ pub async fn my_user_id(usr_details: Json<User>) -> HttpResponse
 {
     // We are only concerned with user email, as that is unique.
     let res = users.filter(email.eq(usr_details.email.clone())).load::<User>(&mut init_db());
-    
+
     HttpResponse::Ok().json(res.expect("Error loading user ID!").get(0).unwrap().user_id)
 }
 
@@ -167,7 +167,7 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         perc_diff: submission.perc_diff.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
-        submission_size: submission.submission_size.clone()
+        submission_size: submission.submission_size.clone(),
     };
     let s_id = diesel::insert_into(submissions).values(&_new_submission)
         .returning(submission_id)
@@ -175,10 +175,13 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
 
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(Json(User { 
-        user_id: 0, first_name: "".to_string(), last_name: "".to_string(), email: email_addr 
+    dispatch_mail_receipt(Json(User {
+        user_id: 0,
+        first_name: "".to_string(),
+        last_name: "".to_string(),
+        email: email_addr,
     }), _new_submission);
-    
+
     HttpResponse::Ok().json(s_id.unwrap())
 }
 
@@ -193,7 +196,7 @@ pub async fn submission_input_save(req: HttpRequest,
 
     let file_name = headers.get("file-name").unwrap().to_str().unwrap();
     let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
-                                                                 file_name);
+                            file_name);
 
     form.file[0].file.read_to_string(&mut contents).expect("Error reading file contents!");
 

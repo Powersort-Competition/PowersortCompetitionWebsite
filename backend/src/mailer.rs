@@ -1,12 +1,11 @@
 use std::env;
-use lettre::message::header::ContentType;
-use lettre::transport::smtp::authentication::Credentials;
-use lettre::{Message, SmtpTransport, Transport};
 
 use dotenv::dotenv;
+use lettre::{Message, SmtpTransport, Transport};
+use lettre::message::header::ContentType;
+use lettre::transport::smtp::authentication::Credentials;
 
-pub fn send_email(body: String, email: String)
-{
+pub fn send_email(body: String, email: String) {
     dotenv().ok();
 
     let mail = body_constructor(body, email);
@@ -21,15 +20,13 @@ pub fn send_email(body: String, email: String)
         .build();
 
     // Send the email!
-    match mailer.send(&mail)
-    {
+    match mailer.send(&mail) {
         Ok(_) => println!("An email has been sent!"),
-        Err(e) => panic!("Could not send email! Error: {e:?}")
+        Err(e) => panic!("Could not send email! Error: {e:?}"),
     }
 }
 
-fn body_constructor(body: String, email: String) -> Message
-{
+fn body_constructor(body: String, email: String) -> Message {
     let mail = Message::builder()
         .from(env::var("MAIL_FROM").unwrap().parse().unwrap())
         .to(email.parse().unwrap())

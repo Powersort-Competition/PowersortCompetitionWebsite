@@ -27,7 +27,4 @@ diesel::table! {
 
 diesel::joinable!(submissions -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    submissions,
-    users,
-);
+diesel::allow_tables_to_appear_in_same_query!(submissions, users,);
