@@ -1,6 +1,15 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    submission_hashes (hash_id) {
+        hash_id -> Int4,
+        submission_id -> Int4,
+        #[max_length = 64]
+        hash -> Varchar,
+    }
+}
+
+diesel::table! {
     submissions (submission_id) {
         submission_id -> Int4,
         user_id -> Int4,
@@ -25,6 +34,11 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(submission_hashes -> submissions (submission_id));
 diesel::joinable!(submissions -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(submissions, users,);
+diesel::allow_tables_to_appear_in_same_query!(
+    submission_hashes,
+    submissions,
+    users,
+);

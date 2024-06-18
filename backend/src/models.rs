@@ -53,6 +53,13 @@ pub struct NewSubmission {
     pub submission_size: i32,
 }
 
+#[derive(Insertable, Serialize, Deserialize)]
+#[diesel(table_name = crate::schema::submission_hashes)]
+pub struct SubmissionHash {
+    pub submission_id: i32,
+    pub hash: String,
+}
+
 #[derive(Debug, MultipartForm)]
 struct UploadForm {
     #[multipart(rename = "file")]

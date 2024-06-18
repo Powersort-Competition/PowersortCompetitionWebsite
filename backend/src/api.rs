@@ -11,7 +11,8 @@ use futures::executor::block_on;
 use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::mailer;
-use crate::models::{FileDownload, NewSubmission, NewUser, Submission, User};
+use crate::models::{FileDownload, NewSubmission, NewUser, Submission, SubmissionHash, User};
+use crate::schema::submission_hashes::dsl::submission_hashes;
 use crate::schema::submissions::{perc_diff, submission_id, submission_size};
 use crate::schema::submissions::dsl::submissions;
 use crate::schema::users::dsl::*;
@@ -36,11 +37,9 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool
     if (res_size == 1) { return true; } else { return false; }
 }
 
-fn dispatch_mail_receipt(email_addr: String, s_id: i32, submission: NewSubmission)
+fn dispatch_mail_receipt(email_addr: String, submission_hash_str: String, submission: NewSubmission)
 {
-    let hash_submission_str = block_on(hash_submission(s_id));
-    
-    println!("Hash submission string: {}", hash_submission_str);
+    println!("Hash submission string: {}", submission_hash_str);
     let body = format!("Hello! Your submission has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
                         \n<br> Timsort Comparison: {} \
@@ -55,7 +54,7 @@ fn dispatch_mail_receipt(email_addr: String, s_id: i32, submission: NewSubmissio
                        submission.powersort_merge_cost,
                        submission.timsort_merge_cost,
                        submission.submission_size,
-                       hash_submission_str);
+                       submission_hash_str);
 
     mailer::send_email(body, email_addr);
 }
@@ -177,10 +176,21 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         .returning(submission_id)
         .get_result::<i32>(&mut init_db())
         .unwrap();
+    
+    // Hash submission ID, and record it to the database. Then, send it via email.
+    let submission_hash_str = block_on(hash_submission(s_id));
+    let _submission_hash = SubmissionHash
+    {
+        submission_id: s_id,
+        hash: submission_hash_str.clone(),
+    };
+    
+    let _ = diesel::insert_into(submission_hashes).values(&_submission_hash)
+        .execute(&mut init_db()).unwrap();
 
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(email_addr, s_id, _new_submission);
+    dispatch_mail_receipt(email_addr, submission_hash_str, _new_submission);
 
     HttpResponse::Ok().json(s_id)
 }
