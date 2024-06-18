@@ -14,13 +14,16 @@ function roundToThree(num) {
 // Work out the (absolute) difference between the two sort merge costs.
 export function percDifference(tsortMergeCost, psortMergeCost)
 {
+    if (tsortMergeCost === 0 && psortMergeCost === 0) {
+        return 0;
+    }
+
     let diff = (100 *
         Math.abs(tsortMergeCost - psortMergeCost) / ((tsortMergeCost + psortMergeCost) / 2));
 
     return roundToThree(diff);
 }
 
-// TODO: Replace this function with axios.
 export function backendHealthCheck() {
     // return fetch("https://psortcomp.shayandoust.me/ping")
     //     .then((response) => response.json())
