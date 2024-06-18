@@ -28,7 +28,7 @@ pub struct NewUser {
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize)]
-#[diesel(table_name = crate::schema::submissions)]
+#[diesel(table_name = crate::schema::tracka_submissions)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Submission {
     pub submission_id: i32,
@@ -42,7 +42,7 @@ pub struct Submission {
 }
 
 #[derive(Insertable, Serialize, Deserialize)]
-#[diesel(table_name = crate::schema::submissions)]
+#[diesel(table_name = crate::schema::tracka_submissions)]
 pub struct NewSubmission {
     pub user_id: i32,
     pub powersort_comp: i32,
@@ -54,7 +54,7 @@ pub struct NewSubmission {
 }
 
 #[derive(Insertable, Serialize, Deserialize)]
-#[diesel(table_name = crate::schema::submission_hashes)]
+#[diesel(table_name = crate::schema::tracka_submission_hashes)]
 pub struct SubmissionHash {
     pub submission_id: i32,
     pub hash: String,

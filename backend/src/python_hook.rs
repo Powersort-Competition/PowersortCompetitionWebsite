@@ -4,13 +4,13 @@ use pyo3::types::PyList;
 pub async fn run_py_hook(input: String) -> PyResult<()> {
     println!("Running Python hook.");
     let py_psort = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/py_assets/Powersort.py"
+    env!("CARGO_MANIFEST_DIR"),
+    "/py_assets/Powersort.py"
     ));
     let py_tsort = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/py_assets/Timsort.py"));
     let py_counters = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/py_assets/Counters.py"
+    env!("CARGO_MANIFEST_DIR"),
+    "/py_assets/Counters.py"
     ));
 
     let psort_python_app = Python::with_gil(|py| -> PyResult<Py<PyAny>> {

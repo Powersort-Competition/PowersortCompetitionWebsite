@@ -1,7 +1,7 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    submission_hashes (hash_id) {
+    tracka_submission_hashes (hash_id) {
         hash_id -> Int4,
         submission_id -> Int4,
         #[max_length = 64]
@@ -10,7 +10,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    submissions (submission_id) {
+    tracka_submissions (submission_id) {
         submission_id -> Int4,
         user_id -> Int4,
         powersort_comp -> Int4,
@@ -19,6 +19,13 @@ diesel::table! {
         powersort_merge_cost -> Int4,
         timsort_merge_cost -> Int4,
         submission_size -> Int4,
+    }
+}
+
+diesel::table! {
+    trackb_submissions (submission_id) {
+        submission_id -> Int4,
+        description -> Text,
     }
 }
 
@@ -34,11 +41,12 @@ diesel::table! {
     }
 }
 
-diesel::joinable!(submission_hashes -> submissions (submission_id));
-diesel::joinable!(submissions -> users (user_id));
+diesel::joinable!(tracka_submission_hashes -> tracka_submissions (submission_id));
+diesel::joinable!(tracka_submissions -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    submission_hashes,
-    submissions,
+    tracka_submission_hashes,
+    tracka_submissions,
+    trackb_submissions,
     users,
 );

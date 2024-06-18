@@ -12,9 +12,9 @@ use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::mailer;
 use crate::models::{FileDownload, NewSubmission, NewUser, Submission, SubmissionHash, User};
-use crate::schema::submission_hashes::dsl::submission_hashes;
-use crate::schema::submissions::{perc_diff, submission_id, submission_size};
-use crate::schema::submissions::dsl::submissions;
+use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
+use crate::schema::tracka_submissions::{perc_diff, submission_id, submission_size};
+use crate::schema::tracka_submissions::dsl::tracka_submissions;
 use crate::schema::users::dsl::*;
 
 #[get("/ping")]
@@ -70,7 +70,7 @@ fn get_email_from_user_id(usr_id: i32) -> String
 #[get("/top_5_submissions")]
 pub async fn top_5_submissions() -> HttpResponse
 {
-    let res = submissions.order(perc_diff.desc()).limit(5).load::<Submission>(&mut init_db());
+    let res = tracka_submissions.order(perc_diff.desc()).limit(5).load::<Submission>(&mut init_db());
 
     let mut top_5 = Vec::new();
 
@@ -93,21 +93,21 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
 
     if (_class == "flyweight")
     {
-        res = submissions
+        res = tracka_submissions
             .filter(submission_size.lt(i32::pow(10, 4)))
             .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     } else if (_class == "mediumweight")
     {
-        res = submissions
+        res = tracka_submissions
             .filter(submission_size.ge(i32::pow(10, 4)).and(submission_size.lt(i32::pow(10, 6))))
             .order(perc_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     } else // heavyweight
     {
-        res = submissions
+        res = tracka_submissions
             .filter(submission_size.ge(i32::pow(10, 6)))
             .order(perc_diff.desc())
             .limit(5)
@@ -172,11 +172,11 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
         submission_size: submission.submission_size.clone(),
     };
-    let s_id = diesel::insert_into(submissions).values(&_new_submission)
+    let s_id = diesel::insert_into(tracka_submissions).values(&_new_submission)
         .returning(submission_id)
         .get_result::<i32>(&mut init_db())
         .unwrap();
-    
+
     // Hash submission ID, and record it to the database. Then, send it via email.
     let submission_hash_str = block_on(hash_submission(s_id));
     let _submission_hash = SubmissionHash
@@ -184,8 +184,8 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse
         submission_id: s_id,
         hash: submission_hash_str.clone(),
     };
-    
-    let _ = diesel::insert_into(submission_hashes).values(&_submission_hash)
+
+    let _ = diesel::insert_into(tracka_submission_hashes).values(&_submission_hash)
         .execute(&mut init_db()).unwrap();
 
     // Send email receipt to user.
@@ -205,8 +205,18 @@ pub async fn submission_input_save(req: HttpRequest,
     let mut contents = String::new();
 
     let file_name = headers.get("file-name").unwrap().to_str().unwrap();
-    let file_path = format!("{}/submissions/{}", env::var("EGRESS_DIR").unwrap(),
+    let track = headers.get("track").unwrap().to_str().unwrap();
+
+    let file_path;
+    if (track == "A") // Track A
+    {
+        file_path = format!("{}/submissions/TrackA/{}", env::var("EGRESS_DIR").unwrap(),
                             file_name);
+    } else // Track B
+    {
+        file_path = format!("{}/submissions/TrackB/{}", env::var("EGRESS_DIR").unwrap(),
+                            file_name);
+    }
 
     form.file[0].file.read_to_string(&mut contents).expect("Error reading file contents!");
 
