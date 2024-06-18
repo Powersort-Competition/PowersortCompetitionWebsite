@@ -126,6 +126,7 @@ const handleFileDrop = async (submission_content) => {
     axios.post("/submission_input_save", submission_input_data, {
       headers: {
         "file-name": response.data,
+        "track": "A",
         "Access-Control-Allow-Origin": "*",
       }
     })
