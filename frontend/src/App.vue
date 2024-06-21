@@ -10,6 +10,8 @@
     |
     <router-link to="/submission">Submit</router-link>
     |
+    <router-link to="/trackB">Track B</router-link>
+    |
     <router-link to="/login">Log In</router-link>
   </nav>
   <router-view/>
