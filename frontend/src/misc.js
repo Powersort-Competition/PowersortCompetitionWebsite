@@ -12,8 +12,7 @@ function roundToThree(num) {
 }
 
 // Work out the (absolute) difference between the two sort merge costs.
-export function percDifference(tsortMergeCost, psortMergeCost)
-{
+export function percDifference(tsortMergeCost, psortMergeCost) {
     if (tsortMergeCost === 0 && psortMergeCost === 0) {
         return 0;
     }

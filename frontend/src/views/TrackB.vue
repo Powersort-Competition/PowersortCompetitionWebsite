@@ -12,8 +12,6 @@
 <script setup>
 import FileDropper from "@/components/FileDropper.vue";
 import axios from "axios";
-
-import {BAlert} from "bootstrap-vue-next";
 import {nextTick, ref} from "vue";
 
 const fileDropComponent = ref(true);
@@ -27,7 +25,7 @@ const forceRerender = async () => {
   fileDropComponent.value = true;
 }
 
-const handleFileDrop = async(submission_content) => {
+const handleFileDrop = async (submission_content) => {
   console.log("File dropped!");
 
   var submission_input_data = new FormData();

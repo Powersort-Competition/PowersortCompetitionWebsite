@@ -3,7 +3,7 @@
     <h1>Powersort Competition</h1>
 
     <div class="homeicon">
-      <IIcBaselineFilterList />
+      <IIcBaselineFilterList/>
     </div>
     <br/>
     <Suspense>

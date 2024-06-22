@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-<!--    <suspense>-->
-<!--      <div v-if = "backendOnline !== true">-->
-<!--        <BackendOfflineAlert />-->
-<!--      </div>-->
-<!--    </suspense>-->
+    <!--    <suspense>-->
+    <!--      <div v-if = "backendOnline !== true">-->
+    <!--        <BackendOfflineAlert />-->
+    <!--      </div>-->
+    <!--    </suspense>-->
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop"/>
@@ -16,7 +16,10 @@
       </div>
       <div v-else-if="processed == true">
         <BAlert :model-value="true" variant="success">
-          <h4 class="alert-heading"><IMdiCheck /> Success!</h4>
+          <h4 class="alert-heading">
+            <IMdiCheck/>
+            Success!
+          </h4>
 
           <p>
             Your submission has been computed and recorded successfully! You should momentarily
@@ -46,10 +49,9 @@
 <script setup>
 import axios from "axios";
 import FileDropper from "@/components/FileDropper.vue";
-import BackendOfflineAlert from "@/components/BackendOfflineAlert.vue";
 import {nextTick, ref} from "vue";
 import {asyncRun} from "../py_webworker.js";
-import {backendHealthCheck, percDifference, getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
+import {getEmailFromCookie, getInputSize, getUserID, percDifference} from "@/misc.js";
 
 import {BAlert} from "bootstrap-vue-next";
 import router from "@/router/index.js";
@@ -107,7 +109,7 @@ const handleFileDrop = async (submission_content) => {
 
   submission_input_data.append("file", submission_content);
   // REDUNDANCY!
- // submission_input_data.append("submissionId", 1); // Might be able to remove this now?
+  // submission_input_data.append("submissionId", 1); // Might be able to remove this now?
 
   let requestData = {
     user_id: await userID,

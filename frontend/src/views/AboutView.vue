@@ -2,33 +2,35 @@
   <div class="useful">
     <h1>Background</h1>
     <p>
-    Help us as citizen scientist to improve Python's sorting algorithm! Win prizes by solving puzzles and
-    help the climate! Every bit counts.
+      Help us as citizen scientist to improve Python's sorting algorithm! Win prizes by solving puzzles and
+      help the climate! Every bit counts.
 
-    <br>
-    <br>
-    Sorting is a core step in many computational tasks, and a faster sorting algorithm can provide faster
-    execution time and reduced energy consumption without changes to application code. Based on our
-    <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc" target="_blank" rel="noopener">
-      theoretical computer science research
-    </BLink>,
-    sorting lists in Python is up to [40% faster since Python 3.11](uni News) due to Powersort.
+      <br>
+      <br>
+      Sorting is a core step in many computational tasks, and a faster sorting algorithm can provide faster
+      execution time and reduced energy consumption without changes to application code. Based on our
+      <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc" target="_blank" rel="noopener">
+        theoretical computer science research
+      </BLink>
+      ,
+      sorting lists in Python is up to [40% faster since Python 3.11](uni News) due to Powersort.
 
-    <br>
-    <br>
-    Help us better understand the algorithm's performance in the wild, and bring its benefits to other communities.
-    And earn some serious prizes along the way!
+      <br>
+      <br>
+      Help us better understand the algorithm's performance in the wild, and bring its benefits to other communities.
+      And earn some serious prizes along the way!
 
-    <br>
-    <br>
-    We seek your help in 3 tracks:
+      <br>
+      <br>
+      We seek your help in 3 tracks:
     </p>
 
     <BCardGroup deck>
       <BCard bg-variant="light" header="Track A" class="text-center">
         <BCardText>
           <p>
-            Timsort and Powersort are <i>adaptive</i> sorting algorithms: they are faster if the input has more presorted
+            Timsort and Powersort are <i>adaptive</i> sorting algorithms: they are faster if the input has more
+            presorted
             areas ("runs"). This behavior is based on finding good merge trees (by implicitly solving an optimization
             problem looking for a nearly [optimal binary search tree](CP ref geeks for geeks or so)!).
 
@@ -68,17 +70,19 @@
     <br>
     <br>
     <BCardGroup deck>
-    <BCard bg-variant="light" header="Flyweight" class="text-center">
-      <BCardText>Submissions where the number of elements is less than <code>10,000</code>.</BCardText>
-    </BCard>
-    <BCard bg-variant="light" header="Mediumweight" class="text-center">
-      <BCardText>Submissions where the number of elements is at least <code>10,000</code>
-        and at most <code>1,000,000</code>.</BCardText>
-    </BCard>
-    <BCard bg-variant="light" header="Heavyweight" class="text-center">
-      <BCardText>Submissions where the number of elements is equal to or greater than
-      <code>1,000,000</code>.</BCardText>
-    </BCard>
+      <BCard bg-variant="light" header="Flyweight" class="text-center">
+        <BCardText>Submissions where the number of elements is less than <code>10,000</code>.</BCardText>
+      </BCard>
+      <BCard bg-variant="light" header="Mediumweight" class="text-center">
+        <BCardText>Submissions where the number of elements is at least <code>10,000</code>
+          and at most <code>1,000,000</code>.
+        </BCardText>
+      </BCard>
+      <BCard bg-variant="light" header="Heavyweight" class="text-center">
+        <BCardText>Submissions where the number of elements is equal to or greater than
+          <code>1,000,000</code>.
+        </BCardText>
+      </BCard>
     </BCardGroup>
 
     <br>
