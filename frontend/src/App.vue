@@ -8,7 +8,7 @@
     |
     <router-link to="/stats">Statistics</router-link>
     |
-    <router-link to="/submission">Submit</router-link>
+    <router-link to="/trackA">Track A</router-link>
     |
     <router-link to="/trackB">Track B</router-link>
     |

@@ -52,6 +52,7 @@ import {asyncRun} from "../py_webworker.js";
 import {backendHealthCheck, percDifference, getEmailFromCookie, getInputSize, getUserID} from "@/misc.js";
 
 import {BAlert} from "bootstrap-vue-next";
+import router from "@/router/index.js";
 
 // $cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
 // Check if oauth cookie is set. If not, redirect to login.
@@ -106,7 +107,7 @@ const handleFileDrop = async (submission_content) => {
 
   submission_input_data.append("file", submission_content);
   // REDUNDANCY!
-  submission_input_data.append("submissionId", 1); // Might be able to remove this now?
+ // submission_input_data.append("submissionId", 1); // Might be able to remove this now?
 
   let requestData = {
     user_id: await userID,

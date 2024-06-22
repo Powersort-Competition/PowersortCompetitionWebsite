@@ -25,10 +25,10 @@ const routes = [
         },
     },
     {
-        path: "/submission",
-        name: "submission",
+        path: "/trackA",
+        name: "trackA",
         component: function () {
-            return import("../views/Submission.vue");
+            return import("../views/TrackA.vue");
         },
     },
     {
