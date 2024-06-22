@@ -12,6 +12,8 @@
     |
     <router-link to="/trackB">Track B</router-link>
     |
+    <router-link to="/trackC">Track C</router-link>
+    |
     <router-link to="/login">Log In</router-link>
   </nav>
   <router-view/>

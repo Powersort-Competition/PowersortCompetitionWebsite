@@ -39,6 +39,13 @@ const routes = [
         },
     },
     {
+        path: "/trackC",
+        name: "trackC",
+        component: function () {
+            return import("../views/TrackC.vue");
+        }
+    },
+    {
         path: "/useful",
         name: "useful",
         component: function () {
