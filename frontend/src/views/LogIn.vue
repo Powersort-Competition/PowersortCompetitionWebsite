@@ -47,7 +47,7 @@ const callback = (response) => {
 
   fetch("https://psortcomp.shayandoust.me/logged_in", requestOptions)
       .then((response) => response.json())
-      .then((data) => (servResponse.status = data));
+      .then((data) => (servResponse.value.status = data));
 
   console.log("Server replied with: ", response);
 
