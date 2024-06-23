@@ -1,9 +1,9 @@
 use std::env;
 
 use dotenv::dotenv;
-use lettre::{Message, SmtpTransport, Transport};
 use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
 
 pub fn send_email(body: String, email: String) {
     dotenv().ok();

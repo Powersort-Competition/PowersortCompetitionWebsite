@@ -64,7 +64,9 @@ async fn main() -> std::io::Result<()> {
 
 fn create_submission_data_dir() {
     let data_dir = env::var("EGRESS_DIR").expect("EGRESS_DIR must be set!");
-    let submission_dir = format!("{}/submissions", data_dir);
+    let trackA_submission_dir = format!("{}/submissions/TrackA", data_dir);
+    let trackB_submission_dir = format!("{}/submissions/TrackB", data_dir);
 
-    std::fs::create_dir_all(submission_dir).expect("Could not create submissions directory!");
+    std::fs::create_dir_all(trackA_submission_dir).expect("Could not create submissions directory!");
+    std::fs::create_dir_all(trackB_submission_dir).expect("Could not create submissions directory!");
 }
