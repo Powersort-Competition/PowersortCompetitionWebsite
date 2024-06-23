@@ -5,8 +5,9 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    left: 38%;
+    left: 25%;
     top: 250px;
+    width: 900px;
 }
 
 .dropzone-container {

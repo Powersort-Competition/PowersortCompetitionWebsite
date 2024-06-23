@@ -19,7 +19,14 @@
 
       <label for="fileInput" class="file-label">
         <div v-if="isDragging">Release to drop submission file here!</div>
-        <div v-else-if="hasDropped">Processing. This might take a while...</div>
+        <div v-else-if="hasDropped">
+          <p>
+            For track A: processing - keep this window open. This might take a while!
+            <br>
+            <br>
+            For track B: the file has been attached. Please complete the description and click submit.
+          </p>
+        </div>
         <div v-else>Drop submission text (txt) file here!</div>
       </label>
     </div>

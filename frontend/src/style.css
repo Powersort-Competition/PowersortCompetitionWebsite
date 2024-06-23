@@ -82,6 +82,14 @@ body {
     font-size: 90px;
 }
 
+.textAreaTrackBox {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    width: 50%;
+}
+
 /*.submission {*/
 /*    display: flex;*/
 /*    top: 100px;*/
