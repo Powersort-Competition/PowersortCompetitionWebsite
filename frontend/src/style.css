@@ -23,23 +23,31 @@ body {
     min-height: 200vh;
 }
 
-
-.leaderboard-table {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 800px;
+.main {
+    /*nothing needed here*/
 }
 
-.stats {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    bottom: 350px;
-    left: 40%;
-    margin-top: -50px;
-    margin-left: -50px;
+.wide-table {
+    overflow-x:auto;
 }
+
+
+/*.leaderboard-table {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    height: 800px;*/
+/*}*/
+
+/*.stats {*/
+/*    position: relative;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    bottom: 350px;*/
+/*    left: 40%;*/
+/*    margin-top: -50px;*/
+/*    margin-left: -50px;*/
+/*}*/
 
 
 .homeicon {

@@ -1,5 +1,5 @@
 <template>
-  <div class="useful">
+  <div class="main">
     <h2>"What file formats can I use for the submission?"</h2>
     <p>
       Currently, the only accepted file format is a plain text file.

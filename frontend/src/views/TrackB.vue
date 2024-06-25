@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="main">
     <h1>Track B Submission</h1>
   <suspense>
   <div v-if="fileDropComponent">

@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <div class="leaderboard-table" >
+    <div class="wide-table" >
       <table class="table">
         <caption>
           Top 5 global submissions

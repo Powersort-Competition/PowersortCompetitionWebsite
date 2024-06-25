@@ -1,5 +1,5 @@
 <template>
-  <div class="stats">
+  <div class="main">
     <h1>Leaderboards</h1>
     <h2>Heavyweight</h2>
 

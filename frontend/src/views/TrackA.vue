@@ -1,4 +1,5 @@
 <template>
+  <div class="main">
     <h1>Track A Submission</h1>
     <!--    <suspense>-->
     <!--      <div v-if = "backendOnline !== true">-->
@@ -43,6 +44,7 @@
         </BAlert>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>

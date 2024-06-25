@@ -1,5 +1,6 @@
 <template>
   <Suspense>
+    <div class="wide-table" >
     <table class="table">
       <caption>
         Top 5 mediumweight submissions
@@ -25,6 +26,7 @@
       </tr>
       </tbody>
     </table>
+    </div>
   </Suspense>
 </template>
 

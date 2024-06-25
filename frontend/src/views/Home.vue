@@ -1,5 +1,5 @@
 <template>
-
+  <div class="main">
   <h1>Powersort Competition</h1>
 
   <div class="homeicon">
@@ -19,7 +19,7 @@
   <Suspense>
     <Leaderboard/>
   </Suspense>
-
+  </div>
 </template>
 
 <script setup>
