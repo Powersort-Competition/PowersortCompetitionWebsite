@@ -13,7 +13,6 @@
             rows="3"
             max-rows="6"
         />
-
         <BButton @click="buttonClicked">Submit</BButton>
       </div>
     </div>

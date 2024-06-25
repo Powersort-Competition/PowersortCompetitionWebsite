@@ -54,7 +54,10 @@ body {
 
 
 .homeicon {
-    font-size: 90px;
+    display: block;
+    float: right;
+    margin-left: 1em;
+    width: 12em;
 }
 
 

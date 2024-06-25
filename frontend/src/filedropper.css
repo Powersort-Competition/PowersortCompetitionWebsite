@@ -1,14 +1,14 @@
-.main {
-    display: flex;
-    position: absolute;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    left: 25%;
-    top: 250px;
-    width: 900px;
-}
+/*.main {*/
+/*    display: flex;*/
+/*    position: absolute;*/
+/*    flex-grow: 1;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    text-align: center;*/
+/*    left: 25%;*/
+/*    top: 250px;*/
+/*    width: 900px;*/
+/*}*/
 
 .dropzone-container {
     padding: 4rem;

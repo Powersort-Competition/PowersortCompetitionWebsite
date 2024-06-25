@@ -24,8 +24,8 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
+  //text-align: left;
+  //color: #2c3e50;
   margin-top: 5%;
   padding: 2rem;
   overflow: auto;
@@ -49,5 +49,6 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+  //background-color: #42b983;
 }
 </style>

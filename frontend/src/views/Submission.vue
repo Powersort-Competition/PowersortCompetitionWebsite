@@ -13,22 +13,42 @@
     </p>
     <br/>
     <p>
-      <strong>To submit to the Powersort Competition, please select a track below:</strong>
-      <ul>
-        <li>
-          <BLink to="trackA"><strong>Track A:</strong> Sort this, Timsort!</BLink>
-        </li>
-        <li>
-          <BLink to="trackB"><strong>Track B:</strong> Sorting-in-the-Wild Benchmark</BLink>
-        </li>
-        <li>
-          <BLink to="trackC"><strong>Track C:</strong> Commit (to) the future of sorting!</BLink>
-        </li>
-      </ul>
+      <strong>To submit to the Powersort Competition, please select a track
+        below:</strong>
     </p>
+    <ul>
+      <li style="margin-bottom: 1ex;">
+        <BButton to="trackA" block variant="outline-success">
+          <strong>Track A:</strong> Sort this, Timsort!
+        </BButton>
+      </li>
+
+      <li style="margin-bottom: 1ex;">
+        <BButton to="trackB" block variant="outline-success">
+          <strong>Track B:</strong> Sorting-in-the-Wild Benchmark
+        </BButton>
+      </li>
+
+      <li>
+        <BButton to="trackC" block variant="outline-success">
+          <strong>Track C:</strong> Commit (to) the future of sorting!
+        </BButton>
+      </li>
+    </ul>
+    <!--      <ul>-->
+    <!--        <li>-->
+    <!--          <BLink to="trackA"><strong>Track A:</strong> Sort this, Timsort!</BLink>-->
+    <!--        </li>-->
+    <!--        <li>-->
+    <!--          <BLink to="trackB"><strong>Track B:</strong> Sorting-in-the-Wild Benchmark</BLink>-->
+    <!--        </li>-->
+    <!--        <li>-->
+    <!--          <BLink to="trackC"><strong>Track C:</strong> Commit (to) the future of sorting!</BLink>-->
+    <!--        </li>-->
+    <!--      </ul>-->
   </div>
 </template>
 
 <script setup>
-import {BLink} from "bootstrap-vue-next";
+import {BLink, BButton} from "bootstrap-vue-next";
 </script>
