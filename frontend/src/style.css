@@ -33,10 +33,12 @@ body {
 }
 
 .leaderboard-table {
-    display: flex;
+    position: fixed;
+    overflow: scroll;
     align-items: center;
     justify-content: center;
-    height: 800px;
+    height: 50%;
+    width: 100%;
 }
 
 .stats {
