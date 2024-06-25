@@ -59,6 +59,13 @@ const routes = [
             return import("../views/Stats.vue");
         },
     },
+    {
+        path: "/submission",
+        name: "submission",
+        component: function () {
+            return import("../views/Submission.vue");
+        },
+    },
 ];
 
 const router = createRouter({

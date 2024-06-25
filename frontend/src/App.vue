@@ -5,16 +5,16 @@
     |
     <router-link to="/about">About</router-link>
     |
-    <router-link to="/stats">Track A Leaderboard</router-link>
+    <router-link to="/stats">Leaderboard</router-link>
     |
-    <router-link to="/trackA">Track A Submission</router-link>
+<!--    <router-link to="/trackA">Track A Submission</router-link>-->
     |
-    <router-link to="/useful">Track A FAQ</router-link>
-    |
-    |
-    <router-link to="/trackB">Track B Submission</router-link>
-    |
-    <router-link to="/trackC">Track C Submission</router-link>
+    <router-link to="/useful">FAQ</router-link>
+    &nbsp; | &nbsp;
+    <router-link to="/submission">Submit!</router-link>
+<!--    <router-link to="/trackB">Track B Submission</router-link>-->
+<!--    |-->
+<!--    <router-link to="/trackC">Track C Submission</router-link>-->
     |
     <router-link to="/login">Log In</router-link>
   </nav>
