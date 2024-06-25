@@ -1,5 +1,4 @@
 <template>
-  <div class="home">
     <h1>Track A Submission</h1>
     <!--    <suspense>-->
     <!--      <div v-if = "backendOnline !== true">-->
@@ -44,7 +43,6 @@
         </BAlert>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -196,3 +194,18 @@ async function runPyWebWorker(submission_content) {
   }
 }
 </script>
+
+<style scoped>
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 10vh;
+}
+
+.h1 {
+  margin-top: 10%;
+}
+</style>
