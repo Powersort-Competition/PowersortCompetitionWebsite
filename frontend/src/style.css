@@ -23,26 +23,6 @@ body {
     min-height: 200vh;
 }
 
-#app {
-    max-width: 1280px;
-    margin: 10px;
-    padding: 2rem;
-    text-align: left;
-    /*max-height: 2000px;*/
-}
-
-.login {
-    position: absolute;
-    top: 400px;
-    left: 700px;
-    text-align: center;
-}
-
-.home {
-    position: fixed;
-    width: 95%;
-    top: 100px;
-}
 
 .leaderboard-table {
     display: flex;
@@ -61,33 +41,11 @@ body {
     margin-left: -50px;
 }
 
-.useful {
-    margin-top: 50px;
-    /*position: absolute;*/
-    /*top: 15%;*/
-    /*left: 17%;*/
-    /*width: 65%;*/
-    /*height: 900px;*/
-}
 
 .homeicon {
     font-size: 90px;
 }
 
-.textAreaTrackBox {
-    display: flex;
-    position: absolute;
-    top: 50%;
-    left: 25%;
-    width: 50%;
-}
-
-/*.submission {*/
-/*    display: flex;*/
-/*    top: 100px;*/
-/*    width: 90%;*/
-/*    height: 200px;*/
-/*}*/
 
 @media (prefers-color-scheme: light) {
     :root {

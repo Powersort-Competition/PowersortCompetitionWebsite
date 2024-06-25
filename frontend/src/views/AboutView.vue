@@ -44,6 +44,7 @@
           </p>
         </BCardText>
       </BCard>
+      <br>
       <BCard bg-variant="light" header="Track B" class="text-center">
         <BCardText>
           <p>
@@ -51,6 +52,7 @@
           </p>
         </BCardText>
       </BCard>
+      <br>
       <BCard bg-variant="light" header="Track C" class="text-center">
         <BCardText>
           <p>
