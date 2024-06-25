@@ -11,9 +11,8 @@
       execution time and reduced energy consumption without changes to application code. Based on our
       <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc" target="_blank" rel="noopener">
         theoretical computer science research
-      </BLink>
-      ,
-      sorting lists in Python is up to [40% faster since Python 3.11](uni News) due to Powersort.
+      </BLink>,
+      sorting lists in Python is up to <BLink href="https://news.liverpool.ac.uk/2022/12/12/liverpool-computer-scientists-improve-python-sorting-function/">40% faster since Python 3.11</BLink> due to Powersort.
 
       <br>
       <br>
