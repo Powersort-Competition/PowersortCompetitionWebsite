@@ -1,20 +1,21 @@
 <template>
   <div class="stats">
-    <h1>Heavyweight</h1>
+    <h1>Leaderboards</h1>
+    <h2>Heavyweight</h2>
 
     <suspense>
       <HeavyweightLeaderboard/>
     </suspense>
 
     <br>
-    <h1>Mediumweight</h1>
+    <h2>Mediumweight</h2>
 
     <suspense>
       <MediumweightLeaderboard/>
     </suspense>
 
     <br>
-    <h1>Flyweight</h1>
+    <h2>Flyweight</h2>
 
     <suspense>
       <FlyweightLeaderboard/>

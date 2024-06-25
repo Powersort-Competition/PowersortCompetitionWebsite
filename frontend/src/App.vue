@@ -6,7 +6,6 @@
     <router-link to="/about">About</router-link>
     |
     <router-link to="/stats">Leaderboard</router-link>
-    |
 <!--    <router-link to="/trackA">Track A Submission</router-link>-->
     |
     <router-link to="/useful">FAQ</router-link>

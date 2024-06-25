@@ -1,4 +1,6 @@
 <template>
+  <div class="home">
+    <h1>Track B Submission</h1>
   <suspense>
   <div v-if="fileDropComponent">
     <div v-if="processed === false">
@@ -37,6 +39,7 @@
       Processed!
     </div>
   </suspense>
+  </div>
 </template>
 
 <script setup>

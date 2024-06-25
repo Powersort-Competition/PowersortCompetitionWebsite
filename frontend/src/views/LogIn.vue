@@ -1,8 +1,12 @@
 <template>
   <div class="login">
+    <h1>Login</h1>
     <p v-if="$cookies.get('pscomp_oauth') == null">
       In order to upload a submission, you need to log in using a Google
       account.
+
+      Your name will be shown on the leaderboard, and you will need the submission
+      receipt emails to claim any prizes.
 
       <br/><br/>
       <GoogleLogin :callback="callback"/>
