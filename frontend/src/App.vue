@@ -1,22 +1,23 @@
 <template>
+  <router-view/>
   <nav class="bg-green-lighten-5">
     <router-link to="/">Home</router-link>
     |
     <router-link to="/about">About</router-link>
     |
-    <router-link to="/useful">Supplementary Information</router-link>
+    <router-link to="/stats">Track A Leaderboard</router-link>
     |
-    <router-link to="/stats">Statistics</router-link>
+    <router-link to="/trackA">Track A Submission</router-link>
     |
-    <router-link to="/trackA">Track A</router-link>
+    <router-link to="/useful">Track A FAQ</router-link>
     |
-    <router-link to="/trackB">Track B</router-link>
     |
-    <router-link to="/trackC">Track C</router-link>
+    <router-link to="/trackB">Track B Submission</router-link>
+    |
+    <router-link to="/trackC">Track C Submission</router-link>
     |
     <router-link to="/login">Log In</router-link>
   </nav>
-  <router-view/>
 </template>
 
 <style>
@@ -24,7 +25,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  text-align: left;
   color: #2c3e50;
 }
 
