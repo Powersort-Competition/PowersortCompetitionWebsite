@@ -6,6 +6,8 @@ import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 import IconsResolve from 'unplugin-icons/resolver'
 
+import vuetify from 'vite-plugin-vuetify'
+
 // https://vitejs.dev/config/
 
 export default ({ mode }) => {
@@ -17,7 +19,7 @@ export default ({ mode }) => {
     define: {
       "process.env": env,
     },
-    plugins: [vue(),
+    plugins: [vue(), vuetify(),
       Components({
         resolvers: [IconsResolve()],
         dts: true,

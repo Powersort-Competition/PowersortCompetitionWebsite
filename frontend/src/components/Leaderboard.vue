@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <div class="leaderboard-table">
+    <div class="leaderboard-table" >
       <table class="table">
         <caption>
           Top 5 global submissions
@@ -44,3 +44,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+table th {
+  background-color: transparent;
+}
+table td {
+  background-color: transparent;
+}
+</style>

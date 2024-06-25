@@ -16,12 +16,14 @@
     "chart.js": "^4.4.3",
     "lzutf8": "^0.6.3",
     "pyodide": "^0.25.0",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
     "vue-chartjs": "^5.3.1",
     "vue-cookies": "^1.8.3",
     "vue-options-api-constants-plugin": "^1.0.1",
     "vue-router": "^4.3.0",
-    "vue3-google-login": "^2.0.25"
+    "vue3-google-login": "^2.0.25",
+    "vuetify": "^3.6.10"
   },
   "devDependencies": {
     "@iconify-json/bi": "^1.1.23",
