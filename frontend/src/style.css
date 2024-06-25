@@ -32,12 +32,15 @@ body {
 }
 
 
-/*.leaderboard-table {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    height: 800px;*/
-/*}*/
+.leaderboard-table {
+    position: fixed;
+    overflow: scroll;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width: 100%;
+}
+
 
 /*.stats {*/
 /*    position: relative;*/
