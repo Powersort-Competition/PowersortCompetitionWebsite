@@ -1,5 +1,8 @@
 <template>
-  <div class="login">
+  <div class="container mt-4 main">
+    <div v-if="logInSuccess === true">
+      <BAlert variant="success">You have logged in successfully. You will now be redirected to the home page.</BAlert>
+    </div>
     <h1>Login</h1>
     <p v-if="$cookies.get('pscomp_oauth') == null">
       In order to upload a submission, you need to log in using a Google
@@ -20,6 +23,10 @@ import {ref} from "vue";
 
 import {decodeCredential, GoogleLogin} from "vue3-google-login";
 import router from "@/router/index.js";
+
+import {BAlert} from "bootstrap-vue-next";
+
+let logInSuccess = ref(false);
 
 let email;
 if ($cookies.get("pscomp_oauth") != null) {
@@ -57,7 +64,10 @@ const callback = (response) => {
 
   $cookies.set("pscomp_oauth", JSON.stringify(decoded_res));
 
-  // Once logged in, route to home page.
-  router.push({name: "home"});
+  // Once logged in, route to home page after 3 seconds.
+  logInSuccess = true;
+  setTimeout(() => {
+    router.push({name: "home"});
+  }, 3000);
 };
 </script>
