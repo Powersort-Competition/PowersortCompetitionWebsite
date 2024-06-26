@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4 main">
     <div v-if="logInSuccess === true">
-      <BAlert variant="success">You have logged in successfully. You will now be redirected to the home page.</BAlert>
+      <BAlert variant="success" :model-value="true">You have logged in successfully. You will now be redirected to the home page.</BAlert>
     </div>
     <h1>Login</h1>
     <p v-if="$cookies.get('pscomp_oauth') == null">
