@@ -1,5 +1,5 @@
 import {createApp} from "vue";
-import "./style.css";
+import "./style.scss";
 
 import App from "./App.vue";
 
@@ -33,7 +33,11 @@ library.add(fas)
 
 
 const app = createApp(App).use(router);
-const vuetify = createVuetify();
+const vuetify = createVuetify({
+    theme: {
+        defaultTheme: 'dark',
+    }
+});
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -44,5 +48,6 @@ app.use(vue3GoogleLogin, {
         "769935082895-a3dirndnnbcc6cdlig4at7650p73n3cl.apps.googleusercontent.com",
 });
 app.use(vuetify);
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount("#app");

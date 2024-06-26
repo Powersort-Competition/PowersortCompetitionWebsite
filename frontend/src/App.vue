@@ -1,54 +1,47 @@
 <template>
+  <div style="margin-bottom: 2ex;">
+    <BNavbar toggleable="sm" variant="primary">
+      <BNavbarBrand to="/">Home</BNavbarBrand>
+      <BNavbarToggle target="nav-collapse" />
+      <BCollapse id="nav-collapse" is-nav>
+        <BNavbarNav>
+          <BNavItem to="/about">Details</BNavItem>
+          <BNavItem to="/useful">FAQ</BNavItem>
+          <BNavItem to="/stats">Leaderboard</BNavItem>
+          <BNavItem to="/submission">Submit</BNavItem>
+        </BNavbarNav>
+        <BNavbarNav class="ms-auto">
+          <BNavItem to="/login">Log In</BNavItem>
+        </BNavbarNav>
+      </BCollapse>
+    </BNavbar>
+  </div>
   <router-view/>
-  <nav class="bg-green-lighten-5">
-    <router-link to="/">Home</router-link>
-    |
-    <router-link to="/about">About</router-link>
-    |
-    <router-link to="/stats">Leaderboard</router-link>
-<!--    <router-link to="/trackA">Track A Submission</router-link>-->
-    |
-    <router-link to="/useful">FAQ</router-link>
-    &nbsp; | &nbsp;
-    <router-link to="/submission">Submit!</router-link>
-<!--    <router-link to="/trackB">Track B Submission</router-link>-->
-<!--    |-->
-<!--    <router-link to="/trackC">Track C Submission</router-link>-->
-    |
-    <router-link to="/login">Log In</router-link>
-  </nav>
 </template>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   //text-align: left;
-  //color: #2c3e50;
-  margin-top: 5%;
+  color: #2c3e50;
   padding: 2rem;
   overflow: auto;
 }
 
-nav {
-  padding: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-}
-
 nav a {
-  font-weight: bold;
   color: #2c3e50;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
-  //background-color: #42b983;
+  font-weight: bold;
 }
+
+
+
 </style>
+<script setup>
+import {BNavbar, BNavbarBrand, BNavbarToggle, BNavbarNav, BNavItem, BNavItemDropdown, BDropdownItem, BCollapse} from "bootstrap-vue-next";
+</script>

@@ -18,19 +18,19 @@
     </p>
     <ul>
       <li style="margin-bottom: 1ex;">
-        <BButton to="trackA" block variant="outline-success">
+        <BButton to="trackA" block variant="outline-primary">
           <strong>Track A:</strong> Sort this, Timsort!
         </BButton>
       </li>
 
       <li style="margin-bottom: 1ex;">
-        <BButton to="trackB" block variant="outline-success">
+        <BButton to="trackB" block variant="outline-primary">
           <strong>Track B:</strong> Sorting-in-the-Wild Benchmark
         </BButton>
       </li>
 
       <li>
-        <BButton to="trackC" block variant="outline-success">
+        <BButton to="trackC" block variant="outline-primary">
           <strong>Track C:</strong> Commit (to) the future of sorting!
         </BButton>
       </li>

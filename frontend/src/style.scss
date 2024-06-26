@@ -1,0 +1,30 @@
+$primary: #080; // doesn't work ...
+@import "bootstrap/scss/bootstrap";
+
+
+.main {
+    /*nothing needed here*/
+}
+
+.wide-table {
+    overflow-x:auto;
+}
+
+
+.leaderboard-table {
+    position: fixed;
+    overflow: scroll;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width: 100%;
+}
+
+
+.homeicon {
+    display: block;
+    float: right;
+    margin-left: 1em;
+    width: 12em;
+}
+
