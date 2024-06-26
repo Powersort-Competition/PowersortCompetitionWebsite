@@ -11,7 +11,7 @@ use futures::executor::block_on;
 use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::mailer;
-use crate::models::{FileDownload, NewSubmission, NewUser, Submission, SubmissionHash, User};
+use crate::models::{FileDownload, NewSubmission, NewUser, Submission, SubmissionHash, SubmissionView, User};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
 use crate::schema::tracka_submissions::{perc_diff, submission_id, submission_size};
@@ -39,6 +39,9 @@ fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool {
     }
 }
 
+/*
+Internal function to dispatch a mail receipt to a submitter.
+ */
 fn dispatch_mail_receipt(
     email_addr: String,
     submission_hash_str: String,
@@ -66,6 +69,34 @@ fn dispatch_mail_receipt(
     mailer::send_email(body, email_addr);
 }
 
+fn get_name_from_user_id(usr_id: i32) -> String {
+    // Needs two returns. You cannot clone() a query result data type.
+    // Maybe a future inventive way for one less DB call?
+    let res_1 = users
+        .filter(user_id.eq(usr_id))
+        .load::<User>(&mut init_db());
+    let res_2 = users
+        .filter(user_id.eq(usr_id))
+        .load::<User>(&mut init_db());
+
+    let f_name = res_1
+        .expect("Error loading user name!")
+        .get(0)
+        .unwrap()
+        .first_name
+        .clone();
+    let l_name = res_2
+        .expect("Error loading user name!")
+        .get(0)
+        .unwrap()
+        .last_name
+        .clone();
+
+    return format!("{} {}",
+            f_name,
+            l_name.chars().nth(0).unwrap());
+}
+
 fn get_email_from_user_id(usr_id: i32) -> String {
     let res = users
         .filter(user_id.eq(usr_id))
@@ -90,7 +121,18 @@ pub async fn top_5_submissions() -> HttpResponse {
     let mut top_5 = Vec::new();
 
     for submission in res.expect("Error loading top 5 submissions!") {
-        top_5.push(submission);
+        top_5.push(SubmissionView {
+            submission_id: submission.submission_id,
+            submitter: get_name_from_user_id(submission.user_id),
+            user_id: submission.user_id,
+            powersort_comp: submission.powersort_comp,
+            timsort_comp: submission.timsort_comp,
+            perc_diff: submission.perc_diff,
+            powersort_merge_cost: submission.powersort_merge_cost,
+            timsort_merge_cost: submission.timsort_merge_cost,
+            submission_size: submission.submission_size,
+
+        });
     }
 
     HttpResponse::Ok().json(top_5)
