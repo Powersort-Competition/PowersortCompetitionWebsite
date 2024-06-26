@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container mt-4 main">
     <h1>University of Liverpool &ndash; Powersort Competition</h1>
 
     <img class="homeicon" src="../assets/powersort.svg" alt="Powersort Competition Logo"/>

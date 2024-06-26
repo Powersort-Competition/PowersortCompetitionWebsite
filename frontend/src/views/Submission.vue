@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container mt-4 main">
     <h1>Submission Pages</h1>
     <p>
       Help us as citizen scientist to improve Python's sorting algorithm!

@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container mt-4 main">
     <h1>Leaderboards</h1>
     <h2>Heavyweight</h2>
 

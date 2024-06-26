@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container mt-4 main">
     <h1>Track A Submission</h1>
     <!--    <suspense>-->
     <!--      <div v-if = "backendOnline !== true">-->

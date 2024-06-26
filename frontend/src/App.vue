@@ -1,6 +1,6 @@
 <template>
   <div style="margin-bottom: 2ex;">
-    <BNavbar toggleable="sm" variant="primary">
+    <BNavbar toggleable="sm" variant="primary-subtle">
       <BNavbarBrand to="/">Home</BNavbarBrand>
       <BNavbarToggle target="nav-collapse" />
       <BCollapse id="nav-collapse" is-nav>
@@ -19,29 +19,7 @@
   <router-view/>
 </template>
 
-<style>
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  //text-align: left;
-  color: #2c3e50;
-  padding: 2rem;
-  overflow: auto;
-}
-
-nav a {
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  font-weight: bold;
-}
-
-
-
-</style>
 <script setup>
 import {BNavbar, BNavbarBrand, BNavbarToggle, BNavbarNav, BNavItem, BNavItemDropdown, BDropdownItem, BCollapse} from "bootstrap-vue-next";
 </script>
