@@ -26,7 +26,7 @@ import router from "@/router/index.js";
 
 import {BAlert} from "bootstrap-vue-next";
 
-let logInSuccess = ref(false);
+let logInSuccess = false;
 
 let email;
 if ($cookies.get("pscomp_oauth") != null) {
@@ -65,7 +65,7 @@ const callback = (response) => {
   $cookies.set("pscomp_oauth", JSON.stringify(decoded_res));
 
   // Once logged in, route to home page after 3 seconds.
-  logInSuccess.value = true;
+  logInSuccess = true;
   setTimeout(() => {
     router.push({name: "home"});
   }, 3000);
