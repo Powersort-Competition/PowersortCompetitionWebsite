@@ -8,7 +8,7 @@
         <thead>
         <tr>
           <th scope="col">Submission ID</th>
-          <tb scope="col">Submitter</tb>
+          <th scope="col">Submitter</th>
           <th scope="col">Powersort Comparisons</th>
           <th scope="col">Timsort Comparisons</th>
           <th scope="col">Powersort Merge Cost</th>
