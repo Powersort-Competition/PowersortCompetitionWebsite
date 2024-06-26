@@ -24,6 +24,9 @@ import { library, config } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+/* import VueKatex component */
+import VueKatex from '@hsorby/vue3-katex'
+import 'katex/dist/katex.min.css'
 
 // import icon style(s)
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -42,6 +45,7 @@ const vuetify = createVuetify({
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 app.use(createBootstrap());
+app.use(VueKatex)
 app.use(VueCookies, {expires: "6h"});
 app.use(vue3GoogleLogin, {
     clientId:
