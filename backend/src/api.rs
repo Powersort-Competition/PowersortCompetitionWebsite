@@ -92,7 +92,7 @@ fn get_name_from_user_id(usr_id: i32) -> String {
         .last_name
         .clone();
 
-    return format!("{} {}",
+    return format!("{} {}.",
             f_name,
             l_name.chars().nth(0).unwrap());
 }
@@ -175,7 +175,17 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     let mut top_5 = Vec::new();
 
     for submission in res.expect("Error loading top 5 flyweight submissions!") {
-        top_5.push(submission);
+        top_5.push(SubmissionView {
+            submission_id: submission.submission_id,
+            submitter: get_name_from_user_id(submission.user_id),
+            user_id: submission.user_id,
+            powersort_comp: submission.powersort_comp,
+            timsort_comp: submission.timsort_comp,
+            perc_diff: submission.perc_diff,
+            powersort_merge_cost: submission.powersort_merge_cost,
+            timsort_merge_cost: submission.timsort_merge_cost,
+            submission_size: submission.submission_size,
+        });
     }
 
     HttpResponse::Ok().json(top_5)
