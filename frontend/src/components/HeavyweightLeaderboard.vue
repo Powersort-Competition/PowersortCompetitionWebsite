@@ -8,6 +8,7 @@
       <thead>
       <tr>
         <th scope="col">Submission ID</th>
+        <th scope="col">Submitter</th>
         <th scope="col">Powersort Comparisons</th>
         <th scope="col">Timsort Comparisons</th>
         <th scope="col">Powersort Merge Cost</th>
@@ -18,6 +19,7 @@
       <tbody>
       <tr v-for="submission in leaderboardJson">
         <td>{{ submission.submission_id }}</td>
+        <td>{{ submission.submitter }}</td>
         <td>{{ submission.powersort_comp }}</td>
         <td>{{ submission.timsort_comp }}</td>
         <td>{{ submission.powersort_merge_cost }}</td>
