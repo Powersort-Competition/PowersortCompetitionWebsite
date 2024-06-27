@@ -9,7 +9,6 @@
       counts.
     </p>
 
-    <p></p>
 
     <h3>What's Powersort?</h3>
     <p><strong>Powersort</strong> is a refinement of <strong>Timsort</strong>,
@@ -29,7 +28,7 @@
       </BLink>
       due to Powersort.
       To learn more about the algorithm itself, check out the
-      <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc"
+      <BLink href="https://www.youtube.com/watch?v=XjOnY-OLAPc"
              target="_blank" rel="noopener">PyCon US talk about Powersort.
       </BLink>
     </p>
@@ -85,54 +84,67 @@
     </p>
 
     <p>Head over to the detailed instructions about the tracks &ndash;
-      <BLink to="/aboutA">Track&nbsp;A</BLink>,
-      <BLink to="/aboutB">Track&nbsp;B</BLink>,
-      <BLink to="/aboutC">Track&nbsp;C</BLink>,
+      <BLink to="/aboutA">Track&nbsp;A</BLink>
+      ,
+      <BLink to="/aboutB">Track&nbsp;B</BLink>
+      ,
+      <BLink to="/aboutC">Track&nbsp;C</BLink>
+      ,
       &ndash;
-      or the <BLink to="/submission">submission page</BLink> if you're ready to submit!
-      Check out how others are doing on the <BLink to="/stats">leaderboard</BLink>.
+      or the
+      <BLink to="/submission">submission page</BLink>
+      if you're ready to submit!
+      Check out how others are doing on the
+      <BLink to="/stats">leaderboard.</BLink>
+
     </p>
 
+    <h3>Background</h3>
+    <p>
+      <!--      “You can't sort this list (with Timsort as fast as you should)”-->
 
-    <h4>
-      <font-awesome-icon icon="database"/>
-      Track B: Sorting-in-the-Wild Benchmark
+      Timsort and Powersort are <a href="https://en.wikipedia.org/wiki/Adaptive_sort"><em>adaptive</em>
+      sorting algorithms</a>:
+      both are faster if the input has long presorted areas (“runs”).
+      However, they differ in the <strong>merge policy</strong>, i.e.,
+      the order in which they combine these naturally occurring into
+      longer runs.</p>
+    <p>
+      Powersort solves this task of finding good merge trees
+      by implicitly solving an optimization problem looking for a nearly
+      <a href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
+        search tree</a>!
+    </p>
+    <h4 style="padding-top:2ex;">
+      <font-awesome-icon icon="address-book" name="contact"/>
+      Contact
     </h4>
     <p>
-      Crowdsourced benchmark
-
-      We want to understand sorting performance in your applications.
+      If you have any questions, comments, or feedback, please contact us at
+      <a href="mailto:powersort@liverpool.ac.uk">
+        <font-awesome-icon icon="envelope"/>
+        <code>powersort@liverpool.ac.uk</code></a>.
     </p>
-
-    <h4>
-      <font-awesome-icon icon="code-merge"/>
-      Track C: Commit (to) the future of sorting!
-    </h4>
-    <p>Implementation sprint</p>
-
-
     <p>
-      Please read the
-      <BLink to="about">about</BLink>
-      page to learn about the different competition tracks; what they consist of,
-      and the prizes to be won!
-    </p>
-
-    <h4>Contact</h4>
-    <p>
-      The Powersort Competition is organized by Sebastian Wild and kindly sponsored by
-      the <a href="https://liverpool.ac.uk">University of Liverpool</a>.
+      The Powersort Competition is organized by
+      <a href="https://www.wild-inter.net" target="_blank" rel="noopener">Sebastian
+        Wild</a> and kindly sponsored by
+      the <a href="https://liverpool.ac.uk" target="_blank" rel="noopener">University of
+      Liverpool</a> as part of
+      the research impact acceleration programs.
     </p>
 
     <br/>
-    <Suspense>
-      <Leaderboard/>
-    </Suspense>
+    <!--
+        <Suspense>
+          <Leaderboard/>
+        </Suspense>
+    -->
   </div>
 </template>
 
 <script setup>
-import Leaderboard from "@/components/Leaderboard.vue";
+//import Leaderboard from "@/components/Leaderboard.vue";
 import {BLink} from "bootstrap-vue-next";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
