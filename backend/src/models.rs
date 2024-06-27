@@ -28,6 +28,7 @@ pub struct NewUser {
     pub email: String,
 }
 
+// Track A submission struct.
 #[derive(Queryable, Selectable, Serialize, Deserialize)]
 #[diesel(table_name = crate::schema::tracka_submissions)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -40,6 +41,13 @@ pub struct Submission {
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32,
+}
+
+// Track B submission struct.
+#[derive(Insertable, Serialize, Deserialize)]
+#[diesel(table_name = crate::schema::trackb_submissions)]
+pub struct NewSubmission2 {
+    pub user_id: i32,
 }
 
 // Distinction: we contain the submitter name as part of the submission view.

@@ -11,10 +11,11 @@ use futures::executor::block_on;
 use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::mailer;
-use crate::models::{FileDownload, NewSubmission, NewUser, Submission, SubmissionHash, SubmissionView, User};
+use crate::models::{FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
 use crate::schema::tracka_submissions::{perc_diff, submission_id, submission_size};
+use crate::schema::trackb_submissions::dsl::trackb_submissions;
 use crate::schema::users::dsl::*;
 
 #[get("/ping")]
@@ -46,10 +47,15 @@ fn dispatch_mail_receipt(
     email_addr: String,
     submission_hash_str: String,
     submission: NewSubmission,
+    track: String
 ) {
     println!("Hash submission string: {}", submission_hash_str);
-    let body = format!(
-        "Hello! Your submission has been recorded successfully. \
+   
+    let mut body = String::new();
+    if (track == "A")
+    {
+        body = format!(
+            "Hello! Your submission for track A has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
                         \n<br> Timsort Comparison: {} \
                         \n<br> Difference in merge costs: {} \
@@ -57,14 +63,24 @@ fn dispatch_mail_receipt(
                         \n<br> Timsort Merge Cost: {} \
                         \n<br> Submission Size: {} \
                          \n\n<br> <br> <br> <br> <br> {} ",
-        submission.powersort_comp,
-        submission.timsort_comp,
-        submission.perc_diff,
-        submission.powersort_merge_cost,
-        submission.timsort_merge_cost,
-        submission.submission_size,
-        submission_hash_str
-    );
+            submission.powersort_comp,
+            submission.timsort_comp,
+            submission.perc_diff,
+            submission.powersort_merge_cost,
+            submission.timsort_merge_cost,
+            submission.submission_size,
+            submission_hash_str
+        );
+    }
+    else // Track B.
+    {
+        body = format!(
+            "Hello! Your submission for track B has been recorded successfully. \
+                        \n\n<br> <br> <br> <br> <br> {} \
+            ",
+            submission_hash_str
+        )
+    }
 
     mailer::send_email(body, email_addr);
 }
@@ -224,8 +240,8 @@ pub async fn my_user_id(usr_details: Json<User>) -> HttpResponse {
     HttpResponse::Ok().json(res.expect("Error loading user ID!").get(0).unwrap().user_id)
 }
 
-#[post("/new_submission")]
-pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse {
+#[post("/new_submission_track_a")]
+pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResponse {
     println!("Adding new user submission to database.");
 
     let _new_submission = NewSubmission {
@@ -257,8 +273,43 @@ pub async fn new_submission(submission: Json<NewSubmission>) -> HttpResponse {
 
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(email_addr, submission_hash_str, _new_submission);
+    dispatch_mail_receipt(email_addr, submission_hash_str, _new_submission, "A".to_string());
 
+    HttpResponse::Ok().json(s_id)
+}
+
+// TODO: If not too much work, merge with new_submission_track_a.
+#[post("/new_submission_track_b")]
+pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpResponse {
+    println!("Adding new user submission to database.");
+    
+    let _new_submission = NewSubmission2 {
+        user_id: submission.user_id,
+    };
+    
+    let s_id = diesel::insert_into(trackb_submissions)
+        .values(&_new_submission)
+        .returning(crate::schema::trackb_submissions::submission_id)
+        .get_result::<i32>(&mut init_db())
+        .unwrap();
+   
+    let submission_hash_str = block_on(hash_submission(s_id));
+    
+    // Send email receipt to user.
+    let email_addr = get_email_from_user_id(_new_submission.user_id);
+    dispatch_mail_receipt(email_addr,
+                          submission_hash_str,
+                          NewSubmission { // Dummy data.
+                              user_id: 0,
+                              powersort_comp: 0,
+                              timsort_comp: 0,
+                              perc_diff: 0.0,
+                              powersort_merge_cost: 0,
+                              timsort_merge_cost: 0,
+                              submission_size: 0,
+                          },
+                          "B".to_string());
+    
     HttpResponse::Ok().json(s_id)
 }
 

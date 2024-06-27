@@ -25,7 +25,7 @@ diesel::table! {
 diesel::table! {
     trackb_submissions (submission_id) {
         submission_id -> Int4,
-        description -> Text,
+        user_id -> Int4,
     }
 }
 
