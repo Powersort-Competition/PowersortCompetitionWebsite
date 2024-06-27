@@ -1,6 +1,14 @@
 <template>
   <div class="container mt-4 main">
-    <h1>Track A Submission</h1>
+    <h1><font-awesome-icon icon="puzzle-piece"/> Track A Submission</h1>
+    <p>
+      For Track A, a submission consists of a single text file containing a list of
+      elements, separated by commas (a Python list expression), e.g.,
+      <code>[11, 12, 13, 14, 1, 2, 3]</code>.
+    </p>
+    <p>
+      (For more information, see the instructions on the <BLink to="/aboutA">Track A</BLink> page.)
+    </p>
     <div v-if="fileDropComponent">
       <div v-if="processed == false">
         <FileDropper @file-dropped="handleFileDrop"/>
@@ -51,6 +59,7 @@ import {getEmailFromCookie, getInputSize, getUserID, percDifference} from "@/mis
 
 import {BAlert} from "bootstrap-vue-next";
 import router from "@/router/index.js";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 // $cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
 // Check if oauth cookie is set. If not, redirect to login.

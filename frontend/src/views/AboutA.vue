@@ -51,8 +51,7 @@
     <p>If you can't get your submissions to work, check out the
       <BLink to="/useful">FAQ</BLink>
       or
-      <BLink href="mailto:powersort@liverpool.ac.uk">contact us</BLink>
-      .
+      <BLink href="mailto:powersort@liverpool.ac.uk">contact us.</BLink>
     </p>
 
     <h3>Performance Metric</h3>
