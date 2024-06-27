@@ -83,7 +83,7 @@
     </p>
     <p>
       Timsort has some known blind spots where it performs poorly
-      (see <!--$$\mathcal R_{\text{tim}}$$--> Theorem 3 of <a
+      (see <span v-katex="'\\mathcal R_{\\text{tim}}'"></span> from Theorem 3 of <a
         href="https://arxiv.org/pdf/1801.04641">[BK2018]</a>.
     </p>
     <p>
