@@ -46,12 +46,14 @@ import FileDropper from "@/components/FileDropper.vue";
 import axios from "axios";
 import {nextTick, ref} from "vue";
 import {BFormTextarea, BButton, BAlert} from "bootstrap-vue-next";
+import {getEmailFromCookie, getUserID} from "@/misc.js";
 
 const fileDropComponent = ref(true);
 const submissionDescription = ref();
 
 let processed = false;
 let submissionContent = null;
+let userID = getUserID(getEmailFromCookie());
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
@@ -73,13 +75,32 @@ const buttonClicked = async () => {
 
   submissionData.append("file", submissionContent);
 
-  axios.post("/submission_input_save", submissionData, {
+  // axios.post("/submission_input_save", submissionData, {
+  //   headers: {
+  //     "file-name": "test",
+  //     "track": "B",
+  //     "description": submissionDescription.value,
+  //     "Access-Control-Allow-Origin": "*",
+  //   }
+  // });
+
+  let requestData = {
+    user_id: await userID
+  }
+  axios.post("/new_submission_track_b", requestData, {
     headers: {
-      "file-name": "test",
-      "track": "B",
-      "description": submissionDescription.value,
+      "content-type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
+  }).then((response) => {
+    axios.post("/submission_input_save", submissionData, {
+      headers: {
+        "file-name": response.data,
+        "track": "B",
+        "description": submissionDescription.value,
+        "Access-Control-Allow-Origin": "*",
+      }
+    })
   });
 
   processed = true;

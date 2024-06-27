@@ -121,7 +121,7 @@ const handleFileDrop = async (submission_content) => {
     timsort_merge_cost: tsortMergeCost,
     submission_size: getInputSize(submission_content),
   };
-  axios.post("/new_submission", requestData, {
+  axios.post("/new_submission_track_a", requestData, {
     headers: {
       "content-type": "application/json",
       "Access-Control-Allow-Origin": "*",
