@@ -8,13 +8,27 @@ const routes = [
         component: HomeView,
     },
     {
-        path: "/about",
-        name: "about",
+        path: "/aboutA",
+        name: "aboutA",
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: function () {
-            return import(/* webpackChunkName: "about" */ "../views/AboutView.vue");
+            return import(/* webpackChunkName: "about" */ "../views/AboutA.vue");
+        },
+    },
+    {
+        path: "/aboutB",
+        name: "aboutB",
+        component: function () {
+            return import("../views/AboutB.vue");
+        },
+    },
+    {
+        path: "/aboutC",
+        name: "aboutC",
+        component: function () {
+            return import("../views/AboutC.vue");
         },
     },
     {
@@ -71,6 +85,11 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
+    scrollBehavior(to, from, savedPosition) {
+        // always scroll to top
+        // https://router.vuejs.org/guide/advanced/scroll-behavior.html
+        return {top: 0, behavior: 'instant'}
+    },
 });
 
 export default router;

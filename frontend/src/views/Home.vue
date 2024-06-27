@@ -8,87 +8,92 @@
       Win <strong>prizes</strong> by solving puzzles and help the climate! Every bit
       counts.
     </p>
+
+    <p></p>
+
     <h3>What's Powersort?</h3>
+    <p><strong>Powersort</strong> is a refinement of <strong>Timsort</strong>,
+      the sorting algorithm developed by Tim Peters for the CPython reference
+      implementation of Python.
+      Powersort is now used in both CPython and PyPy.
+    </p>
     <p>
       Sorting is a core step in many computational tasks, and a faster sorting algorithm
       can provide faster
       execution time and reduced energy consumption without changes to application code.
-      Based on our
-      <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc"
-             target="_blank" rel="noopener">
-        theoretical computer science research
-      </BLink>
-      ,
-      sorting lists in Python is up to
+      Based on our research, sorting lists in Python is up to
       <BLink
-          href="https://news.liverpool.ac.uk/2022/12/12/liverpool-computer-scientists-improve-python-sorting-function/">
+          href="https://news.liverpool.ac.uk/2022/12/12/liverpool-computer-scientists-improve-python-sorting-function/"
+          target="_blank" rel="noopener">
         40% faster since Python 3.11
       </BLink>
       due to Powersort.
+      To learn more about the algorithm itself, check out the
+      <BLink variant="primary" href="https://www.youtube.com/watch?v=XjOnY-OLAPc"
+             target="_blank" rel="noopener">PyCon US talk about Powersort.
+      </BLink>
     </p>
     <p>
       Help us better understand the algorithm's performance in the wild, and bring its
       benefits to other communities.
-      And earn some serious prizes along the way!
     </p>
-    <h2>The Competition</h2>
+    <p>
+      <em>And earn some serious <strong>prizes</strong> along the way! 💸</em>
+    </p>
+
+    <h2>The Powersort Competition</h2>
     <p>
       We seek your help in 3 tracks:
     </p>
     <ul>
       <li>
-        <font-awesome-icon icon="puzzle-piece" fixed-width/>
-        Track A: Exploratory data puzzle
+        <BLink to="/aboutA">
+          <font-awesome-icon icon="puzzle-piece" fixed-width/>
+          Track A: <em>Sort this, Timsort!</em></BLink>
       </li>
       <li>
-        <font-awesome-icon icon="database" fixed-width/>
-        Track B: Contribute to a sorting benchmark
+        <BLink to="/aboutB">
+          <font-awesome-icon icon="database" fixed-width/>
+          Track B: <em>Sorting-in-the-Wild Benchmark</em>
+        </BLink>
       </li>
       <li>
-        <font-awesome-icon icon="code-merge" fixed-width/>
-        Track C: Implementation sprint for Powersort in software frameworks
+        <BLink to="/aboutC">
+          <font-awesome-icon icon="code-merge" fixed-width/>
+          Track C: <em>Commit (to) the future of sorting!</em>
+        </BLink>
       </li>
     </ul>
 
     <p>
-      Track B requires no algorithmic knowledge; you just run your favorite Python project
-      on our virtual machine.
-      Track A requires some tinkering with the algorithms, but we have a demo notebook to
-      get you started.
-      Track C is for developers who want to get their hands dirty with production code.
-    </p>
-    <h4>
-      <font-awesome-icon icon="puzzle-piece"/>
-      Track A: Sort this, Timsort!
-    </h4>
-    <p>
-      In this <strong>exploratory data puzzle</strong>, your goal is to find lists for
-      Timsort and Powersort where they differ the most.
+      <strong>Track B</strong> requires <strong>no algorithmic knowledge</strong>;
+      you just run your favorite Python project on our virtual machine
+      and donate the anonymous performance data to science!
     </p>
     <p>
-      <!--      “You can't sort this list (with Timsort as fast as you should)”-->
+      <strong>Track A</strong> requires coming up with some <strong>lists to sort</strong>,
+      with the goal to find lists where Timsort and Powersort differ the most.
+      We have a demo notebook to get you started and you do not need to have a
+      detailed understanding of the algorithms to win (although it doesn't hurt either
+      😉).
+    </p>
+    <p>
+      <strong>Track C</strong> is for the hand-on <strong>developers</strong>
+      who want to get their hands dirty with production code.
+      We simply put out a bounty for any accepted <strong>pull requests</strong>
+      that bring Powersort to a software framework not currently using it.
+    </p>
 
-      Timsort and Powersort are <a href="https://en.wikipedia.org/wiki/Adaptive_sort"><em>adaptive</em>
-      sorting algorithms</a>:
-      they are faster if the input has more presorted areas (“runs”).
-      This behavior is based on finding good merge trees
-      (by implicitly solving an optimization problem looking for a nearly
-      <a href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
-        search tree</a>!)
+    <p>Head over to the detailed instructions about the tracks &ndash;
+      <BLink to="/aboutA">Track&nbsp;A</BLink>,
+      <BLink to="/aboutB">Track&nbsp;B</BLink>,
+      <BLink to="/aboutC">Track&nbsp;C</BLink>,
+      &ndash;
+      or the <BLink to="/submission">submission page</BLink> if you're ready to submit!
+      Check out how others are doing on the <BLink to="/stats">leaderboard</BLink>.
+    </p>
 
-      In Track A, your goal is to find inputs for which the <strong>difference in
-      efficiency</strong>
-      between the merge policies of <strong>Timsort and Powersort</strong> is as big as
-      possible.
-    </p>
-    <p>
-      Timsort has some known blind spots where it performs poorly
-      (see <span v-katex="'\\mathcal R_{\\text{tim}}'"></span> from Theorem 3 of <a
-        href="https://arxiv.org/pdf/1801.04641">[BK2018]</a>.
-    </p>
-    <p>
-      <em>Can you find more?</em>
-    </p>
+
     <h4>
       <font-awesome-icon icon="database"/>
       Track B: Sorting-in-the-Wild Benchmark
@@ -112,6 +117,13 @@
       page to learn about the different competition tracks; what they consist of,
       and the prizes to be won!
     </p>
+
+    <h4>Contact</h4>
+    <p>
+      The Powersort Competition is organized by Sebastian Wild and kindly sponsored by
+      the <a href="https://liverpool.ac.uk">University of Liverpool</a>.
+    </p>
+
     <br/>
     <Suspense>
       <Leaderboard/>
