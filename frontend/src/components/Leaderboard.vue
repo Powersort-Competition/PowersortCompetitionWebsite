@@ -35,9 +35,17 @@
 <script>
 import axios from "axios";
 
-let {data} = await axios.get(
-    `${import.meta.env.VITE_BACKEND_URL}/top_5_submissions`,
-);
+// SW: My quick hack to let the leaderboard not crash the rendering; TODO proper fix
+let data;
+try {
+  let {data} = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/global`,
+  );
+
+} catch (e) {
+  console.error(e);
+  data = [];
+}
 const leaderboardJson = data;
 
 export default {
