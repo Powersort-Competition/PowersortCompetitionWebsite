@@ -11,9 +11,9 @@
             v-model="submissionDescription"
             placeholder="Describe how you attained your input."
             rows="3"
-            max-rows="6"
+            class="mt-4"
         />
-        <BButton @click="buttonClicked">Submit</BButton>
+        <BButton class="mt-4" @click="buttonClicked">Submit</BButton>
       </div>
     </div>
     <div v-else-if="processed === true"
