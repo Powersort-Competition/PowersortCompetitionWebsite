@@ -5,28 +5,55 @@
       Track B: Sorting-in-the-Wild Benchmark
     </h1>
     <p>
-      In Track B, you will contribute towards a <strong>benchmark</strong> to evaluate the
-      performance of adaptive sorting algorithms such as Timsort and Powersort in
+      In Track B, you will contribute towards a public-domain
+      <strong>adaptive-sorting benchmark</strong>
+      to evaluate the
+      effectiveness of sorting algorithms such as Timsort and Powersort in
       various applications.
     </p>
+    <h3>Background</h3>
+    <p>
+      The goal of Track B is to collect data on how sorting is used in real-world
+      applications.
+      This data will be used to evaluate the effectiveness of adaptive sorting algorithms
+      such as Timsort and Powersort in various applications, and will also
+      be made available under a creative-commons license to the research community
+      for testing the effectiveness of any future algorithms.
+    </p>
+    <p>
+      The benchmark will consist of lists of integers representing the relative order
+      of elements sorted in real-life applications. More precisely, we only keep
+      the <em>ranks</em> of the elements in the lists to anonymize the data;
+      the ranks are sufficient to determine the number of comparisons and the merge cost
+      of adaptive sorting algorithms.
+    </p>
+    <p>
+      We are interested in any application were many and long lists are sorted using
+      the built-in <code>sorted</code> function or the <code>sort</code> method of lists.
+      <br/>
+      <em>Any Python application is welcome; the more diverse the data, the better!</em>
+    </p>
+    <p>
+      Note that scripts that simply sort random or synthetic data are not eligible
+      for Track B; the application or script has to serve a plausible
+      purpose beyond sorting.
+    </p>
+    <h2>Track B Instructions</h2>
     <p>
       A valid submission for Track B consists of a log file <code>arrays.txt</code>
-      produced by our instrumented CPython version and description of how to reproduce
+      produced by our
+      <a href="https://github.com/sebawild/cpython/tree/3.11-instrumented" target="_blank"
+         rel="noopener">
+        instrumented CPython version</a>
+      and description of how to reproduce
       the data. For example, you could give a link to the repository of the project
       you ran and the command, parameters, and data you used.
     </p>
-    <p>
-      The goal is to find Python applications were many and long lists are sorted using
-      the built-in <code>sorted</code> function or the <code>sort</code> method of lists.
-    </p>
-    <p>
-      <em>Any Python application is welcome; the more diverse the data, the better!</em>
-      <br/>
-      However, scripts that simply sort random or synthetic data are not eligible
-      for Track B; the application or script has to serve a purpose beyond sorting.
-    </p>
-    <h3>Instructions</h3>
-    <p>You can obtain a VBox virtual-machine image that has our instrumented CPython
+
+    <p>You can obtain a
+      <a href="" target="_blank" rel="noopener">
+        VBox virtual-machine image</a>
+      that has our instrumented CPython
       clone already installed and ready to use.
       In the virtual machine, you simply install your Python application as you would
       on your local machine and run it.

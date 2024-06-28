@@ -112,7 +112,7 @@
     <p>
       Powersort solves this task of finding good merge trees
       by implicitly solving an optimization problem looking for a nearly
-      <a href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
+      <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
         search tree</a>!
     </p>
     <h4 style="padding-top:2ex;">
@@ -123,7 +123,7 @@
       If you have any questions, comments, or feedback, please contact us at
       <a href="mailto:powersort@liverpool.ac.uk">
         <font-awesome-icon icon="envelope"/>
-        <code>powersort@liverpool.ac.uk</code></a>.
+        <code> powersort@liverpool.ac.uk</code></a>.
     </p>
     <p>
       The Powersort Competition is organized by

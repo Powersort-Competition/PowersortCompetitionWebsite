@@ -88,7 +88,11 @@ const router = createRouter({
     scrollBehavior(to, from, savedPosition) {
         // always scroll to top
         // https://router.vuejs.org/guide/advanced/scroll-behavior.html
-        return {top: 0, behavior: 'instant'}
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return {top: 0};
+        }
     },
 });
 

@@ -13,7 +13,7 @@
     <p>
       <!--      “You can't sort this list (with Timsort as fast as you should)”-->
 
-      Timsort and Powersort are <a href="https://en.wikipedia.org/wiki/Adaptive_sort"><em>adaptive</em>
+      Timsort and Powersort are <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Adaptive_sort"><em>adaptive</em>
       sorting algorithms</a>:
       both are faster if the input has long presorted areas (“runs”).
       However, they differ in the <strong>merge policy</strong>, i.e.,
@@ -22,7 +22,7 @@
     <p>
       Powersort solves this task of finding good merge trees
       by implicitly solving an optimization problem looking for a nearly
-      <a href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
+      <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Optimal_binary_search_tree">optimal binary
         search tree</a>!
     </p>
     <p>
@@ -34,7 +34,7 @@
     <p>
       Timsort has some known blind spots where it performs poorly
       (see <span v-katex="'\\mathcal R_{\\text{tim}}'"></span> from Theorem 3 of <a
-        href="https://arxiv.org/pdf/1801.04641">Buss and Knop (2018)</a>.
+        href="https://arxiv.org/pdf/1801.04641" target="_blank" rel="noopener">Buss and Knop (2018)</a>.
     </p>
     <p>
       <em>Can you find more?</em>
