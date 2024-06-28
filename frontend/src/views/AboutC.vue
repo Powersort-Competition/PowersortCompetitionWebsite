@@ -17,6 +17,12 @@
       The submission also has to prove that you have contributed to the pull request yourself
       in a substantial way.
     </p>
+    <p>
+      To be eligible for a prize in Track C, pull requests have to be accepted by the
+      maintainers of project, and the project has to serve a plausible purpose
+      (beyond sorting), e.g., demonstrated by its use in other project.
+    </p>
+
     <h2>Prizes</h2>
     For Track C, prizes will be individually selected among all submission by the
     academic organizers. The total prize pool for Track C is £1000.
