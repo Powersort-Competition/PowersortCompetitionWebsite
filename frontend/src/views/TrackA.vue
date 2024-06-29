@@ -93,8 +93,14 @@ const handleFileDrop = async (submission_content) => {
       submission_content.length,
   );
 
+
+  const servResponse = ref(null);
+  var submission_input_data = new FormData();
+
+  submission_input_data.append("file", submission_content);
+
   // If input file is too big for Pyodide, send to server for computation instead.
-  if (submission_content.length <= 21388890) {
+  if (getInputSize(submission_content) <= 5_000_000) {
     //pyodide.FS.writeFile("./submission.txt", submission_content, { encoding: "utf8" });
     let comps = await runPyWebWorker(submission_content);
 
@@ -106,16 +112,16 @@ const handleFileDrop = async (submission_content) => {
     console.log("File too big for Pyodide, sending to server.");
 
     needsServerComp = true;
+
+    axios.post("/serverside_comp", submission_input_data, {
+      headers: {
+        "user-id": "test",
+        "Access-Control-Allow-Origin": "*",
+      }
+    })
   }
 
-  // Now that we have the comparison counts, send to server.
-  const servResponse = ref(null);
-  var submission_input_data = new FormData();
-
-  submission_input_data.append("file", submission_content);
-  // REDUNDANCY!
-  // submission_input_data.append("submissionId", 1); // Might be able to remove this now?
-
+  // Now that we have the comparison counts (from in-browser computation), send to server.
   let requestData = {
     user_id: await userID,
     powersort_comp: psortComps,
