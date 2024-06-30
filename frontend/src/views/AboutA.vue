@@ -53,6 +53,12 @@
       or
       <BLink href="mailto:powersort@liverpool.ac.uk">contact us.</BLink>
     </p>
+    <p>
+      Additionally, you can watch a video walkthrough of Track A highlighting some different (creative!) ways you can
+      generate inputs for the competition, and how the submission process itself works:
+      <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track A walkthrough</BButton>
+      <BModal v-model="videoModal" title="Track A video walkthrough"><TrackAVideo /></BModal>
+    </p>
 
     <h3>Performance Metric</h3>
     <p>For a given list, we will use the relative cost as the goal:</p>
@@ -207,8 +213,11 @@
 </template>
 
 <script setup>
-import {BCard, BCardGroup, BCardText, BLink} from "bootstrap-vue-next";
+import {BCard, BCardGroup, BCardText, BLink, BModal, BButton} from "bootstrap-vue-next";
 
 import PrizeTable from "@/components/PrizeTable.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {ref} from "vue";
+
+const videoModal = ref(false);
 </script>
