@@ -65,7 +65,9 @@
     <p>
       Need a kickstart in inspiration or a walkthrough with an example on using the
       VBox image, and generating the <code>arrays.txt</code> file? This video might
-      just help!:
+      just help:
+      </p>
+      <p>
       <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track B walkthrough</BButton>
       <BModal v-model="videoModal" title="Track B video walkthrough"><TrackBVideo /></BModal>
     </p>
