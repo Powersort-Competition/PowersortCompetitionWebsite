@@ -1,7 +1,7 @@
 <template>
   <LiteYouTubeEmbed
-    id="dQw4w9WgXcQ",
-    title="Track A walkthrough">
+      id="dQw4w9WgXcQ",
+      title="Track B walkthrough">
   </LiteYouTubeEmbed>
 </template>
 
