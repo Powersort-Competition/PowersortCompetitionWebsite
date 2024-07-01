@@ -216,6 +216,7 @@
 import {BCard, BCardGroup, BCardText, BLink, BModal, BButton} from "bootstrap-vue-next";
 
 import PrizeTable from "@/components/PrizeTable.vue";
+import TrackAVideo from "@/components/TrackAVideo.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {ref} from "vue";
 
