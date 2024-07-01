@@ -24,6 +24,7 @@
     "vue": "^3.4.21",
     "vue-chartjs": "^5.3.1",
     "vue-cookies": "^1.8.3",
+    "vue-lite-youtube-embed": "^1.2.4",
     "vue-options-api-constants-plugin": "^1.0.1",
     "vue-router": "^4.3.0",
     "vue3-google-login": "^2.0.25",

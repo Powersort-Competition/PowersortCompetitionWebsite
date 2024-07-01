@@ -61,6 +61,15 @@
       the relative order of items in the list) and log this information to a file
       <code>arrays.txt</code>.
     </p>
+
+    <p>
+      Need a kickstart in inspiration or a walkthrough with an example on using the
+      VBox image, and generating the <code>arrays.txt</code> file? This video might
+      just help!:
+      <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track B walkthrough</BButton>
+      <BModal v-model="videoModal" title="Track B video walkthrough"><TrackBVideo /></BModal>
+    </p>
+
     <p>If you can't get the virtual machine to work or have doubts about eligibilty,
       <BLink href="mailto:powersort@liverpool.ac.uk">reach out to us.</BLink>
     </p>
@@ -87,8 +96,12 @@
 </template>
 
 <script setup>
-import {BCard, BCardGroup, BCardText, BLink} from "bootstrap-vue-next";
+import {BButton, BLink, BModal} from "bootstrap-vue-next";
 
 import PrizeTable from "@/components/PrizeTable.vue";
+import TrackBVideo from "@/components/TrackBVideo.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {ref} from "vue";
+
+const videoModal = ref(false);
 </script>
