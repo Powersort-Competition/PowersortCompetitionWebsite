@@ -24,10 +24,6 @@ async fn main() -> std::io::Result<()> {
 
     create_submission_data_dir();
 
-    python_hook::run_py_hook("2,-1".to_string())
-        .await
-        .expect("Error running Python hook!");
-
     let mut listenfd = listenfd::ListenFd::from_env();
     let mut actix_server = HttpServer::new(|| {
         // let cors = Cors::default()
@@ -48,6 +44,7 @@ async fn main() -> std::io::Result<()> {
             .service(api::top_5_submissions)
             .service(api::weightclass_leading_submissions)
             .service(api::submission_input_save)
+            .service(api::serverside_calc)
     });
 
     actix_server = match listenfd.take_tcp_listener(0)? {

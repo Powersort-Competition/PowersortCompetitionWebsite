@@ -1,6 +1,8 @@
 use std::env;
 use std::fs;
-use std::io::Read;
+use std::io::{Read, Write};
+
+use tempfile::NamedTempFile;
 
 use actix_multipart::form::MultipartForm;
 use actix_web::web::Path;
@@ -10,7 +12,7 @@ use futures::executor::block_on;
 
 use crate::crypto::hash_submission;
 use crate::database::init_db;
-use crate::mailer;
+use crate::{mailer, python_hook};
 use crate::models::{FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
@@ -372,8 +374,28 @@ pub async fn submission_input_save(
 }
 
 #[post("/serverside_calc")]
-pub async fn serverside_calc(input: Json<String>) -> HttpResponse {
+pub async fn serverside_calc(req: HttpRequest,
+                             MultipartForm(mut form): MultipartForm<FileDownload>
+) -> HttpResponse {
     println!("Performing server-side calculation.");
+    
+    let mut input_data = String::new();
+    let mut usr_id: i32;
+    
+    usr_id = req.headers().get("user-id").unwrap().to_str().unwrap().parse().unwrap();
+    form.file[0]
+        .file
+        .read_to_string(&mut input_data)
+        .expect("Error reading file contents!");
 
+    // Create a temporary file on the filesystem containing input_data.
+    let mut temp_file = NamedTempFile::new().expect("Error creating temporary file!"); 
+    writeln!(temp_file, "{}", input_data).expect("Error writing to temporary file!");
+    // No weird unicode characters, so safe to use lossy string conversion.
+    let temp_file_path = temp_file.path().to_path_buf().to_string_lossy().to_string();
+   
+    // Call Python hook for the computation. Wait till computation is done.
+    let computation_result = block_on(python_hook::run_python_script(temp_file_path));
+    
     HttpResponse::Ok().json("Success".to_string())
 }
