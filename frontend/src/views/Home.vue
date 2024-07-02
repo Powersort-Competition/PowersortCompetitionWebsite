@@ -77,10 +77,13 @@
       😉).
     </p>
     <p>
-      <strong>Track C</strong> is for the hand-on <strong>developers</strong>
-      who want to get their hands dirty with production code.
-      We simply put out a bounty for any accepted <strong>pull requests</strong>
-      that bring Powersort to a software framework not currently using it.
+      <strong>Track C</strong> is for the hands-on <strong>developers</strong>
+      who want to bring about change with production code.
+      Track C is a bounty for any accepted <strong>pull requests</strong>
+      that bring Powersort to a software framework not currently using it,
+      as an incentive to invest time on fundamental algorithms that help everyone.
+      Your contribution will be recognized and publicized on our 
+      website and in our reports.
     </p>
 
     <p>Head over to the detailed instructions about the tracks &ndash;

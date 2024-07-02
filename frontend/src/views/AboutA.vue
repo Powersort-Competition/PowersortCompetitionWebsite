@@ -56,6 +56,8 @@
     <p>
       Additionally, you can watch a video walkthrough of Track A highlighting some different (creative!) ways you can
       generate inputs for the competition, and how the submission process itself works:
+    </p>
+    <p>
       <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track A walkthrough</BButton>
       <BModal v-model="videoModal" title="Track A video walkthrough"><TrackAVideo /></BModal>
     </p>
