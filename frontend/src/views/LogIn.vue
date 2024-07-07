@@ -1,25 +1,27 @@
 <template>
   <div class="container mt-4 main">
-    <div v-if="logInSuccess === true">
-      <BAlert variant="success" :model-value="true">You have logged in successfully. You will now be redirected to the home page.</BAlert>
+    <div v-if="dynamicComponents">
+      <div v-if="logInSuccess === true">
+        <BAlert variant="success" :model-value="true">You have logged in successfully. You will now be redirected to the home page.</BAlert>
+      </div>
+      <h1>Login</h1>
+      <p v-if="$cookies.get('pscomp_oauth') == null">
+        In order to upload a submission, you need to log in using a Google
+        account.
+
+        Your name will be shown on the leaderboard, and you will need the submission
+        receipt emails to claim any prizes.
+
+        <br/><br/>
+        <GoogleLogin :callback="callback"/>
+      </p>
+      <p v-else>You are already logged in as {{ email }}.</p>
     </div>
-    <h1>Login</h1>
-    <p v-if="$cookies.get('pscomp_oauth') == null">
-      In order to upload a submission, you need to log in using a Google
-      account.
-
-      Your name will be shown on the leaderboard, and you will need the submission
-      receipt emails to claim any prizes.
-
-      <br/><br/>
-      <GoogleLogin :callback="callback"/>
-    </p>
-    <p v-else>You are already logged in as {{ email }}.</p>
   </div>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {nextTick, ref} from "vue";
 
 import {decodeCredential, GoogleLogin} from "vue3-google-login";
 import router from "@/router/index.js";
@@ -27,13 +29,22 @@ import router from "@/router/index.js";
 import {BAlert} from "bootstrap-vue-next";
 
 let logInSuccess = false;
+const dynamicComponents = ref(true);
 
 let email;
 if ($cookies.get("pscomp_oauth") != null) {
   email = $cookies.get("pscomp_oauth").email;
 }
 
-const callback = (response) => {
+const forceRerender = async () => {
+  dynamicComponents.value = false;
+
+  await nextTick();
+
+  dynamicComponents.value = true;
+};
+
+const callback = async (response) => {
   console.log("Google login raw response: ", response);
 
   const decoded_res = decodeCredential(response.credential);
@@ -66,6 +77,8 @@ const callback = (response) => {
 
   // Once logged in, route to home page after 3 seconds.
   logInSuccess = true;
+  await forceRerender();
+
   setTimeout(() => {
     router.push({name: "home"});
   }, 3000);
