@@ -51,7 +51,8 @@
     </p>
 
     <p>You can obtain a
-      <a href="" target="_blank" rel="noopener">
+      <a href="https://drive.google.com/file/d/1DejZCnmeuFYHjDdIZCzisLnmQ4mJtV_q/view?usp=drive_link"
+         target="_blank" rel="noopener">
         VBox virtual-machine image</a>
       that has our instrumented CPython
       clone already installed and ready to use.
