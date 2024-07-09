@@ -13,6 +13,7 @@
         <th scope="col">Timsort Comparisons</th>
         <th scope="col">Powersort Merge Cost</th>
         <th scope="col">Timsort Merge Cost</th>
+        <th scope="col">Comparison Difference (%)</th>
         <th scope="col">Merge Cost Difference (%)</th>
       </tr>
       </thead>
@@ -24,13 +25,37 @@
         <td>{{ submission.timsort_comp }}</td>
         <td>{{ submission.powersort_merge_cost }}</td>
         <td>{{ submission.timsort_merge_cost }}</td>
-        <td>{{ submission.perc_diff }}</td>
+        <td>{{ submission.comp_diff }}</td>
+        <td>{{ submission.mcost_diff }}</td>
       </tr>
       </tbody>
     </table>
     </div>
   </Suspense>
 </template>
+
+<script setup>
+import {defineProps, watch} from "vue";
+
+const props = defineProps({
+  selectedMetric: String,
+  default: "perc_diff"
+});
+
+watch(() => props.selectedMetric, (newType) => {
+  // metricDiffType =
+  //     newType === "perc_diff"
+  //         ? "Merge Cost Difference (%)"
+  //         : "Comparison Count Difference (%)";
+
+  if (newType === "perc_diff") {
+    leaderboardJson.sort((a, b) => b.perc_diff - a.perc_diff)
+  }
+  else {
+    leaderboardJson.sort((a, b) => b.comp_diff - a.comp_diff)
+  }
+});
+</script>
 
 <script>
 import axios from "axios";

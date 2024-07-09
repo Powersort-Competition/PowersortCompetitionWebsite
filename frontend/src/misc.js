@@ -11,14 +11,14 @@ function roundToThree(num) {
     return +(Math.round(num + "e+3") + "e-3");
 }
 
-// Work out the (absolute) difference between the two sort merge costs.
-export function percDifference(tsortMergeCost, psortMergeCost) {
-    if (tsortMergeCost === 0 && psortMergeCost === 0) {
+// Work out the (absolute) difference between the a and b.
+export function percDifference(a, b) {
+    if (a === 0 && b === 0) {
         return 0;
     }
 
     let diff = (100 *
-        Math.abs(tsortMergeCost - psortMergeCost) / ((tsortMergeCost + psortMergeCost) / 2));
+        Math.abs(a - b) / ((a + b) / 2));
 
     return roundToThree(diff);
 }

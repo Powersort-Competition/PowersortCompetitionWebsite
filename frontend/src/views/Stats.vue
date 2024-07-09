@@ -18,14 +18,14 @@
     <h2>Mediumweight</h2>
 
     <suspense>
-      <MediumweightLeaderboard/>
+      <MediumweightLeaderboard :selectedMetric="selectedMetricType"/>
     </suspense>
 
     <br>
     <h2>Flyweight</h2>
 
     <suspense>
-      <FlyweightLeaderboard/>
+      <FlyweightLeaderboard :selectedMetric="selectedMetricType"/>
     </suspense>
   </div>
 
