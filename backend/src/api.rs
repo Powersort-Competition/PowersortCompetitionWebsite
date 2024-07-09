@@ -13,10 +13,10 @@ use futures::executor::block_on;
 use crate::crypto::hash_submission;
 use crate::database::init_db;
 use crate::{mailer, python_hook};
-use crate::models::{FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
+use crate::models::{CompositionTrackA, FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
-use crate::schema::tracka_submissions::{perc_diff, submission_id, submission_size};
+use crate::schema::tracka_submissions::{mcost_diff, submission_id, submission_size};
 use crate::schema::trackb_submissions::dsl::trackb_submissions;
 use crate::schema::users::dsl::*;
 
@@ -60,14 +60,16 @@ fn dispatch_mail_receipt(
             "Hello! Your submission for track A has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
                         \n<br> Timsort Comparison: {} \
-                        \n<br> Difference in merge costs: {} \
+                        \n<br> Difference in comparisons (%): {} \
+                        \n<br> Difference in merge costs (%): {} \
                         \n<br> Powersort Merge Cost: {} \
                         \n<br> Timsort Merge Cost: {} \
                         \n<br> Submission Size: {} \
                          \n\n<br> <br> <br> <br> <br> {} ",
             submission.powersort_comp,
             submission.timsort_comp,
-            submission.perc_diff,
+            submission.comp_diff,
+            submission.mcost_diff,
             submission.powersort_merge_cost,
             submission.timsort_merge_cost,
             submission.submission_size,
@@ -132,7 +134,6 @@ fn get_email_from_user_id(usr_id: i32) -> String {
 #[get("/top_5_submissions")]
 pub async fn top_5_submissions() -> HttpResponse {
     let res = tracka_submissions
-        .order(perc_diff.desc())
         .limit(5)
         .load::<Submission>(&mut init_db());
 
@@ -145,7 +146,8 @@ pub async fn top_5_submissions() -> HttpResponse {
             user_id: submission.user_id,
             powersort_comp: submission.powersort_comp,
             timsort_comp: submission.timsort_comp,
-            perc_diff: submission.perc_diff,
+            comp_diff: submission.comp_diff,
+            mcost_diff: submission.mcost_diff,
             powersort_merge_cost: submission.powersort_merge_cost,
             timsort_merge_cost: submission.timsort_merge_cost,
             submission_size: submission.submission_size,
@@ -154,6 +156,39 @@ pub async fn top_5_submissions() -> HttpResponse {
     }
 
     HttpResponse::Ok().json(top_5)
+}
+
+#[get("/composition_track_a")]
+pub async fn composition_track_a() -> HttpResponse {
+    let mut conn = init_db();
+
+    let flyweight_count = tracka_submissions
+        .filter(submission_size.lt(i32::pow(10, 4)))
+        .count()
+        .get_result::<i64>(&mut conn)
+        .unwrap();
+    
+    let mediumweight_count = tracka_submissions
+        .filter(
+            submission_size.ge(i32::pow(10, 4))
+                .and(submission_size.lt(i32::pow(10, 86))))
+        .count()
+        .get_result::<i64>(&mut conn)
+        .unwrap();
+
+    let heavyweight_count = tracka_submissions
+        .filter(submission_size.ge(i32::pow(10, 6)))
+        .count()
+        .get_result::<i64>(&mut conn)
+        .unwrap();
+
+    let counts = CompositionTrackA {
+        flyweight: flyweight_count,
+        mediumweight: mediumweight_count,
+        heavyweight: heavyweight_count,
+    };
+
+    HttpResponse::Ok().json(counts)
 }
 
 // class = flyweight OR mediumweight OR heavyweight.
@@ -167,7 +202,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     if (_class == "flyweight") {
         res = tracka_submissions
             .filter(submission_size.lt(i32::pow(10, 4)))
-            .order(perc_diff.desc())
+            .order(mcost_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     } else if (_class == "mediumweight") {
@@ -177,7 +212,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
                     .ge(i32::pow(10, 4))
                     .and(submission_size.lt(i32::pow(10, 6))),
             )
-            .order(perc_diff.desc())
+            .order(mcost_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     } else
@@ -185,7 +220,7 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
     {
         res = tracka_submissions
             .filter(submission_size.ge(i32::pow(10, 6)))
-            .order(perc_diff.desc())
+            .order(mcost_diff.desc())
             .limit(5)
             .load::<Submission>(&mut init_db());
     }
@@ -199,10 +234,11 @@ pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpRespons
             user_id: submission.user_id,
             powersort_comp: submission.powersort_comp,
             timsort_comp: submission.timsort_comp,
-            perc_diff: submission.perc_diff,
+            comp_diff: submission.comp_diff,
+            mcost_diff: submission.mcost_diff,
             powersort_merge_cost: submission.powersort_merge_cost,
             timsort_merge_cost: submission.timsort_merge_cost,
-            submission_size: submission.submission_size,
+            submission_size: submission.submission_size
         });
     }
 
@@ -250,7 +286,8 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
         user_id: submission.user_id,
         powersort_comp: submission.powersort_comp.clone(),
         timsort_comp: submission.timsort_comp.clone(),
-        perc_diff: submission.perc_diff.clone(),
+        comp_diff: submission.comp_diff.clone(),
+        mcost_diff: submission.mcost_diff.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
         submission_size: submission.submission_size.clone(),
@@ -305,7 +342,8 @@ pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpRes
                               user_id: 0,
                               powersort_comp: 0,
                               timsort_comp: 0,
-                              perc_diff: 0.0,
+                              comp_diff: 0.0,
+                              mcost_diff: 0.0,
                               powersort_merge_cost: 0,
                               timsort_merge_cost: 0,
                               submission_size: 0,

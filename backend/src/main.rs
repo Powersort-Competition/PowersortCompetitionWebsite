@@ -42,6 +42,7 @@ async fn main() -> std::io::Result<()> {
             .service(api::new_submission_track_a)
             .service(api::new_submission_track_b)
             .service(api::top_5_submissions)
+            .service(api::composition_track_a)
             .service(api::weightclass_leading_submissions)
             .service(api::submission_input_save)
             .service(api::serverside_calc)

@@ -2,12 +2,18 @@ use actix_multipart::form::tempfile::TempFile;
 use actix_multipart::form::MultipartForm;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::schema::tracka_submissions::perc_diff;
 
 #[derive(Debug, MultipartForm)]
 pub struct FileDownload {
     #[multipart(rename = "file")]
     pub(crate) file: Vec<TempFile>,
+}
+
+#[derive(Serialize)]
+pub struct CompositionTrackA {
+    pub flyweight: i64,
+    pub mediumweight: i64,
+    pub heavyweight: i64
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
@@ -37,7 +43,8 @@ pub struct Submission {
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub perc_diff: f64,
+    pub comp_diff: f64,
+    pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32,
@@ -58,7 +65,8 @@ pub struct SubmissionView {
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub perc_diff: f64,
+    pub comp_diff: f64,
+    pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32,
@@ -70,7 +78,8 @@ pub struct NewSubmission {
     pub user_id: i32,
     pub powersort_comp: i32,
     pub timsort_comp: i32,
-    pub perc_diff: f64,
+    pub comp_diff: f64,
+    pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
     pub submission_size: i32,
