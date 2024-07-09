@@ -13,7 +13,7 @@
         <th scope="col">Timsort Comparisons</th>
         <th scope="col">Powersort Merge Cost</th>
         <th scope="col">Timsort Merge Cost</th>
-        <th scope="col">Merge Cost Difference (%)</th>
+        <th scope="col">{{ metricDiffType }}</th>
       </tr>
       </thead>
       <tbody>
@@ -31,6 +31,23 @@
     </div>
   </Suspense>
 </template>
+
+<script setup>
+import {defineProps, watch} from "vue";
+
+const props = defineProps({
+  selectedMetric: String,
+  default: "perc_diff"
+});
+let metricDiffType = "Merge Cost Difference (%)";
+
+watch(() => props.selectedMetric, (newType) => {
+  metricDiffType =
+      newType === "perc_diff"
+          ? "Merge Cost Difference (%)"
+          : "Comparison Count Difference (%)";
+});
+</script>
 
 <script>
 import axios from "axios";
