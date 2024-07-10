@@ -33,7 +33,7 @@
       </BLink>
     </p>
     <p>
-      Help us better understand the algorithm's performance in the wild, and bring its
+      Help us to better understand the algorithm's performance in the wild, and bring its
       benefits to other communities.
     </p>
     <p>
