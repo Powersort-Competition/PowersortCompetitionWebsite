@@ -11,6 +11,12 @@
       effectiveness of sorting algorithms such as Timsort and Powersort in
       various applications.
     </p>
+    <p>Ready to submit? &nbsp;
+      <BButton to="trackB" block variant="outline-primary">
+        <font-awesome-icon icon="database" fixed-width/>
+        <strong>Track B:</strong> Sorting-in-the-Wild Benchmark
+      </BButton>
+    </p>
     <h3>Background</h3>
     <p>
       The goal of Track B is to collect data on how sorting is used in real-world
@@ -67,10 +73,15 @@
       Need a kickstart in inspiration or a walkthrough with an example on using the
       VBox image, and generating the <code>arrays.txt</code> file? This video might
       just help:
-      </p>
-      <p>
-      <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track B walkthrough</BButton>
-      <BModal v-model="videoModal" title="Track B video walkthrough"><TrackBVideo /></BModal>
+    </p>
+    <p>
+      <BButton variant="outline-primary" @click="videoModal = !videoModal">
+        <font-awesome-icon icon="video"/>
+        Track B walkthrough
+      </BButton>
+      <BModal v-model="videoModal" title="Track B video walkthrough">
+        <TrackBVideo/>
+      </BModal>
     </p>
 
     <p>If you can't get the virtual machine to work or have doubts about eligibilty,

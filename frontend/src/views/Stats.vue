@@ -1,13 +1,18 @@
 <template>
   <div class="container mt-4">
     <h1>Leaderboards</h1>
+    <p class="mb-10 text-right">
+      <strong>Cost Measure:</strong> &nbsp;
     <BFormRadioGroup
       v-model="selectedMetricType"
       :options="metricTypes"
-      class="mb-10 text-right"
       value-field="item"
       text-field="name"
+      buttons
+      button-variant="outline-primary"
     />
+    </p>
+
     <h2>Heavyweight</h2>
 
     <suspense>
