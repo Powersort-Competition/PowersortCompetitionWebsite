@@ -124,9 +124,7 @@
     </h4>
     <p>
       If you have any questions, comments, or feedback, please contact us at
-      <a href="mailto:powersort@liverpool.ac.uk">
-        <font-awesome-icon icon="envelope"/>
-        <code> powersort@liverpool.ac.uk</code></a>.
+      <a href="mailto:powersort@liverpool.ac.uk"> <font-awesome-icon icon="envelope"/>&nbsp;<code>powersort@liverpool.ac.uk</code></a>.
     </p>
     <p>
       The Powersort Competition is organized by

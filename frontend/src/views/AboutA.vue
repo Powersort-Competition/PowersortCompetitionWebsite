@@ -9,6 +9,12 @@
       In this <strong>exploratory data puzzle</strong>, your goal is to find lists for
       Timsort and Powersort where they differ the most.
     </p>
+    <p>Ready to submit? &nbsp;
+      <BButton to="trackA" block variant="outline-primary">
+        <font-awesome-icon icon="puzzle-piece" fixed-width/>
+        <strong>Track A:</strong> Sort this, Timsort!
+      </BButton>
+    </p>
     <h3>Background</h3>
     <p>
       <!--      “You can't sort this list (with Timsort as fast as you should)”-->
@@ -58,7 +64,7 @@
       generate inputs for the competition, and how the submission process itself works:
     </p>
     <p>
-      <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track A walkthrough</BButton>
+      <BButton variant="outline-primary" @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track A walkthrough</BButton>
       <BModal v-model="videoModal" title="Track A video walkthrough"><TrackAVideo /></BModal>
     </p>
     <p>

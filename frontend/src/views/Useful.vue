@@ -2,7 +2,7 @@
   <div class="container mt-4 main">
     <h4>
       <font-awesome-icon icon="question-circle"/>
-      What file formats can I use for the submission?
+      Track A: What file formats can I use for the submission?
     </h4>
     <p>
       Currently, the only accepted file format is a plain text file.
@@ -18,7 +18,7 @@
 
     <h4>
       <font-awesome-icon icon="question-circle"/>
-      What is the maximum file size allowed?
+      Track A: What is the maximum file size allowed?
     </h4>
     <p>
       There is no hard limit on the file size.

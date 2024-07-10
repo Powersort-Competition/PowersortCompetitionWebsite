@@ -15,7 +15,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
       for a software framework not currently using it.
     </p>
     <p>
-      The submission is via email to <code>powersort@liverpool.ac.uk</code>.
+      The submission is via email to <a href="mailto:powersort@liverpool.ac.uk"> <font-awesome-icon icon="envelope"/>&nbsp;<code>powersort@liverpool.ac.uk</code></a>.
     </p>
   </div>
 </template>
