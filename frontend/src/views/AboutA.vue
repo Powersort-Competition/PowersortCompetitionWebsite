@@ -61,6 +61,13 @@
       <BButton @click="videoModal = !videoModal"><font-awesome-icon icon="video"/> Track A walkthrough</BButton>
       <BModal v-model="videoModal" title="Track A video walkthrough"><TrackAVideo /></BModal>
     </p>
+    <p>
+      Or, if you'd rather get down with the nitty-gritty of playing with some example functions to fuel some
+      inspiration, check out the Jupyter Notebook in the
+      <a target="_blank" rel="noopener" href="https://github.com/Powersort-Competition/PowersortCompetitionExamples">
+        Powersort Examples Repository!
+      </a>
+    </p>
 
     <h3>Performance Metric</h3>
     <p>For a given list, we will use the relative cost as the goal:</p>
