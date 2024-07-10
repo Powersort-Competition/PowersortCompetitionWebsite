@@ -59,6 +59,13 @@ import {nextTick, ref} from "vue";
 import {BFormTextarea, BButton, BAlert} from "bootstrap-vue-next";
 import {getEmailFromCookie, getUserID} from "@/misc.js";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import router from "@/router/index.js";
+
+
+if ($cookies.get("pscomp_oauth") == null) {
+  console.log("Not logged in... routing to login page");
+  router.push({name: "login"});
+}
 
 const fileDropComponent = ref(true);
 const submissionDescription = ref();
@@ -66,6 +73,7 @@ const submissionDescription = ref();
 let processed = false;
 let submissionContent = null;
 let userID = getUserID(getEmailFromCookie());
+
 
 const forceRerender = async () => {
   fileDropComponent.value = false;
