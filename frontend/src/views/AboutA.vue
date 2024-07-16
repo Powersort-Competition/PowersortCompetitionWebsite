@@ -71,8 +71,8 @@
       Or, if you'd rather get down with the nitty-gritty of playing with some example functions to fuel some
       inspiration, check out the Jupyter Notebook in the
       <a target="_blank" rel="noopener" href="https://github.com/Powersort-Competition/PowersortCompetitionExamples">
-        Powersort Examples Repository!
-      </a>
+        Powersort Examples Repository</a>
+      or directly open it in <a target="_blank" rel="noopener" href="https://mybinder.org/v2/gh/Powersort-Competition/PowersortCompetitionExamples/HEAD?labpath=GenerateInputPermutations.ipynb">MyBinder</a> (you may need some patience).
     </p>
 
     <h3>Performance Metric</h3>
