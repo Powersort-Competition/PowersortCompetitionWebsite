@@ -32,8 +32,8 @@
     </p>
 
     <h2>Prizes</h2>
-    For Track C, prizes will be individually selected among all submission by the
-    academic organizers. The total prize pool for Track C is £1000.
+    The prizes for Track C are two <em>10.9" Apple iPads 10th Gen</em>. 
+    The winners will be individually selected among all submission by the academic organizers.
 
   </div>
 </template>
