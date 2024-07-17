@@ -61,6 +61,7 @@ async fn main() -> std::io::Result<()> {
     actix_server.run().await
 }
 
+#[allow(non_snake_case)]
 fn create_submission_data_dir() {
     let data_dir = env::var("EGRESS_DIR").expect("EGRESS_DIR must be set!");
     let trackA_submission_dir = format!("{}/submissions/TrackA", data_dir);
