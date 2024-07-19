@@ -33,12 +33,6 @@
       <FlyweightLeaderboard :selectedMetric="selectedMetricType"/>
     </suspense>
   </div>
-
-  <br>
-  <suspense>
-    <TrackACompositionDoughnut/>
-  </suspense>
-
 </template>
 
 <script setup>
@@ -48,7 +42,7 @@ import FlyweightLeaderboard from "@/components/FlyweightLeaderboard.vue";
 
 import {BFormRadioGroup} from "bootstrap-vue-next";
 import {ref} from "vue";
-import TrackACompositionDoughnut from "@/components/TrackACompositionDoughnut.vue";
+//import TrackACompositionDoughnut from "@/components/TrackACompositionDoughnut.vue";
 
 const selectedMetricType = ref('perc_diff');
 const metricTypes = [
