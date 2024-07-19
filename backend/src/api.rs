@@ -171,7 +171,7 @@ pub async fn composition_track_a() -> HttpResponse {
     let mediumweight_count = tracka_submissions
         .filter(
             submission_size.ge(i32::pow(10, 4))
-                .and(submission_size.lt(i32::pow(10, 86))))
+                .and(submission_size.lt(i32::pow(10, 6))))
         .count()
         .get_result::<i64>(&mut conn)
         .unwrap();
