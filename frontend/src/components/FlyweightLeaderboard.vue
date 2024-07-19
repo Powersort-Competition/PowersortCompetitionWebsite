@@ -39,7 +39,7 @@ import {defineProps, watch} from "vue";
 
 const props = defineProps({
   selectedMetric: String,
-  default: "perc_diff"
+  default: "comp_diff"
 });
 
 watch(() => props.selectedMetric, (newType) => {
@@ -48,8 +48,8 @@ watch(() => props.selectedMetric, (newType) => {
   //         ? "Merge Cost Difference (%)"
   //         : "Comparison Count Difference (%)";
 
-  if (newType === "perc_diff") {
-    leaderboardJson.sort((a, b) => b.perc_diff - a.perc_diff)
+  if (newType === "merge_diff") {
+    leaderboardJson.sort((a, b) => b.merge_diff - a.merge_diff)
   }
   else {
     leaderboardJson.sort((a, b) => b.comp_diff - a.comp_diff)

@@ -44,10 +44,10 @@ import {BFormRadioGroup} from "bootstrap-vue-next";
 import {ref} from "vue";
 //import TrackACompositionDoughnut from "@/components/TrackACompositionDoughnut.vue";
 
-const selectedMetricType = ref('perc_diff');
+const selectedMetricType = ref('comp_diff');
 const metricTypes = [
-  {item: 'perc_diff', name: 'Merge Cost Difference (%)'},
-  {item: 'comp_diff', name: 'Comparison Count Difference'}
+  {item: 'comp_diff', name: 'Comparison Count Difference (%)'},
+  {item: 'merge_diff', name: 'Merge Cost Difference (%)'}
 ]
 </script>
 
