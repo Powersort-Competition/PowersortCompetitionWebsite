@@ -61,7 +61,7 @@ import {BAlert} from "bootstrap-vue-next";
 import router from "@/router/index.js";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-// $cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
+//$cookies.set("pscomp_oauth", JSON.stringify({"email": "shayan.doust@outlook.com"}));
 // Check if oauth cookie is set. If not, redirect to login.
 if ($cookies.get("pscomp_oauth") == null) {
   console.log("Not logged in... routing to login page");
@@ -164,8 +164,13 @@ import Powersort as Powersort
 import Timsort as Timsort
 import Counters as Counters
 
+import json
+
 def cost(lst, sorter):
+    lst = json.loads(lst)
+
     wrapped = [Counters.ComparisonCounter(x) for x in lst]
+
     Counters.reset_counters()
     sorter.sort(wrapped)
     assert Counters.ComparisonCounter.EQ_COMPARISONS == 0
