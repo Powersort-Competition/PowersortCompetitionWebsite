@@ -1,7 +1,7 @@
 <template>
   <Suspense>
     <div class="wide-table" >
-    <table class="table">
+    <table class="table" id="mediumweightTBL">
       <caption>
         Top 5 mediumweight submissions
       </caption>
@@ -36,6 +36,7 @@
 
 <script setup>
 import {defineProps, watch} from "vue";
+import {sortTable} from "@/misc.js"
 
 const props = defineProps({
   selectedMetric: String,
@@ -43,18 +44,13 @@ const props = defineProps({
 });
 
 watch(() => props.selectedMetric, (newType) => {
-  // metricDiffType =
-  //     newType === "perc_diff"
-  //         ? "Merge Cost Difference (%)"
-  //         : "Comparison Count Difference (%)";
-
   if (newType === "merge_diff") {
-    leaderboardJson.sort((a, b) => b.merge_diff - a.merge_diff)
-  }
-  else {
-    leaderboardJson.sort((a, b) => b.comp_diff - a.comp_diff)
+    sortTable(document.getElementById("mediumweightTBL"), 7);
+  } else {
+    sortTable(document.getElementById("mediumweightTBL"), 6)
   }
 });
+
 </script>
 
 <script>
