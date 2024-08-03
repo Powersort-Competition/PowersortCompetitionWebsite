@@ -16,7 +16,7 @@ use crate::{mailer, python_hook};
 use crate::models::{CompositionTrackA, FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
-use crate::schema::tracka_submissions::{mcost_diff, submission_id, submission_size};
+use crate::schema::tracka_submissions::{mcost_diff, comp_diff, submission_id, submission_size};
 use crate::schema::trackb_submissions::dsl::trackb_submissions;
 use crate::schema::users::dsl::*;
 
@@ -192,37 +192,72 @@ pub async fn composition_track_a() -> HttpResponse {
 }
 
 // class = flyweight OR mediumweight OR heavyweight.
+#[allow(unused_parens)]
 #[get("/weightclass_leading_submissions/{class}")]
-pub async fn weightclass_leading_submissions(class: Path<String>) -> HttpResponse {
+pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<String>) -> HttpResponse {
     let _class = class.into_inner();
-    println!("Getting top 5 submissions for weight class: {}", _class);
+    
+    let headers = req.headers();
+    let _orderBy = headers.get("order-by").unwrap().to_str().unwrap();
 
     let res;
 
     if (_class == "flyweight") {
-        res = tracka_submissions
-            .filter(submission_size.lt(i32::pow(10, 4)))
-            .order(mcost_diff.desc())
-            .limit(5)
-            .load::<Submission>(&mut init_db());
+        if (_orderBy == "mcost_diff") {
+            res = tracka_submissions
+                .filter(submission_size.lt(i32::pow(10, 4)))
+                .order(mcost_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        } else // Order by ncomp_diff.
+        {
+           res = tracka_submissions
+                .filter(submission_size.lt(i32::pow(10, 4)))
+                .order(comp_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+
+        }
     } else if (_class == "mediumweight") {
-        res = tracka_submissions
-            .filter(
-                submission_size
-                    .ge(i32::pow(10, 4))
-                    .and(submission_size.lt(i32::pow(10, 6))),
-            )
-            .order(mcost_diff.desc())
-            .limit(5)
-            .load::<Submission>(&mut init_db());
+        if (_orderBy == "mcost_diff") {
+            res = tracka_submissions
+                .filter(
+                    submission_size
+                        .ge(i32::pow(10, 4))
+                        .and(submission_size.lt(i32::pow(10, 6))),
+                )
+                .order(mcost_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        } else
+        {
+             res = tracka_submissions
+                .filter(
+                    submission_size
+                        .ge(i32::pow(10, 4))
+                        .and(submission_size.lt(i32::pow(10, 6))),
+                )
+                .order(mcost_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        }
     } else
     // heavyweight
     {
-        res = tracka_submissions
-            .filter(submission_size.ge(i32::pow(10, 6)))
-            .order(mcost_diff.desc())
-            .limit(5)
-            .load::<Submission>(&mut init_db());
+        if (_orderBy == "mcost_diff") {
+            res = tracka_submissions
+                .filter(submission_size.ge(i32::pow(10, 6)))
+                .order(mcost_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        } else
+        {
+            res = tracka_submissions
+                .filter(submission_size.ge(i32::pow(10, 6)))
+                .order(comp_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        }
     }
 
     let mut top_5 = Vec::new();
