@@ -18,7 +18,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="submission in leaderboardJson">
+      <tr v-for="submission in leaderboardJson" :key="submission.submission_id">
         <td>{{ submission.submission_id }}</td>
         <td>{{ submission.submitter }}</td>
         <td>{{ submission.powersort_comp }}</td>
@@ -35,8 +35,25 @@
 </template>
 
 <script setup>
-import {defineProps, watch} from "vue";
-import {sortTable} from "@/misc.js"
+import {defineProps, watch, ref, onMounted} from "vue";
+import {sortTable, getLeaderboardJSONs} from "@/misc.js"
+
+let mcostDiffSorted = ref([]);
+let compDiffSorted = ref([]);
+const leaderboardJson = ref([]);
+
+const fetchData = async () => {
+  const [mcostData, compData] = await getLeaderboardJSONs("mediumweight");
+  mcostDiffSorted.value = mcostData;
+  compDiffSorted.value = compData;
+
+  leaderboardJson.value = compDiffSorted.value;
+}
+
+// Fetch data when the component is mounted.
+onMounted(() => {
+  fetchData();
+});
 
 const props = defineProps({
   selectedMetric: String,
@@ -45,25 +62,10 @@ const props = defineProps({
 
 watch(() => props.selectedMetric, (newType) => {
   if (newType === "merge_diff") {
-    sortTable(document.getElementById("mediumweightTBL"), 7);
+    leaderboardJson.value = mcostDiffSorted.value;
   } else {
-    sortTable(document.getElementById("mediumweightTBL"), 6)
+    leaderboardJson.value = compDiffSorted.value;
   }
 });
 
-</script>
-
-<script>
-import axios from "axios";
-
-let {data} = await axios.get(
-    `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/mediumweight`,
-);
-const leaderboardJson = data;
-
-export default {
-  async setup() {
-    return {leaderboardJson};
-  },
-};
 </script>

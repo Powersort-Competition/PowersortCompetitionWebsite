@@ -1,5 +1,30 @@
 import axios from "axios";
 
+
+export async function getLeaderboardJSONs(lboard_type) {
+  try {
+    const resMcostDiff = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/${lboard_type}`, {
+        headers: {
+          "order-by": "mcost_diff"
+        }
+      });
+
+    const resCompDiff = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/${lboard_type}`, {
+        headers: {
+          "order-by": "comp_diff"
+        }
+      });
+
+    return [resMcostDiff.data, resCompDiff.data];
+  } catch (error) {
+    console.error('Error fetching leaderboard data:', error);
+
+    return [[], []]; // Return empty arrays in case of error
+  }
+}
+
 export function getInputSize(inputArr) {
     inputArr = inputArr.split(",");
 
