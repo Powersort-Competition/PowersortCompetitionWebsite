@@ -199,7 +199,6 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
     
     let headers = req.headers();
     let _orderBy = headers.get("order-by").unwrap().to_str().unwrap();
-
     let res;
 
     if (_class == "flyweight") {
@@ -237,7 +236,7 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
                         .ge(i32::pow(10, 4))
                         .and(submission_size.lt(i32::pow(10, 6))),
                 )
-                .order(mcost_diff.desc())
+                .order(comp_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
         }
