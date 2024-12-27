@@ -13,7 +13,7 @@ pub struct FileDownload {
 pub struct CompositionTrackA {
     pub flyweight: i64,
     pub mediumweight: i64,
-    pub heavyweight: i64
+    pub heavyweight: i64,
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
@@ -47,6 +47,7 @@ pub struct Submission {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
+    pub net_metric: i32,
     pub submission_size: i32,
 }
 
@@ -69,6 +70,7 @@ pub struct SubmissionView {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
+    pub net_metric: i32,
     pub submission_size: i32,
 }
 
@@ -82,6 +84,7 @@ pub struct NewSubmission {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
+    pub net_metric: i32,
     pub submission_size: i32,
 }
 
