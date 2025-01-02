@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import {defineProps, watch, ref, onMounted} from "vue";
+import {watch, ref, onMounted} from "vue";
 import {sortTable, getLeaderboardJSONs} from "@/misc.js"
 
 let mcostDiffSorted = ref([]);

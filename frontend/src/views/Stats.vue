@@ -33,7 +33,7 @@
       <FlyweightLeaderboard :selectedMetric="selectedMetricType"/>
     </suspense>
 
-    <hline/>
+    <hr/>
 
     <h1 style="margin-top:2ex;">🏆 Past Winners Track A 🎉</h1>
     <p>The recipients of prizes in Track A are listed below.<br/>  Congratulations and thanks for your contribution to science!</p>
