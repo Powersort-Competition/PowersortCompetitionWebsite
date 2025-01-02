@@ -15,6 +15,7 @@
         <th scope="col">Timsort Merge Cost</th>
         <th scope="col">Comparison Difference (%)</th>
         <th scope="col">Merge Cost Difference (%)</th>
+        <th scope="col">Overall Score</th>
       </tr>
       </thead>
       <tbody>
@@ -27,6 +28,7 @@
         <td>{{ submission.timsort_merge_cost }}</td>
         <td>{{ submission.comp_diff }}</td>
         <td>{{ submission.mcost_diff }}</td>
+        <td>{{ submission.combined_metric }}</td>
       </tr>
       </tbody>
     </table>

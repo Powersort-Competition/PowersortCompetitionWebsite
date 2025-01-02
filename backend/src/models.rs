@@ -47,7 +47,7 @@ pub struct Submission {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
-    pub net_metric: i32,
+    pub combined_metric: f64,
     pub submission_size: i32,
 }
 
@@ -70,7 +70,7 @@ pub struct SubmissionView {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
-    pub net_metric: i32,
+    pub combined_metric: f64,
     pub submission_size: i32,
 }
 
@@ -84,7 +84,7 @@ pub struct NewSubmission {
     pub mcost_diff: f64,
     pub powersort_merge_cost: i32,
     pub timsort_merge_cost: i32,
-    pub net_metric: i32,
+    pub combined_metric: f64,
     pub submission_size: i32,
 }
 

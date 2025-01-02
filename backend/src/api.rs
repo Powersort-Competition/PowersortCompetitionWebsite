@@ -12,13 +12,18 @@ use futures::executor::block_on;
 
 use crate::crypto::hash_submission;
 use crate::database::init_db;
-use crate::{mailer, python_hook};
-use crate::models::{CompositionTrackA, FileDownload, NewSubmission, NewSubmission2, NewUser, Submission, SubmissionHash, SubmissionView, User};
+use crate::models::{
+    CompositionTrackA, FileDownload, NewSubmission, NewSubmission2, NewUser, Submission,
+    SubmissionHash, SubmissionView, User,
+};
 use crate::schema::tracka_submission_hashes::dsl::tracka_submission_hashes;
 use crate::schema::tracka_submissions::dsl::tracka_submissions;
-use crate::schema::tracka_submissions::{mcost_diff, comp_diff, submission_id, submission_size};
+use crate::schema::tracka_submissions::{
+    combined_metric, comp_diff, mcost_diff, submission_id, submission_size,
+};
 use crate::schema::trackb_submissions::dsl::trackb_submissions;
 use crate::schema::users::dsl::*;
+use crate::{mailer, python_hook};
 
 #[get("/ping")]
 pub async fn ping() -> HttpResponse {
@@ -49,13 +54,12 @@ fn dispatch_mail_receipt(
     email_addr: String,
     submission_hash_str: String,
     submission: NewSubmission,
-    track: String
+    track: String,
 ) {
     println!("Hash submission string: {}", submission_hash_str);
-   
+
     let mut body = String::new();
-    if (track == "A")
-    {
+    if (track == "A") {
         body = format!(
             "Hello! Your submission for track A has been recorded successfully. \
                         \n\n<br> <br> Powersort Comparison: {} \
@@ -64,6 +68,7 @@ fn dispatch_mail_receipt(
                         \n<br> Difference in merge costs (%): {} \
                         \n<br> Powersort Merge Cost: {} \
                         \n<br> Timsort Merge Cost: {} \
+                        \n<br> Overall Score: {} \
                         \n<br> Submission Size: {} \
                          \n\n<br> <br> <br> <br> <br> {} ",
             submission.powersort_comp,
@@ -72,11 +77,12 @@ fn dispatch_mail_receipt(
             submission.mcost_diff,
             submission.powersort_merge_cost,
             submission.timsort_merge_cost,
+            submission.combined_metric,
             submission.submission_size,
             submission_hash_str
         );
-    }
-    else // Track B.
+    } else
+    // Track B.
     {
         body = format!(
             "Hello! Your submission for track B has been recorded successfully. \
@@ -112,9 +118,7 @@ fn get_name_from_user_id(usr_id: i32) -> String {
         .last_name
         .clone();
 
-    return format!("{} {}.",
-            f_name,
-            l_name.chars().nth(0).unwrap());
+    return format!("{} {}.", f_name, l_name.chars().nth(0).unwrap());
 }
 
 fn get_email_from_user_id(usr_id: i32) -> String {
@@ -150,8 +154,8 @@ pub async fn top_5_submissions() -> HttpResponse {
             mcost_diff: submission.mcost_diff,
             powersort_merge_cost: submission.powersort_merge_cost,
             timsort_merge_cost: submission.timsort_merge_cost,
+            combined_metric: submission.combined_metric,
             submission_size: submission.submission_size,
-
         });
     }
 
@@ -167,11 +171,13 @@ pub async fn composition_track_a() -> HttpResponse {
         .count()
         .get_result::<i64>(&mut conn)
         .unwrap();
-    
+
     let mediumweight_count = tracka_submissions
         .filter(
-            submission_size.ge(i32::pow(10, 4))
-                .and(submission_size.lt(i32::pow(10, 6))))
+            submission_size
+                .ge(i32::pow(10, 4))
+                .and(submission_size.lt(i32::pow(10, 6))),
+        )
         .count()
         .get_result::<i64>(&mut conn)
         .unwrap();
@@ -194,29 +200,40 @@ pub async fn composition_track_a() -> HttpResponse {
 // class = flyweight OR mediumweight OR heavyweight.
 #[allow(unused_parens)]
 #[get("/weightclass_leading_submissions/{class}")]
-pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<String>) -> HttpResponse {
+pub async fn weightclass_leading_submissions(
+    req: HttpRequest,
+    class: Path<String>,
+) -> HttpResponse {
     let _class = class.into_inner();
-    
+
     let headers = req.headers();
     let _orderBy = headers.get("order-by").unwrap().to_str().unwrap();
     let res;
 
     if (_class == "flyweight") {
+        // ------------------- //
         if (_orderBy == "mcost_diff") {
             res = tracka_submissions
                 .filter(submission_size.lt(i32::pow(10, 4)))
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else // Order by ncomp_diff.
-        {
-           res = tracka_submissions
+        } else if (_orderBy == "ncomp_diff") {
+            // Ordered by ncomp_diff.
+            res = tracka_submissions
                 .filter(submission_size.lt(i32::pow(10, 4)))
                 .order(comp_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-
+        } else {
+            // Order by combined_metric.
+            res = tracka_submissions
+                .filter(submission_size.lt(i32::pow(10, 4)))
+                .order(combined_metric.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
         }
+        // ------------------- //
     } else if (_class == "mediumweight") {
         if (_orderBy == "mcost_diff") {
             res = tracka_submissions
@@ -228,9 +245,8 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else
-        {
-             res = tracka_submissions
+        } else if (_orderBy == "ncomp_diff") {
+            res = tracka_submissions
                 .filter(
                     submission_size
                         .ge(i32::pow(10, 4))
@@ -239,7 +255,18 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
                 .order(comp_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
+        } else {
+            res = tracka_submissions
+                .filter(
+                    submission_size
+                        .ge(i32::pow(10, 4))
+                        .and(submission_size.lt(i32::pow(10, 6))),
+                )
+                .order(combined_metric.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
         }
+        // ------------------- //
     } else
     // heavyweight
     {
@@ -249,11 +276,16 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else
-        {
+        } else if (_orderBy == "ncomp_diff") {
             res = tracka_submissions
                 .filter(submission_size.ge(i32::pow(10, 6)))
                 .order(comp_diff.desc())
+                .limit(5)
+                .load::<Submission>(&mut init_db());
+        } else {
+            res = tracka_submissions
+                .filter(submission_size.ge(i32::pow(10, 6)))
+                .order(combined_metric.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
         }
@@ -272,7 +304,8 @@ pub async fn weightclass_leading_submissions(req: HttpRequest, class: Path<Strin
             mcost_diff: submission.mcost_diff,
             powersort_merge_cost: submission.powersort_merge_cost,
             timsort_merge_cost: submission.timsort_merge_cost,
-            submission_size: submission.submission_size
+            combined_metric: submission.combined_metric,
+            submission_size: submission.submission_size,
         });
     }
 
@@ -324,6 +357,7 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
         mcost_diff: submission.mcost_diff.clone(),
         powersort_merge_cost: submission.powersort_merge_cost.clone(),
         timsort_merge_cost: submission.timsort_merge_cost.clone(),
+        combined_metric: submission.combined_metric.clone(),
         submission_size: submission.submission_size.clone(),
     };
     let s_id = diesel::insert_into(tracka_submissions)
@@ -346,7 +380,12 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
 
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(email_addr, submission_hash_str, _new_submission, "A".to_string());
+    dispatch_mail_receipt(
+        email_addr,
+        submission_hash_str,
+        _new_submission,
+        "A".to_string(),
+    );
 
     HttpResponse::Ok().json(s_id)
 }
@@ -355,35 +394,39 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
 #[post("/new_submission_track_b")]
 pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpResponse {
     println!("Adding new user submission to database.");
-    
+
     let _new_submission = NewSubmission2 {
         user_id: submission.user_id,
     };
-    
+
     let s_id = diesel::insert_into(trackb_submissions)
         .values(&_new_submission)
         .returning(crate::schema::trackb_submissions::submission_id)
         .get_result::<i32>(&mut init_db())
         .unwrap();
-   
+
     let submission_hash_str = block_on(hash_submission(s_id));
-    
+
     // Send email receipt to user.
     let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(email_addr,
-                          submission_hash_str,
-                          NewSubmission { // Dummy data.
-                              user_id: 0,
-                              powersort_comp: 0,
-                              timsort_comp: 0,
-                              comp_diff: 0.0,
-                              mcost_diff: 0.0,
-                              powersort_merge_cost: 0,
-                              timsort_merge_cost: 0,
-                              submission_size: 0,
-                          },
-                          "B".to_string());
-    
+    dispatch_mail_receipt(
+        email_addr,
+        submission_hash_str,
+        NewSubmission {
+            // Dummy data.
+            user_id: 0,
+            powersort_comp: 0,
+            timsort_comp: 0,
+            comp_diff: 0.0,
+            mcost_diff: 0.0,
+            powersort_merge_cost: 0,
+            timsort_merge_cost: 0,
+            combined_metric: 0.0,
+            submission_size: 0,
+        },
+        "B".to_string(),
+    );
+
     HttpResponse::Ok().json(s_id)
 }
 
@@ -410,7 +453,7 @@ pub async fn submission_input_save(
             env::var("EGRESS_DIR").unwrap(),
             file_name
         );
-        
+
         form.file[0]
             .file
             .read_to_string(&mut contents)
@@ -421,7 +464,7 @@ pub async fn submission_input_save(
         // Special handling is required for Track B submissions, as we have descriptions too.
         let mut input_data = String::new();
         let mut description = String::new();
-        
+
         file_path = format!(
             "{}/submissions/TrackB/{}",
             env::var("EGRESS_DIR").unwrap(),
@@ -432,9 +475,15 @@ pub async fn submission_input_save(
             .file
             .read_to_string(&mut input_data)
             .expect("Error reading file contents!");
-        
-        description = headers.get("description").unwrap().to_str().unwrap().parse().unwrap();
-        
+
+        description = headers
+            .get("description")
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .parse()
+            .unwrap();
+
         // Concatenate the input data and description into contents variable.
         contents = format!("{}\n\n{}", input_data, description);
     }
@@ -446,28 +495,36 @@ pub async fn submission_input_save(
 }
 
 #[post("/serverside_calc")]
-pub async fn serverside_calc(req: HttpRequest,
-                             MultipartForm(mut form): MultipartForm<FileDownload>
+pub async fn serverside_calc(
+    req: HttpRequest,
+    MultipartForm(mut form): MultipartForm<FileDownload>,
 ) -> HttpResponse {
     println!("Performing server-side calculation.");
-    
+
     let mut input_data = String::new();
     let mut usr_id: i32;
-    
-    usr_id = req.headers().get("user-id").unwrap().to_str().unwrap().parse().unwrap();
+
+    usr_id = req
+        .headers()
+        .get("user-id")
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .parse()
+        .unwrap();
     form.file[0]
         .file
         .read_to_string(&mut input_data)
         .expect("Error reading file contents!");
 
     // Create a temporary file on the filesystem containing input_data.
-    let mut temp_file = NamedTempFile::new().expect("Error creating temporary file!"); 
+    let mut temp_file = NamedTempFile::new().expect("Error creating temporary file!");
     writeln!(temp_file, "{}", input_data).expect("Error writing to temporary file!");
     // No weird unicode characters, so safe to use lossy string conversion.
     let temp_file_path = temp_file.path().to_path_buf().to_string_lossy().to_string();
-   
+
     // Call Python hook for the computation. Wait till computation is done.
     let computation_result = block_on(python_hook::run_python_script(temp_file_path));
-    
+
     HttpResponse::Ok().json("Success".to_string())
 }

@@ -19,6 +19,7 @@ diesel::table! {
         mcost_diff -> Float8,
         powersort_merge_cost -> Int4,
         timsort_merge_cost -> Int4,
+        combined_metric -> Float8,
         submission_size -> Int4,
     }
 }
