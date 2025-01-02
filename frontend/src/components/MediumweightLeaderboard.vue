@@ -40,12 +40,14 @@ import {sortTable, getLeaderboardJSONs} from "@/misc.js"
 
 let mcostDiffSorted = ref([]);
 let compDiffSorted = ref([]);
+let combinedMetricSorted = ref([]);
 const leaderboardJson = ref([]);
 
 const fetchData = async () => {
-  const [mcostData, compData] = await getLeaderboardJSONs("mediumweight");
+  const [mcostData, compData, combinedMetricData] = await getLeaderboardJSONs("mediumweight");
   mcostDiffSorted.value = mcostData;
   compDiffSorted.value = compData;
+  combinedMetricSorted.value = combinedMetricData;
 
   leaderboardJson.value = compDiffSorted.value;
 }
@@ -63,6 +65,8 @@ const props = defineProps({
 watch(() => props.selectedMetric, (newType) => {
   if (newType === "merge_diff") {
     leaderboardJson.value = mcostDiffSorted.value;
+  } else if (newType === "combined_metric") {
+    leaderboardJson.value = combinedMetricSorted.value; 
   } else {
     leaderboardJson.value = compDiffSorted.value;
   }

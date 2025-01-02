@@ -2,7 +2,7 @@
   <div class="container mt-4">
     <h1>Leaderboards Track A</h1>
     <p class="mb-10 text-right">
-      <strong>Cost Measure:</strong> &nbsp;
+      <strong>Sort by (descending order):</strong> &nbsp;
     <BFormRadioGroup
       v-model="selectedMetricType"
       :options="metricTypes"
@@ -67,7 +67,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 const selectedMetricType = ref('comp_diff');
 const metricTypes = [
   {item: 'comp_diff', name: 'Comparison Count Difference (%)'},
-  {item: 'merge_diff', name: 'Merge Cost Difference (%)'}
+  {item: 'merge_diff', name: 'Merge Cost Difference (%)'},
+  {item: 'combined_metric', name: 'Combined Metric'}
 ]
 </script>
 

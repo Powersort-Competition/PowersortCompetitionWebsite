@@ -17,11 +17,18 @@ export async function getLeaderboardJSONs(lboard_type) {
         }
       });
 
-    return [resMcostDiff.data, resCompDiff.data];
+    const resCombinedMetric = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/${lboard_type}`, {
+        headers: {
+          "order-by": "combined_metric"
+        }
+      });
+
+    return [resMcostDiff.data, resCompDiff.data, resCombinedMetric.data];
   } catch (error) {
     console.error('Error fetching leaderboard data:', error);
 
-    return [[], []]; // Return empty arrays in case of error
+    return [[], [], []]; // Return empty arrays in case of error 
   }
 }
 
