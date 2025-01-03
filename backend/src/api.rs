@@ -218,7 +218,7 @@ pub async fn weightclass_leading_submissions(
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else if (_orderBy == "ncomp_diff") {
+        } else if (_orderBy == "comp_diff") {
             // Ordered by ncomp_diff.
             res = tracka_submissions
                 .filter(submission_size.lt(i32::pow(10, 4)))
@@ -245,7 +245,7 @@ pub async fn weightclass_leading_submissions(
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else if (_orderBy == "ncomp_diff") {
+        } else if (_orderBy == "comp_diff") {
             res = tracka_submissions
                 .filter(
                     submission_size
@@ -276,7 +276,7 @@ pub async fn weightclass_leading_submissions(
                 .order(mcost_diff.desc())
                 .limit(5)
                 .load::<Submission>(&mut init_db());
-        } else if (_orderBy == "ncomp_diff") {
+        } else if (_orderBy == "comp_diff") {
             res = tracka_submissions
                 .filter(submission_size.ge(i32::pow(10, 6)))
                 .order(comp_diff.desc())
