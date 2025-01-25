@@ -57,7 +57,7 @@
     </p>
 
     <p>You can obtain a
-      <a href="https://drive.google.com/file/d/1DejZCnmeuFYHjDdIZCzisLnmQ4mJtV_q/view?usp=drive_link"
+      <a href="https://drive.google.com/file/d/18PMgQEzbsbIesJihCi1hciYnIDetpXWq/view?usp=sharing"
          target="_blank" rel="noopener">
         VBox virtual-machine image</a>
       that has our instrumented CPython
