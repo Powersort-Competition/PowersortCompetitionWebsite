@@ -9,6 +9,10 @@
       counts.
     </p>
 
+    <p style="color: red;"><em><strong>🔥Update🔥</strong><br/>
+      Round 3 of <BLink to="/aboutA">Track A</BLink> features a new Cost Measure.<br/>
+      That means a new chance to win prizes!</em>
+    </p>
 
     <h3>What's Powersort?</h3>
     <p><strong>Powersort</strong> is a refinement of <strong>Timsort</strong>,

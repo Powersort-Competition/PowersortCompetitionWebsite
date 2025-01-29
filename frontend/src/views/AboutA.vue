@@ -5,6 +5,11 @@
       <font-awesome-icon icon="puzzle-piece"/>
       Track A: Sort this, Timsort!
     </h1>
+    <p style="color: red;"><em><strong>🔥Update🔥</strong><br/>
+      Round 3 features a new Cost Measure (see below)!</em>
+      <br/>
+      Submit your best allrounder inputs now!
+    </p>
     <p>
       In this <strong>exploratory data puzzle</strong>, your goal is to find lists for
       Timsort and Powersort where they differ the most.
@@ -40,7 +45,7 @@
     <p>
       Timsort has some known blind spots where it performs poorly
       (see <span v-katex="'\\mathcal R_{\\text{tim}}'"></span> from Theorem 3 of <a
-        href="https://arxiv.org/pdf/1801.04641" target="_blank" rel="noopener">Buss and Knop (2018)</a>.
+        href="https://arxiv.org/pdf/1801.04641" target="_blank" rel="noopener">Buss and Knop (2018)</a>).
     </p>
     <p>
       <em>Can you find more?</em>
@@ -86,11 +91,11 @@
       The larger this ratio, the better your submission.
     </p>
     <p>
-      The competition is split into 6 <strong>subcompetitions</strong>: 3 size categories
-      and 2
+      The competition is split into <del>6</del> 9 <strong>subcompetitions</strong>: 3 size categories
+      and <del>2</del> 3
       cost measures.
       Your submission is automatically assigned its weight class and always participates
-      in the competitions for both cost measures.
+      in the competitions for all cost measures.
     </p>
     <p>
       <em>There are prizes to be won for each subcompetition!</em>
@@ -101,7 +106,7 @@
     </p>
 
 
-    <h4>Cost Measures</h4>
+    <h4 id="cost-measures">Cost Measures</h4>
     <p>The cost of sorting a list can be measured in many ways; we focus on the
       following.</p>
     <p>
@@ -115,6 +120,11 @@
           <BCardText>
             The total <strong>merge cost</strong>, where the merge cost of merging
             two runs is the sum of their lengths.
+          </BCardText>
+        </BCard>
+        <BCard bg-variant="light" header-html="<strong>🔥Combined Score🔥</strong>">
+          <BCardText>
+            🆕 The <strong>geometric mean</strong> of (the relative difference in) Comparisons and Merge Cost.
           </BCardText>
         </BCard>
       </BCardGroup>
@@ -135,6 +145,13 @@
       they can require executing interpreted user Python code.
       Merge cost is proportional to the number of elements moved around in memory and
       hence can be a good proxy for cache misses and energy consumption.
+    </p>
+    <p>
+      🆕 Since the best inputs submitted to Track A until Round 2 have scored highly in one
+      metric
+      (Comparisons or Merge Cost), but close to 0 in the other, we have now added a the
+      <strong>Combined Score</strong> as a third cost measure. Inputs must do reasonably
+      well on both metrics to score highly in this new cost measure.
     </p>
 
     <h4>Weight (List Length) Classes </h4>

@@ -68,7 +68,7 @@ const selectedMetricType = ref('comp_diff');
 const metricTypes = [
   {item: 'comp_diff', name: 'Comparison Count Difference (%)'},
   {item: 'merge_diff', name: 'Merge Cost Difference (%)'},
-  {item: 'combined_metric', name: 'Combined Metric'}
+  {item: 'combined_metric', name: 'Combined Score'}
 ]
 </script>
 

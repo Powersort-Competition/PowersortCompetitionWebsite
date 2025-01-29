@@ -15,7 +15,7 @@
         <th scope="col">Timsort Merge Cost</th>
         <th scope="col">Comparison Difference (%)</th>
         <th scope="col">Merge Cost Difference (%)</th>
-        <th scope="col">Overall Score</th>
+        <th scope="col">Combined Score</th>
       </tr>
       </thead>
       <tbody>
