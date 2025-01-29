@@ -69,6 +69,7 @@
       <code>arrays.txt</code>.
     </p>
 
+<!--
     <p>
       Need a kickstart in inspiration or a walkthrough with an example on using the
       VBox image, and generating the <code>arrays.txt</code> file? This video might
@@ -83,8 +84,9 @@
         <TrackBVideo/>
       </BModal>
     </p>
+-->
 
-    <p>If you can't get the virtual machine to work or have doubts about eligibilty,
+    <p>If you can't get the virtual machine to work or have doubts about eligibilty, please
       <BLink href="mailto:powersort@liverpool.ac.uk">reach out to us.</BLink>
     </p>
     <h2>Prizes</h2>
