@@ -95,6 +95,51 @@ fn dispatch_mail_receipt(
     mailer::send_email(body, email_addr);
 }
 
+fn handle_submission_post_processing(
+    s_id: i32,
+    usr_id: i32,
+    submission_data: Option<NewSubmission>,
+) {
+    // Hash submission ID, and record it to the database (if Track A). Then, send it via email.
+    let submission_hash_str = block_on(hash_submission(s_id));
+
+    if let Some(sub) = submission_data {
+        // Track A logic
+        let _submission_hash = SubmissionHash {
+            submission_id: s_id,
+            hash: submission_hash_str.clone(),
+        };
+
+        let _ = diesel::insert_into(tracka_submission_hashes)
+            .values(&_submission_hash)
+            .execute(&mut init_db())
+            .unwrap();
+
+        let email_addr = get_email_from_user_id(usr_id);
+        dispatch_mail_receipt(email_addr, submission_hash_str, sub, "A".to_string());
+    } else {
+        // Track B logic
+        let email_addr = get_email_from_user_id(usr_id);
+        dispatch_mail_receipt(
+            email_addr,
+            submission_hash_str,
+            NewSubmission {
+                // Dummy data for Track B.
+                user_id: 0,
+                powersort_comp: 0,
+                timsort_comp: 0,
+                comp_diff: 0.0,
+                mcost_diff: 0.0,
+                powersort_merge_cost: 0,
+                timsort_merge_cost: 0,
+                combined_metric: 0.0,
+                submission_size: 0,
+            },
+            "B".to_string(),
+        );
+    }
+}
+
 fn get_name_from_user_id(usr_id: i32) -> String {
     // Needs two returns. You cannot clone() a query result data type.
     // Maybe a future inventive way for one less DB call?
@@ -366,31 +411,11 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
         .get_result::<i32>(&mut init_db())
         .unwrap();
 
-    // Hash submission ID, and record it to the database. Then, send it via email.
-    let submission_hash_str = block_on(hash_submission(s_id));
-    let _submission_hash = SubmissionHash {
-        submission_id: s_id,
-        hash: submission_hash_str.clone(),
-    };
-
-    let _ = diesel::insert_into(tracka_submission_hashes)
-        .values(&_submission_hash)
-        .execute(&mut init_db())
-        .unwrap();
-
-    // Send email receipt to user.
-    let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(
-        email_addr,
-        submission_hash_str,
-        _new_submission,
-        "A".to_string(),
-    );
+    handle_submission_post_processing(s_id, _new_submission.user_id, Some(_new_submission));
 
     HttpResponse::Ok().json(s_id)
 }
 
-// TODO: If not too much work, merge with new_submission_track_a.
 #[post("/new_submission_track_b")]
 pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpResponse {
     println!("Adding new user submission to database.");
@@ -405,27 +430,7 @@ pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpRes
         .get_result::<i32>(&mut init_db())
         .unwrap();
 
-    let submission_hash_str = block_on(hash_submission(s_id));
-
-    // Send email receipt to user.
-    let email_addr = get_email_from_user_id(_new_submission.user_id);
-    dispatch_mail_receipt(
-        email_addr,
-        submission_hash_str,
-        NewSubmission {
-            // Dummy data.
-            user_id: 0,
-            powersort_comp: 0,
-            timsort_comp: 0,
-            comp_diff: 0.0,
-            mcost_diff: 0.0,
-            powersort_merge_cost: 0,
-            timsort_merge_cost: 0,
-            combined_metric: 0.0,
-            submission_size: 0,
-        },
-        "B".to_string(),
-    );
+    handle_submission_post_processing(s_id, _new_submission.user_id, None);
 
     HttpResponse::Ok().json(s_id)
 }
