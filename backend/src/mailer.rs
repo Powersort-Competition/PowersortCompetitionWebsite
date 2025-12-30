@@ -26,7 +26,7 @@ pub fn send_email(body: String, email: String) {
     }
 }
 
-fn body_constructor(body: String, email: String) -> Message {
+pub fn body_constructor(body: String, email: String) -> Message {
     let mail = Message::builder()
         .from(env::var("MAIL_FROM").unwrap().parse().unwrap())
         .to(email.parse().unwrap())

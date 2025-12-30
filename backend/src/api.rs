@@ -23,7 +23,7 @@ use crate::schema::tracka_submissions::{
 };
 use crate::schema::trackb_submissions::dsl::trackb_submissions;
 use crate::schema::users::dsl::*;
-use crate::{mailer, python_hook};
+use crate::{mailer, python_hook, utils};
 
 #[get("/ping")]
 pub async fn ping() -> HttpResponse {
@@ -58,39 +58,7 @@ fn dispatch_mail_receipt(
 ) {
     println!("Hash submission string: {}", submission_hash_str);
 
-    let mut body = String::new();
-    if (track == "A") {
-        body = format!(
-            "Hello! Your submission for track A has been recorded successfully. \
-                        \n\n<br> <br> Powersort Comparison: {} \
-                        \n<br> Timsort Comparison: {} \
-                        \n<br> Difference in comparisons (%): {} \
-                        \n<br> Difference in merge costs (%): {} \
-                        \n<br> Powersort Merge Cost: {} \
-                        \n<br> Timsort Merge Cost: {} \
-                        \n<br> Overall Score: {} \
-                        \n<br> Submission Size: {} \
-                         \n\n<br> <br> <br> <br> <br> {} ",
-            submission.powersort_comp,
-            submission.timsort_comp,
-            submission.comp_diff,
-            submission.mcost_diff,
-            submission.powersort_merge_cost,
-            submission.timsort_merge_cost,
-            submission.combined_metric,
-            submission.submission_size,
-            submission_hash_str
-        );
-    } else
-    // Track B.
-    {
-        body = format!(
-            "Hello! Your submission for track B has been recorded successfully. \
-                        \n\n<br> <br> <br> <br> <br> {} \
-            ",
-            submission_hash_str
-        )
-    }
+    let body = utils::construct_receipt_body(&submission, &track, &submission_hash_str);
 
     mailer::send_email(body, email_addr);
 }

@@ -5,14 +5,7 @@ use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 use listenfd;
 
-mod api;
-mod crypto;
-mod database;
-mod mailer;
-mod models;
-mod python_hook;
-mod schema;
-mod utils;
+use backend::api;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
