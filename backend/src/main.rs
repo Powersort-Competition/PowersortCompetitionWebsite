@@ -1,11 +1,11 @@
 use std::env;
 
 use actix_cors::Cors;
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 use dotenv::dotenv;
 use listenfd;
 
-use backend::api;
+use backend::{api, database};
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -17,8 +17,11 @@ async fn main() -> std::io::Result<()> {
 
     create_submission_data_dir();
 
+    // Establish connection pool.
+    let pool = database::establish_connection_pool();
+
     let mut listenfd = listenfd::ListenFd::from_env();
-    let mut actix_server = HttpServer::new(|| {
+    let mut actix_server = HttpServer::new(move || {
         // let cors = Cors::default()
         //     .allowed_origin("https://shayandoust.github.io")
         //     .allowed_methods(vec!["GET", "POST", "OPTIONS"])
@@ -28,6 +31,7 @@ async fn main() -> std::io::Result<()> {
         let cors = Cors::permissive();
 
         App::new()
+            .app_data(web::Data::new(pool.clone()))
             .wrap(cors)
             .service(api::ping)
             .service(api::login_probe)
