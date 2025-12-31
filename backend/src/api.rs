@@ -6,12 +6,12 @@ use tempfile::NamedTempFile;
 
 use actix_multipart::form::MultipartForm;
 use actix_web::web::Path;
-use actix_web::{get, post, web::Json, HttpRequest, HttpResponse};
+use actix_web::{get, post, web, web::Json, HttpRequest, HttpResponse};
 use diesel::prelude::*;
 use futures::executor::block_on;
 
 use crate::crypto::hash_submission;
-use crate::database::init_db;
+use crate::database::DbPool;
 use crate::models::{
     CompositionTrackA, FileDownload, NewSubmission, NewSubmission2, NewUser, Submission,
     SubmissionHash, SubmissionView, User,
@@ -31,23 +31,6 @@ pub async fn ping() -> HttpResponse {
 }
 
 /*
-Internal function to check if user exists by probing database with email.
- */
-#[allow(unused_parens)]
-fn check_usr_exists(mut conn: PgConnection, email_addr: String) -> bool {
-    let res = users.filter(email.eq(email_addr)).load::<User>(&mut conn);
-    let res_size = res
-        .expect("Error checking if user exists in database!")
-        .len();
-
-    if (res_size == 1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/*
 Internal function to dispatch a mail receipt to a submitter.
  */
 fn dispatch_mail_receipt(
@@ -63,15 +46,21 @@ fn dispatch_mail_receipt(
     mailer::send_email(body, email_addr);
 }
 
-fn get_name_from_user_id(usr_id: i32) -> String {
+fn get_name_from_user_id(usr_id: i32, pool: &web::Data<DbPool>) -> String {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
     // Needs two returns. You cannot clone() a query result data type.
     // Maybe a future inventive way for one less DB call?
     let res_1 = users
         .filter(user_id.eq(usr_id))
-        .load::<User>(&mut init_db());
+        .load::<User>(&mut conn);
+
+    // We can reuse the connection for the second query, but diesel queries often consume the result.
+    // However, `load` returns a result, so we should be able to reuse `conn`.
+    // But `load` takes `&mut conn`.
+
     let res_2 = users
         .filter(user_id.eq(usr_id))
-        .load::<User>(&mut init_db());
+        .load::<User>(&mut conn);
 
     let f_name = res_1
         .expect("Error loading user name!")
@@ -89,10 +78,11 @@ fn get_name_from_user_id(usr_id: i32) -> String {
     return format!("{} {}.", f_name, l_name.chars().nth(0).unwrap());
 }
 
-fn get_email_from_user_id(usr_id: i32) -> String {
+fn get_email_from_user_id(usr_id: i32, pool: &web::Data<DbPool>) -> String {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
     let res = users
         .filter(user_id.eq(usr_id))
-        .load::<User>(&mut init_db());
+        .load::<User>(&mut conn);
 
     return res
         .expect("Error loading user email!")
@@ -104,17 +94,18 @@ fn get_email_from_user_id(usr_id: i32) -> String {
 
 // Top 5 GLOBAL submissions irrespective of upload size.
 #[get("/top_5_submissions")]
-pub async fn top_5_submissions() -> HttpResponse {
+pub async fn top_5_submissions(pool: web::Data<DbPool>) -> HttpResponse {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
     let res = tracka_submissions
         .limit(5)
-        .load::<Submission>(&mut init_db());
+        .load::<Submission>(&mut conn);
 
     let mut top_5 = Vec::new();
 
     for submission in res.expect("Error loading top 5 submissions!") {
         top_5.push(SubmissionView {
             submission_id: submission.submission_id,
-            submitter: get_name_from_user_id(submission.user_id),
+            submitter: get_name_from_user_id(submission.user_id, &pool),
             user_id: submission.user_id,
             powersort_comp: submission.powersort_comp,
             timsort_comp: submission.timsort_comp,
@@ -131,8 +122,8 @@ pub async fn top_5_submissions() -> HttpResponse {
 }
 
 #[get("/composition_track_a")]
-pub async fn composition_track_a() -> HttpResponse {
-    let mut conn = init_db();
+pub async fn composition_track_a(pool: web::Data<DbPool>) -> HttpResponse {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let flyweight_count = tracka_submissions
         .filter(submission_size.lt(i32::pow(10, 4)))
@@ -169,6 +160,7 @@ pub async fn composition_track_a() -> HttpResponse {
 #[allow(unused_parens)]
 #[get("/weightclass_leading_submissions/{class}")]
 pub async fn weightclass_leading_submissions(
+    pool: web::Data<DbPool>,
     req: HttpRequest,
     class: Path<String>,
 ) -> HttpResponse {
@@ -178,6 +170,8 @@ pub async fn weightclass_leading_submissions(
     let _orderBy = headers.get("order-by").unwrap().to_str().unwrap();
     let res;
 
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
+
     if (_class == "flyweight") {
         // ------------------- //
         if (_orderBy == "mcost_diff") {
@@ -185,21 +179,21 @@ pub async fn weightclass_leading_submissions(
                 .filter(submission_size.lt(i32::pow(10, 4)))
                 .order(mcost_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else if (_orderBy == "comp_diff") {
             // Ordered by ncomp_diff.
             res = tracka_submissions
                 .filter(submission_size.lt(i32::pow(10, 4)))
                 .order(comp_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else {
             // Order by combined_metric.
             res = tracka_submissions
                 .filter(submission_size.lt(i32::pow(10, 4)))
                 .order(combined_metric.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         }
         // ------------------- //
     } else if (_class == "mediumweight") {
@@ -212,7 +206,7 @@ pub async fn weightclass_leading_submissions(
                 )
                 .order(mcost_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else if (_orderBy == "comp_diff") {
             res = tracka_submissions
                 .filter(
@@ -222,7 +216,7 @@ pub async fn weightclass_leading_submissions(
                 )
                 .order(comp_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else {
             res = tracka_submissions
                 .filter(
@@ -232,7 +226,7 @@ pub async fn weightclass_leading_submissions(
                 )
                 .order(combined_metric.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         }
         // ------------------- //
     } else
@@ -243,19 +237,19 @@ pub async fn weightclass_leading_submissions(
                 .filter(submission_size.ge(i32::pow(10, 6)))
                 .order(mcost_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else if (_orderBy == "comp_diff") {
             res = tracka_submissions
                 .filter(submission_size.ge(i32::pow(10, 6)))
                 .order(comp_diff.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         } else {
             res = tracka_submissions
                 .filter(submission_size.ge(i32::pow(10, 6)))
                 .order(combined_metric.desc())
                 .limit(5)
-                .load::<Submission>(&mut init_db());
+                .load::<Submission>(&mut conn);
         }
     }
 
@@ -264,7 +258,7 @@ pub async fn weightclass_leading_submissions(
     for submission in res.expect("Error loading top 5 flyweight submissions!") {
         top_5.push(SubmissionView {
             submission_id: submission.submission_id,
-            submitter: get_name_from_user_id(submission.user_id),
+            submitter: get_name_from_user_id(submission.user_id, &pool),
             user_id: submission.user_id,
             powersort_comp: submission.powersort_comp,
             timsort_comp: submission.timsort_comp,
@@ -282,9 +276,11 @@ pub async fn weightclass_leading_submissions(
 
 #[allow(unused_parens)]
 #[post("/logged_in")]
-pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse {
+pub async fn login_probe(pool: web::Data<DbPool>, usr_details: Json<NewUser>) -> HttpResponse {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
     // Check if user already exists in the database via their email address.
-    let usr_exists = check_usr_exists(init_db(), usr_details.email.clone());
+
+    let usr_exists = check_usr_exists(&mut conn, usr_details.email.clone());
 
     if (!usr_exists) {
         println!("Creating new user in database.");
@@ -297,25 +293,27 @@ pub async fn login_probe(usr_details: Json<NewUser>) -> HttpResponse {
 
         let _ = diesel::insert_into(users)
             .values(&_new_usr)
-            .execute(&mut init_db());
+            .execute(&mut conn);
     }
 
     HttpResponse::Ok().json("Success".to_string())
 }
 
 #[post("/my_user_id")]
-pub async fn my_user_id(usr_details: Json<User>) -> HttpResponse {
+pub async fn my_user_id(pool: web::Data<DbPool>, usr_details: Json<User>) -> HttpResponse {
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
     // We are only concerned with user email, as that is unique.
     let res = users
         .filter(email.eq(usr_details.email.clone()))
-        .load::<User>(&mut init_db());
+        .load::<User>(&mut conn);
 
     HttpResponse::Ok().json(res.expect("Error loading user ID!").get(0).unwrap().user_id)
 }
 
 #[post("/new_submission_track_a")]
-pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResponse {
+pub async fn new_submission_track_a(pool: web::Data<DbPool>, submission: Json<NewSubmission>) -> HttpResponse {
     println!("Adding new user submission to database.");
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let _new_submission = NewSubmission {
         user_id: submission.user_id,
@@ -331,7 +329,7 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
     let s_id = diesel::insert_into(tracka_submissions)
         .values(&_new_submission)
         .returning(submission_id)
-        .get_result::<i32>(&mut init_db())
+        .get_result::<i32>(&mut conn)
         .unwrap();
 
     // Hash submission ID, and record it to the database. Then, send it via email.
@@ -343,11 +341,11 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
 
     let _ = diesel::insert_into(tracka_submission_hashes)
         .values(&_submission_hash)
-        .execute(&mut init_db())
+        .execute(&mut conn)
         .unwrap();
 
     // Send email receipt to user.
-    let email_addr = get_email_from_user_id(_new_submission.user_id);
+    let email_addr = get_email_from_user_id(_new_submission.user_id, &pool);
     dispatch_mail_receipt(
         email_addr,
         submission_hash_str,
@@ -360,8 +358,9 @@ pub async fn new_submission_track_a(submission: Json<NewSubmission>) -> HttpResp
 
 // TODO: If not too much work, merge with new_submission_track_a.
 #[post("/new_submission_track_b")]
-pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpResponse {
+pub async fn new_submission_track_b(pool: web::Data<DbPool>, submission: Json<NewSubmission2>) -> HttpResponse {
     println!("Adding new user submission to database.");
+    let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let _new_submission = NewSubmission2 {
         user_id: submission.user_id,
@@ -370,13 +369,13 @@ pub async fn new_submission_track_b(submission: Json<NewSubmission2>) -> HttpRes
     let s_id = diesel::insert_into(trackb_submissions)
         .values(&_new_submission)
         .returning(crate::schema::trackb_submissions::submission_id)
-        .get_result::<i32>(&mut init_db())
+        .get_result::<i32>(&mut conn)
         .unwrap();
 
     let submission_hash_str = block_on(hash_submission(s_id));
 
     // Send email receipt to user.
-    let email_addr = get_email_from_user_id(_new_submission.user_id);
+    let email_addr = get_email_from_user_id(_new_submission.user_id, &pool);
     dispatch_mail_receipt(
         email_addr,
         submission_hash_str,
@@ -495,4 +494,21 @@ pub async fn serverside_calc(
     let computation_result = block_on(python_hook::run_python_script(temp_file_path));
 
     HttpResponse::Ok().json("Success".to_string())
+}
+
+// Updated helper:
+// Internal function to check if user exists by probing database with email.
+// Takes &mut PgConnection to be compatible with pool.get() result usage.
+#[allow(unused_parens)]
+fn check_usr_exists(conn: &mut PgConnection, email_addr: String) -> bool {
+    let res = users.filter(email.eq(email_addr)).load::<User>(conn);
+    let res_size = res
+        .expect("Error checking if user exists in database!")
+        .len();
+
+    if (res_size == 1) {
+        return true;
+    } else {
+        return false;
+    }
 }
