@@ -38,10 +38,10 @@ import axios from "axios";
 // SW: My quick hack to let the leaderboard not crash the rendering; TODO proper fix
 let data;
 try {
-  let {data} = await axios.get(
+  const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/weightclass_leading_submissions/global`,
   );
-
+  data = response.data;
 } catch (e) {
   console.error(e);
   data = [];
