@@ -11,6 +11,7 @@ declare module 'vue' {
     FileDropper: typeof import('./src/components/FileDropper.vue')['default']
     FlyweightLeaderboard: typeof import('./src/components/FlyweightLeaderboard.vue')['default']
     HeavyweightLeaderboard: typeof import('./src/components/HeavyweightLeaderboard.vue')['default']
+    IMdiCheck: typeof import('~icons/mdi/check')['default']
     Leaderboard: typeof import('./src/components/Leaderboard.vue')['default']
     MediumweightLeaderboard: typeof import('./src/components/MediumweightLeaderboard.vue')['default']
     PrizeTable: typeof import('./src/components/PrizeTable.vue')['default']

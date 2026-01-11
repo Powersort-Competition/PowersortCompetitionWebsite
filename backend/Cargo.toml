@@ -5,22 +5,22 @@ edition = "2021"
 
 [dependencies]
 env_logger = "0.11.8"
-actix-web = "4.11.0"
-actix-rt = "2.10.0"
+actix-web = "4.12.1"
+actix-rt = "2.11.0"
 actix-cors = "0.7.1"
-actix-multipart = "0.6.2"
-diesel = { version = "2.2.12", features = ["postgres", "r2d2"] }
-diesel_migrations = "2.2.0"
-serde = "1.0.219"
+actix-multipart = "0.7.2"
+diesel = { version = "2.3.5", features = ["postgres", "r2d2"] }
+diesel_migrations = "2.3.1"
+serde = "1.0.228"
 listenfd = "1.0.2"
 r2d2 = "0.8.10"
 lazy_static = "1.5.0"
 dotenv = "0.15.0"
-lettre = "0.11.17"
+lettre = "0.11.19"
 futures = "0.3.31"
-chrono = "0.4.41"
+chrono = "0.4.42"
 argon2 = "0.5.3"
-tempfile = "3.20.0"
+tempfile = "3.24.0"
 
 [profile.release-lto]
 inherits = "release"
@@ -29,5 +29,5 @@ codegen-units = 16
 lto = true
 
 [dev-dependencies]
-serde_json = "1.0.148"
-serial_test = "3.2.0"
+serde_json = "1.0.149"
+serial_test = "3.3.1"
